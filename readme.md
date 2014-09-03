@@ -13,6 +13,7 @@ I plan to use this application at http://www.manggisan.com
 2. Syaiful Bachry                       (Documenatation)
 3. Iswan                                    (Programmer/Designer)
 4. Ahmad Saifuddin Karim        (Young Programmer/designer)
+
 We opens to every programmer or designer to join with us.
 ### License
 The Sarung  is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)

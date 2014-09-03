@@ -27,6 +27,7 @@ Route::get('users', function()
 //Route::controller('/', 'UserController');
 Route::get('/outcome', 'outcome@index');
 Route::get('/income', 'income@index');
-Route::get('/subdivisi', 'divisisub_control@index');
+Route::get('/subdivisi', 'divisisub@index');
+
 
 

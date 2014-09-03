@@ -1,5 +1,5 @@
 <?php
-class Outcome_model extends Root_model {	
+class Income_model extends Root_model {	
 	public function __construct( $alias = array() ){	
 		$this->set_alias( $alias );
 		$this->set_order( " order by id DESC " );
@@ -10,7 +10,7 @@ class Outcome_model extends Root_model {
 		$first = sprintf( '
 			select outc.id as %1$s , divi.nama as %2$s, divs.nama as %3$s,
 			outc.jumlah as %4$s  , outc.tanggal as %5$s
-			from outcome outc , divisi divi , divisisub divs
+			from income outc , divisi divi , divisisub divs
 			where divs.id = outc.idsubdivisi and divi.id = divs.iddivisi 
 		',
 		$alias_name [0] , 
@@ -23,13 +23,11 @@ class Outcome_model extends Root_model {
 		return $first;
 	}
 }
-
-
-/*This will return error , i didt know why
-class Outcome_model extends Eloquent {
-	protected $table = 'outcome';
+/*
+class Income_model extends Eloquent {
+	protected $table = 'income';
 	public function divisisub() {
      	return $this->belongsTo('divisisub' , 'idsubdivisi');
  	}
 }
- */
+*/

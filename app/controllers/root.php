@@ -11,18 +11,10 @@ abstract class root extends Controller {
 	abstract public function index( $param = array() ) ; 
 	abstract protected function get_additional_js();
 	public function __construct(){}
-	protected function  set_title($val){
-		$this->title = $val;
-	}
-	protected function get_title(){
-		return $this->title;
-	}
-	protected function  set_category($val){
-		$this->category = $val;
-	}
-	protected function get_category(){
-		return $this->$this->category;
-	}	
+	protected function  set_title($val){		$this->title = $val;	}
+	protected function get_title(){ 		return $this->title;	}
+	protected function  set_category($val){ 		$this->category = $val;	}
+	protected function get_category(){ 		return $this->$this->category;	}	
 	protected function get_css(){
 		return sprintf('
 			<link href="%1$s" rel="stylesheet" type="text/css" />
@@ -57,12 +49,8 @@ abstract class root extends Controller {
 		URL::to('/').'/asset/css/fudc.css'
 		);
 	}
-	protected function get_total_jump(){
-		return 15;
-	}
-	protected function base_url(){
-		return URL::to('/');
-	}
+	protected function get_total_jump(){		return 15;	}
+	protected function base_url(){		return URL::to('/');	}
     protected function get_select( $items  , $array = array() ){
         $default = array( "class" => "select_class" , "id" => "" , "name" => 'select_name' , 'selected' => '' );
         foreach ( $default as $key => $value) {

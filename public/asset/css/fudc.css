@@ -1,0 +1,35 @@
+.header_container{
+	background:#42A2CE !important;
+}
+.header_container .navbar{
+	background:#42A2CE !important;
+	border:none;
+	box-shadow:none;
+}
+.header_container .navbar a{
+	color:white !important;
+	font-size:;
+}
+.form-inline .select_form  {
+	margin-right:5px !important;	
+}
+article .title{
+	margin:0px;
+	padding:0px 0px 5px;
+	border-bottom:1px solid #DDDDDD;
+	/*font-family: 'Glyphicons Halflings';	*/
+	font-size: 2em;
+}
+table td{
+	font-size: 1em;
+}
+table tr.header{
+	font-weight: bold;
+	font-size:1.2em;
+}
+table{
+	margin: 8px 3px 0px;
+}
+.pagination{
+	margin:5px 0px;
+}

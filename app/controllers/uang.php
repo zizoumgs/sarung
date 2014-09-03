@@ -24,31 +24,6 @@ class uang extends root {
     }
     //! override this if you want 
     protected function get_default_query(){return "";}
-    protected function get_pagenation_link( $array = array() ){
-        //echo count( $array)  ;
-        if( count( $array) > 0  )
-            return $this->pagenation->appends( $array )->links();
-        return $this->pagenation->links ( );
-    }
-    protected function set_pagenation( $additonal_query = ""  , $additonal_where = array() ){
-        $posts;
-        if( count($additonal_where) > 0 )
-            $posts = DB::select(DB::raw( $this->get_default_query() . $additonal_query) , $additonal_where   );
-        else
-            $posts = DB::select(DB::raw( $this->get_default_query()));
-        $this->pagenation = Paginator::make($posts, count($posts),  $this->get_total_jump() );
-        
-        /*
-$pagination->getCurrentPage
-$pagination->getLastPage
-$pagination->getPerPage
-$pagination->getTotal
-$pagination->getFrom
-$pagination->getTo
-$pagination->count
-        */
-
-    }
     protected function get_header(){
         return '
             <header class="header_container">
@@ -68,7 +43,7 @@ $pagination->count
                                 <li><a href="'.$this->base_url().'/income">Income</a></li>
                                 <li><a href="'.$this->base_url().'/outcome">Outcome</a></li>
                                 <li><a href="'.$this->base_url().'/subdivisi">Sub Divisi</a></li>
-                                <li><a href="/contact">Contact</a></li>
+                                <!-- <li><a href="/contact">Contact</a></li> -->
                             </ul>
                         </div>
                     </div>

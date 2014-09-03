@@ -4,46 +4,28 @@
 * /vendor/laravel/framework/src/Illuminate/Pagination/views
 **/
 class income extends uang {
-
 	public function __construct(){
 		$this->set_title('Pemasukan Pondok Pesantren Fatihul Ulum');
 		$this->set_category('uang');
-	}
-	protected function get_default_query(){
-		$query = sprintf('
-			select outc.id as id , divi.nama as nama_div, divs.nama as nama_sub,
-			outc.jumlah as jumlah  , outc.tanggal as tanggal
-			from income outc , divisi divi , divisisub divs
-			where divs.id = outc.idsubdivisi and divi.id = divs.iddivisi 
-			');
-		return $query;
 	}
 	protected function get_table(){
 		$form = $this->get_form();
 		$div_sub 	= $this->get_selected_division_sub();
 		$div 		= $this->get_selected_division();
+		$wheres = array ();
 		$additional_data_for_pagenation  = array() ;
-		$additional_query = "";
-		$additonal_where = array();
 		if( $div != "" &&  $div != "All" ){
-			$additional_query .= sprintf(' and divi.nama = ? ');
-			$additonal_where [] = $div ;
 			$additional_data_for_pagenation  [ $this->get_name_division() ] = $div ; 
+			$wheres [] = array( 'text' => ' and divi.nama = ?'  , 'val' =>   $div );
 		}
 		if( $div_sub != "" &&  $div_sub != "All" ){
-			$additional_query .= sprintf(' and divs.nama = ? ');
-			$additonal_where [] = $div_sub ;
 			$additional_data_for_pagenation  [ $this->get_name_division_sub() ] = $div_sub ; 
+			$wheres [] = array( 'text' => ' and divs.nama = ?'  , 'val' =>   $div_sub );
 		}
-
-		$this->set_pagenation( $additional_query , $additonal_where );
-		$query = sprintf('%1$s %2$s order by id DESC limit %3$s,%4$s',
-			$this->get_default_query() 	, 
-			$additional_query			,
-			$this->get_current_page()   , 
-			$this->get_total_jump()
-			);
-		$posts = DB::select(DB::raw($query) , $additonal_where ) ; 
+		$obj = new Income_model( array( "id" , "divisi_name" , "divisisub_name" , 'jumlah' , 'tanggal' ) );
+		$obj->set_limit( $this->get_current_page() , $this->get_total_jump() );
+		$obj->set_wheres( $wheres);
+		$posts = $obj->get_model();
 		$isi = "";
 		foreach ( $posts as $post) {
 			$isi .= sprintf('
@@ -54,7 +36,7 @@ class income extends uang {
 					<td>%4$s</td>
 					<td>%5$s</td>
 				</tr>
-				', $post->id , $post->nama_div, $post->nama_sub,
+				', $post->id , $post->divisi_name, $post->divisisub_name,
 				$post->jumlah , $post->tanggal
 				);
 		}
@@ -74,9 +56,9 @@ class income extends uang {
 				%1$s
 				
 			</table>%2$s', $isi , 
-			 $this->get_pagenation_link( $additional_data_for_pagenation ),
-			 $this->get_title(),
-			$form 
+			 	$obj->get_pagenation_link( $additional_data_for_pagenation ),
+			 	$this->get_title(),
+				$form 
 			);
 		return $hasil ;		
 	}
@@ -86,7 +68,7 @@ class income extends uang {
 		$hasil ="";
 		//$hasil .= Form::open(array('method' => 'get' , 'action' => '')); 
 		$hasil .= "<form class='form-inline' name='' methode = 'get' action= 'income' role='form' > ";
-		$hasil .= sprintf('<div class="form-group select_form  ">%1$s</div>',$divisi);
+		$hasil .= sprintf('<div class="form-group select_form ">%1$s</div>',$divisi);
 		$hasil .= sprintf('<div class="form-group select_form ">%1$s</div>',$divisi_sub);
 		//$hasil .= '  <div class="form-group"><input type="text" class="form-control" id="tanggal" name="tanggal" placeholder="Tanggal"></div>';
 		$hasil .= '  <div class="form-group"><button type="submit" class="btn btn-primary btn-sm">Filter</button></div>';
@@ -95,7 +77,7 @@ class income extends uang {
 	}
 	protected function get_side(){
 		$hasil = sprintf('
-			<h3 class="title">Income</h3>
+			<h3 class="title">Outcome</h3>
 			<div class="list-group">
 			  <a href="#" class="list-group-item disabled">Table</a>
 			  <a href="#" class="list-group-item">Statistik</a>

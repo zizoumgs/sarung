@@ -1,4 +1,14 @@
 <?php
+/**
+ *	Evens 
+*/
+Event::listen('auth.login', function($user) {
+	//! http://stackoverflow.com/questions/22460066/laravel-last-login-date-and-time-timestamp
+	//! http://laravel.com/docs/events
+	//! Make sure that app/config/auth.php has 'driver' => 'eloquent'. So it will use your Eloquent User Model
+    $user->last_login = new DateTime;
+    $user->save();
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -10,7 +20,6 @@
 | your classes in the "global" namespace without Composer updating.
 |
 */
-
 ClassLoader::addDirectories(array(
 
 	app_path().'/commands',

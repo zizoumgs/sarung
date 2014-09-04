@@ -5,5 +5,10 @@ class Divisi extends Eloquent {
 	 *
 	 * @var string
 	 */
-	protected $table = 'divisi';
+	//protected $table = 'divisi';
+	protected $table = 'divisisub';
+	// DEFINE RELATIONSHIPS --------------------------------------------------
+	public function divisisub() {
+     	return $this->belongsTo('divisi' , 'iddivisi');
+ 	}	
 }

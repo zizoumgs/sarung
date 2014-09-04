@@ -6,6 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Admin_income' => $baseDir . '/app/controllers/admin/uang/Admin_income.php',
+    'Admin_root' => $baseDir . '/app/controllers/admin/Admin_root.php',
+    'Admin_uang' => $baseDir . '/app/controllers/admin/uang/Admin_uang.php',
     'DatabaseSeeder' => $baseDir . '/app/database/seeds/DatabaseSeeder.php',
     'Divisi' => $baseDir . '/app/models/Divisi.php',
     'DivisiSub_model' => $baseDir . '/app/models/DivisiSub_model.php',
@@ -15,12 +18,14 @@ return array(
     'Root_model' => $baseDir . '/app/models/Root_model.php',
     'SessionHandlerInterface' => $vendorDir . '/symfony/http-foundation/Symfony/Component/HttpFoundation/Resources/stubs/SessionHandlerInterface.php',
     'TestCase' => $baseDir . '/app/tests/TestCase.php',
+    'User' => $baseDir . '/app/models/User.php',
     'Whoops\\Module' => $vendorDir . '/filp/whoops/src/deprecated/Zend/Module.php',
     'Whoops\\Provider\\Zend\\ExceptionStrategy' => $vendorDir . '/filp/whoops/src/deprecated/Zend/ExceptionStrategy.php',
     'Whoops\\Provider\\Zend\\RouteNotFoundStrategy' => $vendorDir . '/filp/whoops/src/deprecated/Zend/RouteNotFoundStrategy.php',
     'divisi' => $baseDir . '/app/controllers/divisi.php',
-    'divisisub_control' => $baseDir . '/app/controllers/divisisub_control.php',
+    'divisisub' => $baseDir . '/app/controllers/divisisub.php',
     'income' => $baseDir . '/app/controllers/income.php',
+    'login' => $baseDir . '/app/controllers/login.php',
     'outcome' => $baseDir . '/app/controllers/outcome.php',
     'root' => $baseDir . '/app/controllers/root.php',
     'uang' => $baseDir . '/app/controllers/uang.php',

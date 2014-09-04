@@ -25,9 +25,28 @@ Route::get('users', function()
 //Route::get('outcome', 'outcome@index');
 //Route::get('/{id}', '{id}@index') ;
 //Route::controller('/', 'UserController');
-Route::get('/outcome', 'outcome@index');
-Route::get('/income', 'income@index');
-Route::get('/subdivisi', 'divisisub@index');
+/*
+$user = new User;
+$user->id = 5;
+$user->email = 'ema';
+$user->password = Hash::make('example');
+$user->idgroup = 1;
+$user->save();
+*/
+Route::get('logout', function()
+{
+    Auth::logout();
+    return Redirect::to('login');
+});
+Route::post('/login', 'login@index');
+Route::get('/login', 'login@index');
 
+Route::get('admin_uang'     , 'Admin_uang@index');
+Route::get('admin_uang/income'     , 'Admin_income@index');
+
+Route::get('outcome', 'outcome@index');
+Route::get('income', 'income@index');
+Route::get('subdivisi', 'divisisub@index');
+Route::get('', 'login@index');
 
 

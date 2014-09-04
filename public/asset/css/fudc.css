@@ -1,3 +1,13 @@
+body {
+	margin: 0px ;
+	padding: 0px ;
+	line-height: 1.5em;
+	font-family: serif ,sans-serif !important;
+	color: #555a4a;	
+}
+label  , .item{
+	font-size:0.6em;
+}
 .header_container{
 	background:#42A2CE !important;
 }
@@ -32,4 +42,34 @@ table{
 }
 .pagination{
 	margin:5px 0px;
+}
+/*Login*/
+body.login_body {
+	padding-top: 40px;
+	padding-bottom: 40px;
+	background-color: #F1F1F1 !important;
+}
+body.login_body .center{
+	margin: 20px auto;
+	text-align:center !important;
+	background:transparent;
+}
+body.login_body .login {
+	margin: 10px auto;				
+	max-width: 275px;
+	border-radius:7px;
+}
+body.login_body .login form{				
+	background: white;
+	margin-bottom:10px;
+}
+body.login_body .item:not(span) ,  .login form{
+	padding: 15px;
+}
+body.login_body .item  {
+	color:#99A4BC;
+}
+body.login_body .login input[type='text'] , body.login_body .login input[type='password'] {
+	padding:5px !important;
+	margin:0px !important;
 }

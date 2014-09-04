@@ -1,0 +1,79 @@
+body {
+    height: 100%;
+}
+#wrap {
+    background: black;
+    min-height: 100%;
+}
+#main {
+  overflow:auto;
+  padding-bottom:150px; /* this needs to be bigger than footer height*/
+}
+aside .title{
+    font-size:1.3em;
+    margin-bottom:5px;
+}
+.footer {
+  position: relative;
+  margin-top: -150px; /* negative value of footer height */
+  height: 150px;
+  clear:both;
+  padding-top:20px;
+  background:#F5F5F5;
+} 
+/*Top Header*/
+.top-header{
+    margin-bottom:0px ;    
+}
+.top-header .navbar-collapse li:not(.active) a , .top-header  a.navbar-brand {
+	color:#37B0D5 !important;
+}
+.admin_side{
+    background: black;
+    color: #EEEEEE;
+    padding: 8px 8px;
+}
+aside.col-md-2 ul li a{
+    display: block;
+	color:#F1F1F1;
+    color: #EEEEEE;
+}
+article.col-md-10{
+    background:#F1F1F1;
+}
+
+/*Side Widget appears Click*/
+.title_side_content {
+	color:#37B0D5 !important;    
+}
+.inside_side_content{
+	color:#37B0D5 !important;
+}
+.inside_side_content:hover{
+	font-weight: bold;
+	background: #F1F1F1 !important;
+}
+.popover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1010;
+  display: none;
+  width: 200px;
+  padding: 1px;
+  text-align: left;
+  white-space: normal;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+     -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -webkit-background-clip: padding-box;
+     -moz-background-clip: padding;
+          background-clip: padding-box;
+}
+

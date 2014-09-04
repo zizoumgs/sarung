@@ -6,6 +6,7 @@
 abstract class root extends Controller {
 	private $title = "";
 	protected $category = "";
+	private $body_attribute = "";
 	abstract protected function get_header();
 	abstract protected function get_footer();
 	abstract public function index( $param = array() ) ; 
@@ -72,4 +73,6 @@ abstract class root extends Controller {
         $select .= "</select>";
         return $select;
     }	
+    protected function set_body_attribute($attr){		$this->body_attribute = $attr;    }
+    protected function get_body_attribute(){return $this->body_attribute ; }
 }

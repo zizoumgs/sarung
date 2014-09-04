@@ -9,6 +9,7 @@ class uang extends root {
     protected function get_name_division_sub(){ return $this->name_division_sub ; }
     public function index( $param = array() ){
         $data = array(
+            'body_attr'    => $this->get_body_attribute() ,             
             'js'    => $this->get_js() ,
             'footer'    => $this->get_footer() ,
             'header'    => $this->get_header(),

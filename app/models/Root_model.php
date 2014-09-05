@@ -5,6 +5,7 @@
 *
 **/
 abstract class Root_model {
+	protected $base_query  ; 
 	private $alias_name  = array();
 	private $order = "";
 	private $final_query = "";// Good for debug \
@@ -94,5 +95,7 @@ abstract class Root_model {
 	public function get_wheres(){ 		return $this->wheres;	}
 
 
-	abstract protected function get_base_query();
+	protected function get_base_query(){		return $this->base_query;		}
+	
+	abstract protected function set_base_query( $query) ; 
 }

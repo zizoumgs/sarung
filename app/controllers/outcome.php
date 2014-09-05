@@ -9,6 +9,22 @@ class outcome extends uang {
 		$this->set_title('Pengeluaran Pondok Pesantren Fatihul Ulum');
 		$this->set_category('uang');
 	}
+	private function get_base_query($alias_name){
+		$first = sprintf( '
+			select outc.id as %1$s , divi.nama as %2$s, divs.nama as %3$s,
+			outc.jumlah as %4$s  , outc.tanggal as %5$s
+			from outcome outc , divisi divi , divisisub divs
+			where divs.id = outc.idsubdivisi and divi.id = divs.iddivisi 
+		',
+		$alias_name [0] , 
+		$alias_name [1] , 
+		$alias_name [2] ,
+		$alias_name [3] ,
+		$alias_name [4] 
+
+		);
+		return $first;
+	}	
 	protected function get_table(){
 		$form = $this->get_form();
 		$div_sub 	= $this->get_selected_division_sub();
@@ -23,7 +39,10 @@ class outcome extends uang {
 			$additional_data_for_pagenation  [ $this->get_name_division_sub() ] = $div_sub ; 
 			$wheres [] = array( 'text' => ' and divs.nama = ?'  , 'val' =>   $div_sub );
 		}
-		$obj = new Outcome_model( array( "id" , "divisi_name" , "divisisub_name" , 'jumlah' , 'tanggal' ) );
+		
+		$alias = array( "id" , "divisi_name" , "divisisub_name" , 'jumlah' , 'tanggal' );
+		$obj = new Outcome_model( $alias );
+		$obj ->set_base_query( $this->get_base_query($alias) );
 		$obj->set_limit( $this->get_current_page() , $this->get_total_jump() );
 		$obj->set_wheres( $wheres);
 		$posts = $obj->get_model();

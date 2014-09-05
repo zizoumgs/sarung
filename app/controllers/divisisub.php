@@ -4,7 +4,21 @@ class divisisub extends uang {
 		$this->set_title('Sub divisi Pondok Pesantren Fatihul Ulum');
 		$this->set_category('uang');
 	}
+	private function get_base_query( $alias_name){
+		$first = sprintf( 'select divs.id as %1$s ,  divi.nama as %2$s , divs.nama as %3$s
+			from  divisi divi , divisisub divs 
+			where divs.iddivisi = divi.id ' 
+			,
+			$alias_name [0] , $alias_name [1] , $alias_name [2]
+		);
+		return $first; 
+	}
 	protected function get_table(){
+		$query = '
+			select divs.id as %1$s ,  divi.nama as %2$s , divs.nama as %3$s
+			from  divisi divi , divisisub divs 
+			where divs.iddivisi = divi.id		
+		';
 		$form = $this->get_form();
 		$div 		= $this->get_selected_division();
 		$wheres = array ();
@@ -14,7 +28,9 @@ class divisisub extends uang {
 			$wheres [] = array( 'text' => ' and divi.nama = ?'  , 'val' =>   $div );
 		}
 
-		$divisi_sub = new DivisiSub_model( array( "id" , "divisi_name" , "divisisub_name") );
+		$alias = array( "id" , "divisi_name" , "divisisub_name");
+		$divisi_sub = new DivisiSub_model( $alias );
+		$divisi_sub->set_base_query( $this->get_base_query( $alias ) );
 		$divisi_sub->set_limit( $this->get_current_page() , $this->get_total_jump() );
 		$divisi_sub->set_wheres( $wheres);		
 		$posts = $divisi_sub->get_model();

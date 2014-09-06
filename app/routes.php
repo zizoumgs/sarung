@@ -33,16 +33,22 @@ $user->password = Hash::make('example');
 $user->idgroup = 1;
 $user->save();
 */
+//Route::get('home', 'HomeController');
+//Route::controller('home', 'HomeController');
 Route::get('logout', function()
 {
     Auth::logout();
     return Redirect::to('login');
 });
-Route::post('/login', 'login@index');
-Route::get('/login', 'login@index');
+
+Route::post('login', 'login@index');
+Route::get('login', 'login@index');
 
 Route::get('admin_uang'     , 'Admin_uang@index');
-Route::get('admin_uang/income'     , 'Admin_income@index');
+Route::get('admin_uang/outcome'     , 'Admin_outcome@index');
+//! admind_income
+Route::get('admin_uang/income'          , 'Admin_income@index');
+Route::controller('admin_uang/income_cud'      , 'Admin_income_cud');
 
 Route::get('outcome', 'outcome@index');
 Route::get('income', 'income@index');

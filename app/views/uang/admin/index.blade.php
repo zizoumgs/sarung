@@ -9,9 +9,9 @@
 			<aside class='col-md-2 admin_side'>
 				{{ $side }}
 			</aside>
-			<article class='col-md-10'>
+			<article class='col-md-10 main-article'>
 				@section('content')
-			   		<h2>{{ $content }}</h2>
+			   		{{ $content }}
 			   	@show
 			</article>
 		</div>

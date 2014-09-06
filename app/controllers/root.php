@@ -53,19 +53,15 @@ abstract class root extends Controller {
 	protected function get_total_jump(){		return 15;	}
 	protected function base_url(){		return URL::to('/');	}
     protected function get_select( $items  , $array = array() ){
-        $default = array( "class" => "select_class" , "id" => "" , "name" => 'select_name' , 'selected' => '' );
-        foreach ( $default as $key => $value) {
-            if( array_key_exists($key , $array)){
-                $default [$key] = $array [$key] ;
-            }
-        }
-        $select = sprintf('<select name="%1$s" class="%2$s" id="%3$s" >', 
-            $default ['name']   , 
-            $default ['class']  ,
-            $default ['id']     );
+		$attribute_select ="" ;
+		foreach($array as $key => $val){
+			if( $key != "selected")
+				$attribute_select .= sprintf( ' %1$s = "%2$s" ' , $key , $val );
+		}
+		$select = sprintf('<select %1$s >' , $attribute_select);
         foreach ( $items as $key => $value) {
         	$selected = "";
-        	if($value == $default ['selected']){
+        	if($value == $array ['selected']){
         		$selected = ' selected="selected" ' ;
         	}
             $select .= sprintf('<option value="%2$s" %3$s >%2$s</option>',$key,$value , $selected );

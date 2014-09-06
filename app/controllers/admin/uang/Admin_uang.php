@@ -1,17 +1,110 @@
 <?php
+/**
+ *	This class will be parent for every administrator uang
+*/
 class Admin_uang extends Admin_root{
-    public function __construct(){
+    private $name_division , $name_division_sub ; 
+    protected function get_name_division(){ return $this->name_division ; }
+    protected function get_name_division_sub(){ return $this->name_division_sub ; }
+    protected function get_selected_division(){        return Input::get( $this->name_division );    }
+    protected function get_selected_division_sub(){    return Input::get( $this->name_division_sub );  }
+	private function set_attribute_on_select( $from , $to ){
+        foreach ( $from as $key => $value) {
+            if( ! array_key_exists( $key , $to )){
+                $to [$key] = $value;
+            }
+        }
+		return $to;
+	}
+    protected function get_select_divisi( $array = array() , $items = array()){
+        $default = array( "class" => "selectpicker" , "id" => "" , "name" => 'divisi');
+        foreach ( $default as $key => $value) {
+            if( array_key_exists($key , $array)){
+                $default [$key] = $array [$key] ;
+            }
+        }
+		$array = $this->set_attribute_on_select( $default , $array );
+        $this->name_division = $default ['name'] ; 
+        $array ['selected'] = $this->get_selected_division();
+		if( count ($items) <= 0 ):
+        $posts = DB::select(DB::raw('
+            select divi.id as id , divi.nama as nama_div
+            from divisi divi 
+            order by nama_div')
+        );
+        $items = array("All");
+        foreach ($posts as $post ) {
+            $items [$post->id] = $post->nama_div ; 
+        }
+		endif;
+        return $this->get_select( $items , $array ) ;
+    }
+    protected function get_select_divisi_sub( $array = array() , $items = array() ){
+        $default = array( "class" => "selectpicker" ,
+							"id" => "" ,
+							"name" => "divisi_sub"  
+						 );
+		$array = $this->set_attribute_on_select( $default , $array );
+        $this->name_division_sub = $array ['name'] ; 		
+		$array ["selected"] = $this->get_selected_division_sub();
+        //! for selected item
+		if( count ($items) <= 0 ):
+        $posts = DB::select(DB::raw('
+            select divis.id as id , divis.nama as nama_div 
+            from divisisub divis 
+            group by nama_div
+            order by divis.id DESC')
+        );
+        $items = array( '' => "All");
+        foreach ($posts as $post ) {
+            $items [$post->id] = $post->nama_div ; 
+        }
+		endif;
+        return $this->get_select( $items , $array) ;
+    }
+	
+    public function __construct( $params ){
+		$config = array( 'min_power' => 1000  );
+		foreach( $params as $key => $val){			
+			if( $key == $config [$key]){
+				$this->config [$key] = $val ; 
+			}
+		}
+		$this->set_min_power( $config ['min_power']);
         parent::__construct();
 		$this->set_title('Admin Uang Fatihul Ulum');
 		$this->set_body_attribute( " class='admin admin_uang_body' " );
 		$this->set_view ('uang/admin/index'); 
     }
+	//! you can override this if you wanna something different
+	//! @ see constructor function from Admin_root
+	protected function check_power_admin(){
+		if( $this->get_user_power() < $this->get_min_power()){
+			return Redirect::to('/login');			
+		}
+		/*
+		$users = User::all();
+		foreach ($users as $user){
+			echo $user -> admindgroup->power ; 
+		}
+		*/		
+	}
 	protected function get_content(){
-		return "<h1>Welcome Admind Uang</h1>
-		<p>Silahkan anda masukkan apa yang perlu dimasukkan!</p>";
+		$hasil = '<div class="thumbnail">
+		<h2>Welcome %1$s</h2>
+		<p><b>Your Last Login was</b> %2$s</p>
+		<p><b>Your Power is </b> %3$s</p>
+		<p><b>Your group is </b> %4$s</p>
+		</div>';
+		return sprintf( $hasil ,
+					   $this->get_user_name()	,
+					   Auth::user()->last_login ,
+					   $this->get_user_power()  ,
+					   $this->get_user_name_group());
+		
 	}
 	protected function get_header(){
-		$hasil = '
+		$hasil = sprintf('
 		<nav class="navbar navbar-inverse top-header" role="navigation">
             <div class="container-fluid">
 	            <div class="navbar-header">
@@ -26,15 +119,18 @@ class Admin_uang extends Admin_root{
                 <div class="collapse navbar-collapse">
 	                <ul class="nav navbar-nav navbar-right">
                         <li class="active"><a href="#">Home</a></li>
-                        <li><a href="%2$s" rel="nofollow" target="_blank">Visit Site</a></li>
+                        <li><a href="#" rel="nofollow" target="_blank">Visit Site</a></li>
                         <li><a href="#" rel="nofollow">Back up Database</a></li>
-                        <li><a href="%1$s" rel="nofollow">Admind-Power</a></li>
-		                <li><a href="logout" rel="nofollow">Log out</a></li>
+                        <li><a href="#" rel="nofollow">%2$s | %3$s</a></li>
+		                <li><a href="%1$s" rel="nofollow">Log out</a></li>
                     </ul>
                 </div>
 			</div>
-		</nav>		
-		';
+		</nav>',
+		URL::to('/')."/logout" ,
+		$this->get_user_power() ,
+		$this->get_user_name_group()
+		);
 		return $hasil;
 	}
 	protected function get_side(){
@@ -102,6 +198,13 @@ class Admin_uang extends Admin_root{
     }
 	
 	//! penting
-	protected function get_admin_url(){		return sprintf('%1$s/admin_uang' , Url::to('/') ) ;	}
+	protected function get_admin_url(){		return sprintf('%1$s/admin_uang' , URL::to('/') ) ;	}
+    protected function get_current_page(){    
+        $page = Input::get( 'page') ; 
+        if( $page > 0)
+            return (Input::get( 'page')-1)* $this->get_total_jump();  
+        return 0;  
+    }
+	
 }
 

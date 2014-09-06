@@ -1,6 +1,13 @@
 body {
     height: 100%;
+	font-size:1.5em;
 }
+/*Reset*/
+.pagination {
+	margin:0px;
+	font-size:0.8em;
+}
+
 #wrap {
     background: black;
     min-height: 100%;
@@ -8,6 +15,12 @@ body {
 #main {
   overflow:auto;
   padding-bottom:150px; /* this needs to be bigger than footer height*/
+}
+article.main-article{
+	padding:5px 10px;
+}
+.article-part {
+	margin-bottom:10px;	
 }
 aside .title{
     font-size:1.3em;

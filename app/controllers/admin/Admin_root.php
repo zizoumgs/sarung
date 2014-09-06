@@ -38,7 +38,14 @@ abstract class Admin_root extends root {
 	abstract protected function get_admin_url();
 	//! you should override this class , because this will check admin`s power
 	abstract protected function check_power_admin();
+	/* Call this everythime you have succeded to delete item*/
+	public function delete_db_admin_root($nama_table , $id_table){
+		$user = new SaveId;
+		$user->namatable = $nama_table;
+		$user->idtable = $id_table;
+		$user->save();
 
+	}
 	//! about auth
 	protected function get_user_id(){ return Auth::id() ; }
 	protected function get_user_name() { return Auth::user()->email;}

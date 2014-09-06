@@ -13,21 +13,6 @@ class Admin_income extends Admin_uang{
         parent::__construct($default);
    		$this->set_title('Admin Uang-Income Fatihul Ulum');
     }
-	private function get_base_query( $alias_name){
-		$first = sprintf( '
-			select outc.id as %1$s , divi.nama as %2$s, divs.nama as %3$s,
-			outc.jumlah as %4$s  , outc.tanggal as %5$s
-			from income outc , divisi divi , divisisub divs
-			where divs.id = outc.idsubdivisi and divi.id = divs.iddivisi 
-		',
-		$alias_name [0] , 
-		$alias_name [1] , 
-		$alias_name [2] ,
-		$alias_name [3] ,
-		$alias_name [4] 
-		);
-		return $first;
-	}	
 	//! index , this is default methode which will be called by index
     protected function get_content(){
 		$form = $this->get_form();
@@ -37,17 +22,17 @@ class Admin_income extends Admin_uang{
 		$additional_data_for_pagenation  = array() ;
 		if( $div != "" &&  $div != "All" ){
 			$additional_data_for_pagenation  [ $this->get_name_division() ] = $div ; 
-			$wheres [] = array( 'text' => ' and divi.nama = ?'  , 'val' =>   $div );
+			$wheres [] = array( 'text' => ' and third.nama = ?'  , 'val' =>   $div );
 		}
 		if( $div_sub != "" &&  $div_sub != "All" ){
 			$additional_data_for_pagenation  [ $this->get_name_division_sub() ] = $div_sub ; 
-			$wheres [] = array( 'text' => ' and divs.nama = ?'  , 'val' =>   $div_sub );
+			$wheres [] = array( 'text' => ' and second.nama = ?'  , 'val' =>   $div_sub );
 		}
 		
-		$alias = array( "id" , "divisi_name" , "divisisub_name" , 'jumlah' , 'tanggal' );
-		$obj = new Income_model( $alias );
-		$obj->set_base_query( $this->get_base_query( $alias ) );		
+		$obj = new Models_uang();
+		$obj->set_base_query_income();
 		$obj->set_limit( $this->get_current_page() , $this->get_total_jump() );
+		$obj->set_order(' order by updated_at DESC ');
 		$obj->set_wheres( $wheres);
 		
 		$posts = $obj->get_model();
@@ -55,28 +40,36 @@ class Admin_income extends Admin_uang{
 		foreach ( $posts as $post) {
 			$isi .= sprintf('
 				<tr>
-					<td> <span class="badge ">%1$s </span></td>
+					<td> <span class="badge ">%2$s </span></td>
 					<td>
-						<a href="%6$s/income_cud/edit/%1$s" >Edit</a><br>
-						<a href="#" >Delete</a></td>
-					<td>%2$s</td>
+						<a href="%1$s/%2$s" >Edit</a><br>
+						<a href="%8$s/%2$s" >Delete</a></td>
 					<td>%3$s</td>
 					<td>%4$s</td>
 					<td>%5$s</td>
+					<td>%6$s</td>
+					<td>%7$s</td>
 				</tr>
-				', $post->id ,
+				',
+				$this->get_edit_income_url(),
+				$post->income_id ,
 				$post->divisi_name,
 				$post->divisisub_name,
-				$post->jumlah ,
+				$this->get_rupiah_root($post->jumlah) ,
 				$post->tanggal,
-				$this->get_admin_url()
+				$post->updated_at,
+				$this->get_del_income_url()
+				
 				);
 		}
+		$panel_heading = sprintf('<div class="panel-heading"><span class="badge pull-right">%1$s</span>Menunjukkan Semua Table Income
+								 <a href="%2$s" class="btn btn-default btn-sm">Add</a></div>' ,
+								 $obj->get_total_row() ,
+								 $this->get_add_income_url() );
 		$hasil = sprintf(
 			'
 		<div class="panel panel-primary">
-			<div class="panel-heading">	<span class="badge pull-right">%5$s</span>Menunjukkan Semua Table Income
-			</div>
+			%5$s
 			<div class="panel-body">    %4$s  </div>
 			<table class="table" >
 				<tr class ="header">
@@ -86,6 +79,7 @@ class Admin_income extends Admin_uang{
 					<td>Sub Divisi</th>
 					<td>Jumlah</th>
 					<td>Tanggal</th>
+					<td>Last Update</th>
 				</tr>
 				%1$s				
 			</table>
@@ -95,11 +89,11 @@ class Admin_income extends Admin_uang{
 			 	$obj->get_pagenation_link( $additional_data_for_pagenation ),
 			 	$this->get_title(),
 				$form ,
-				$obj->get_total_row()
+				$panel_heading
 			);
 		return $hasil ;		
     }
-	protected function get_form(){
+	protected function get_form($methode = ''){
 		$divisi = $this->get_select_divisi( );
 		$divisi_sub = $this->get_select_divisi_sub(  );
 		$hasil ="";
@@ -138,4 +132,9 @@ class Admin_income extends Admin_uang{
 		return $js;
     }
 
+	//! usefull for redirect 
+	protected function get_parent_url(){ return parent::get_admin_url()."/income";}
+	protected function get_edit_income_url(){ return sprintf('%1$s/income_cud/edit' , $this->get_admin_url() );	}
+	protected function get_add_income_url(){ return sprintf('%1$s/income_cud/add'   , $this->get_admin_url() );	}
+	protected function get_del_income_url(){ return sprintf('%1$s/income_cud/del'   , $this->get_admin_url() );	}
 }

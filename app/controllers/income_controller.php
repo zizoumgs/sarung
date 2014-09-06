@@ -3,7 +3,7 @@
 *	To change pagenation move to 
 * /vendor/laravel/framework/src/Illuminate/Pagination/views
 **/
-class income extends uang {
+class income_controller extends uang {
 	public function __construct(){
 		$this->set_title('Pemasukan Pondok Pesantren Fatihul Ulum');
 		$this->set_category('uang');

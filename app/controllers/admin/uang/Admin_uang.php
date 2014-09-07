@@ -136,7 +136,7 @@ class Admin_uang extends Admin_root{
                         array('Outcome' 	,'<span class="glyphicon glyphicon-refresh"></span>'    , sprintf('%1$s/outcome' , $this->get_admin_url() )  ) ,
                         array('Income'  	,'<span class="glyphicon glyphicon-cutlery"></span>'    , sprintf('%1$s/income'  	, $this->get_admin_url() ) ) ,
                         array('Subdivisi'	,'<span class="glyphicon glyphicon-expand"></span>'     , sprintf('%1$s/subdivisi_crud' , $this->get_admin_url() ) ),
-						array('User'		,'<span class="glyphicon glyphicon-user"></span>'       , sprintf('%1$s/subdivisi' , $this->get_admin_url() ) )
+						array('Divisi'		,'<span class="glyphicon glyphicon-user"></span>'       , sprintf('%1$s/divisi_crud' , $this->get_admin_url() ) )
                       );
         foreach($list as $key => $val ){
            $list_menu .= sprintf('<li><a href="%1$s" rel="nofollow"> %2$s    %3$s</a></li>', $val [2] , $val [1] ,$val[0]) ;

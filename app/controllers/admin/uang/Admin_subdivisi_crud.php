@@ -241,7 +241,6 @@ class Admin_subdivisi_crud extends Admin_uang{
 	}
 
 	public function getIndex( $params = array ()){
-		echo $this->get_selected_division();
 		$div 		= $this->selected_divisi = Input::get('divisi');
 		$form = $this->get_form_table();
 		$wheres = array ();

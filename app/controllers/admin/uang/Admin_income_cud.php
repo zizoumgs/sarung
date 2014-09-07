@@ -98,12 +98,16 @@ class Admin_income_cud extends Admin_income{
 				$id =  $result->idtable;
 				$data ['id'] = $id ;
 				$saveId = SaveId::find( $result->id);				
-				$income->id = $id;
-				
 			}
+			else{
+				$id = $income->max('id');
+				$id++;
+			}
+			
 			$divisi   		= Divisi::where('nama' , '=' , $div , 'and' )->firstOrFail();
 			$divisisub 		= DivisiSub::where('nama' , '=' , $sub , 'and' )
 							->where('iddivisi' , '=' , $divisi->id)->firstOrFail();
+			$income->id = $id;
 			$income->idsubdivisi = $divisisub->id	;
 			$income->jumlah   = $data['jumlah']			;
 			$income->tanggal  = $data['tanggal']	;
@@ -116,7 +120,8 @@ class Admin_income_cud extends Admin_income{
 			$bool = false ; 
 			DB::transaction(function()use ($income , $saveId , &$bool){
 				$income->save();
-				$saveId->delete();
+				if($saveId)
+					$saveId->delete();
 				$bool = true;				
 			});
 			if($bool){

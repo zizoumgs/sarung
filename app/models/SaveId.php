@@ -20,5 +20,4 @@ class SaveId extends Eloquent{
     public function scopeNamaTable($query , $namatable){
         return $query->where('namatable', '=', $namatable);
     }
-    
 }

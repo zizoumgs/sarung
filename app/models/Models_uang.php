@@ -27,10 +27,10 @@ class Models_uang extends Root_model{
 	}
 	/*Automatic Base Query , the alias header name will have 5 column*/
 	public function set_base_query_outcome(){
-		$alias_header_name = array( "income_id" , "divisi_name" , "divisisub_name" , 'jumlah' , 'tanggal' );
+		$alias_header_name = array( "income_id" , "divisi_name" , "divisisub_name" , 'jumlah' , 'tanggal', 'updated_at' );
 		$first = sprintf( '
 			select main.id as %1$s , third.nama as %2$s, second.nama as %3$s,
-			main.jumlah as %4$s  , main.tanggal as %5$s
+			main.jumlah as %4$s  , main.tanggal as %5$s , main.updated_at as %6$s
 			from outcome main , divisi third , divisisub second
 			where second.id = main.idsubdivisi and third.id = second.iddivisi 
 		',
@@ -38,7 +38,8 @@ class Models_uang extends Root_model{
 		$alias_header_name [1] , 
 		$alias_header_name [2] ,
 		$alias_header_name [3] ,
-		$alias_header_name [4]
+		$alias_header_name [4] ,
+        $alias_header_name [5] 
 		);
 		$this->set_alias($alias_header_name);
 		$this->set_base_query($first);

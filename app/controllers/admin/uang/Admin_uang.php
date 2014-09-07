@@ -3,7 +3,9 @@
  *	This class will be parent for every administrator uang
 */
 class Admin_uang extends Admin_root{
-    private $name_division , $name_division_sub ; 
+    protected $name_division , $name_division_sub ;
+	protected function set_name_division($val) {$this->name_division = $val;}
+	protected function set_name_division_sub($val) {$this->name_division_sub = $val;}
     protected function get_name_division(){ return $this->name_division ; }
     protected function get_name_division_sub(){ return $this->name_division_sub ; }
     protected function get_selected_division(){        return Input::get( $this->name_division );    }
@@ -63,15 +65,8 @@ class Admin_uang extends Admin_root{
         return $this->get_select( $items , $array) ;
     }
 	
-    public function __construct( $params ){
-		$config = array( 'min_power' => 1000  );
-		foreach( $params as $key => $val){			
-			if( $key == $config [$key]){
-				$this->config [$key] = $val ; 
-			}
-		}
-		$this->set_min_power( $config ['min_power']);
-        parent::__construct();
+    public function __construct( $params = array( 'min_power' => 1000  )){
+        parent::__construct( $params);
 		$this->set_title('Admin Uang Fatihul Ulum');
 		$this->set_body_attribute( " class='admin admin_uang_body' " );
 		$this->set_view ('uang/admin/index'); 
@@ -139,9 +134,9 @@ class Admin_uang extends Admin_root{
 							   $this->get_admin_url(),"Dashboard"); 
         $list = array(
                         array('Outcome' 	,'<span class="glyphicon glyphicon-refresh"></span>'    , sprintf('%1$s/outcome' , $this->get_admin_url() )  ) ,
-                        array('Income'  	,'<span class="glyphicon glyphicon-cutlery"></span>' , sprintf('%1$s/income'  	, $this->get_admin_url() ) ) ,
-                        array('Subdivisi'	,'<span class="glyphicon glyphicon-expand"></span>'  , sprintf('%1$s/subdivisi' , $this->get_admin_url() ) ),
-						array('User'		,'<span class="glyphicon glyphicon-user"></span>'  , sprintf('%1$s/subdivisi' , $this->get_admin_url() ) )
+                        array('Income'  	,'<span class="glyphicon glyphicon-cutlery"></span>'    , sprintf('%1$s/income'  	, $this->get_admin_url() ) ) ,
+                        array('Subdivisi'	,'<span class="glyphicon glyphicon-expand"></span>'     , sprintf('%1$s/subdivisi_crud' , $this->get_admin_url() ) ),
+						array('User'		,'<span class="glyphicon glyphicon-user"></span>'       , sprintf('%1$s/subdivisi' , $this->get_admin_url() ) )
                       );
         foreach($list as $key => $val ){
            $list_menu .= sprintf('<li><a href="%1$s" rel="nofollow"> %2$s    %3$s</a></li>', $val [2] , $val [1] ,$val[0]) ;
@@ -205,6 +200,13 @@ class Admin_uang extends Admin_root{
             return (Input::get( 'page')-1)* $this->get_total_jump();  
         return 0;  
     }
-	
+	//! message make , as you can see that message is array
+	public function make_message($messages){
+		$message_outputs  = "";
+		foreach( $messages as $message):	
+			$message_outputs .= $message ;
+		endforeach;
+		return $message;
+	}	
 }
 

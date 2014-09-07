@@ -116,5 +116,9 @@ abstract class root extends Controller {
 	protected function get_rupiah_root( $angka){
 		return number_format($angka,2,',','.');
 	}
+	/*Nama yang akan dikirimi email*/
+	protected function get_nama_to_email(){
+		return "Syafii";
+	}
 	
 }

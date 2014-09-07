@@ -3,7 +3,8 @@ class DivisiSub extends Eloquent {
 	protected $table = 'divisisub';
 	// DEFINE RELATIONSHIPS --------------------------------------------------
 	public function divisi() {
-     	return $this->belongsTo('divisi' , 'iddivisi');
+		//! must be capital form first aplhabet
+     	return $this->belongsTo('Divisi' , 'iddivisi');
  	}	
 }
 

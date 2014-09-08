@@ -3,8 +3,18 @@ body {
 	padding: 0px ;
 	line-height: 1.5em;
 	font-family: serif ,sans-serif !important;
-	color: #555a4a;	
+	color: #555a4a;
+	font-size:1.7em;
 }
+/*Reset*/
+h1,h2,h3,h4,h5,h6,#main , div{
+	margin:0px ; padding:0px;
+}
+#main {
+	margin-top:15px;
+}
+
+/*
 label  , .item{
 	font-size:0.6em;
 }
@@ -14,7 +24,6 @@ label  , .item{
 .header_container .navbar{
 	background:#42A2CE !important;
 	border:none;
-	box-shadow:none;
 }
 .header_container .navbar a{
 	color:white !important;
@@ -27,7 +36,6 @@ article .title{
 	margin:0px;
 	padding:0px 0px 5px;
 	border-bottom:1px solid #DDDDDD;
-	/*font-family: 'Glyphicons Halflings';	*/
 	font-size: 2em;
 }
 table td{
@@ -43,6 +51,7 @@ table{
 .pagination{
 	margin:5px 0px;
 }
+*/
 /*Login*/
 body.login_body {
 	padding-top: 40px;

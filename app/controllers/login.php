@@ -86,4 +86,5 @@ class login extends root {
     protected function get_side(){}
     protected function get_footer(){}
     protected function get_additional_js(){}
+	protected function get_additional_css(){}
 }

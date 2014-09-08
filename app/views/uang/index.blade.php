@@ -7,7 +7,7 @@
 	<div id="main" class="row">
 		<article class='col-md-9'>
 			@section('content')
-	       		<h2>{{ $content }}</h2>
+	       		{{ $content }}
 	       	@show
 		</article>
 		<aside class='col-md-3'>

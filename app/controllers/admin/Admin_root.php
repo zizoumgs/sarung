@@ -34,7 +34,6 @@ abstract class Admin_root extends root {
 	protected final function set_min_power($val){ $this->values ['min_power']  = $val ;}
 	protected final function get_min_power() { return $this->values ['min_power'];}
 	
-	abstract protected function get_content();
 	abstract protected function get_admin_url();
 	//! you should override this class , because this will check admin`s power
 	abstract protected function check_power_admin();

@@ -28,7 +28,7 @@ return array(
 	|
 	*/
 
-	'host' => 'smtp.mailgun.org',
+	'host' => 'smtp.gmail.com',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ return array(
 	|
 	*/
 
-	'from' => array('address' => null, 'name' => null),
+	'from' => array('address' => 'fatihululum@sakip.com', 'name' => 'Sakip Fatihul Ulum'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -79,22 +79,16 @@ return array(
 	| connection. You may also set the "password" value below this one.
 	|
 	*/
-
-	'username' => null,
-
+	'username' => 'zizougra@gmail.com',
 	/*
 	|--------------------------------------------------------------------------
 	| SMTP Server Password
 	|--------------------------------------------------------------------------
-	|
 	| Here you may set the password required by your SMTP server to send out
 	| messages from your application. This will be given to the server on
 	| connection so that the application will be able to send messages.
-	|
 	*/
-
-	'password' => null,
-
+	'password' => 'tYh4&*(1',
 	/*
 	|--------------------------------------------------------------------------
 	| Sendmail System Path

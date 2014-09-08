@@ -46,6 +46,9 @@ Route::get('login', 'login@index');
 
 Route::get('admin_uang'     , 'Admin_uang@index');
 Route::get('admin_uang/outcome'     , 'Admin_outcome@index');
+//! uang
+Route::controller('uang'      , 'uang');
+
 //! admind_income
 Route::get('admin_uang/income'          , 'Admin_income@index');
 Route::controller('admin_uang/income_cud'      , 'Admin_income_cud');
@@ -53,9 +56,11 @@ Route::controller('admin_uang/outcome_cud'      , 'Admin_outcome_cud');
 Route::controller('admin_uang/subdivisi_crud'      , 'Admin_subdivisi_crud');
 Route::controller('admin_uang/divisi_crud'      , 'Admin_divisi_crud');
 
+
+/*
 Route::get('outcome', 'outcome@index');
 Route::get('income', 'income@index');
 Route::get('subdivisi', 'divisisub@index');
 Route::get('', 'login@index');
-
+*/
 

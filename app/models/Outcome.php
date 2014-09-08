@@ -3,7 +3,7 @@
 class Outcome extends Eloquent {
 	protected $table = 'outcome';
 	public function divisisub() {
-     	return $this->belongsTo('divisisub' , 'idsubdivisi');
+     	return $this->belongsTo('DivisiSub' , 'idsubdivisi');
  	}
 }
 

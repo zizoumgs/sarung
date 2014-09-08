@@ -4,21 +4,35 @@
 * this is just definition , you can`t instant this class 
 **/
 abstract class root extends Controller {
-	private $js , $css;
-	private $title = "";
+	private $js , $css  , $header , $content , $footer , $side;
+	private $title = "" , $value = array( 'jump' => 15  );
 	protected $category = "";
 	private $body_attribute = "";
 	
-	abstract protected function get_header();
-	abstract protected function get_footer();
 	abstract public function index( $param = array() ) ; 
-	abstract protected function get_additional_js();
+	abstract protected function get_additional_css();
 	
+	protected function get_additional_js(){}
 	public function __construct(){}
 	protected function  set_title($val){		$this->title = $val;	}
 	protected function get_title(){ 		return $this->title;	}
 	protected function  set_category($val){ 		$this->category = $val;	}
-	protected function get_category(){ 		return $this->$this->category;	}	
+	protected function get_category(){ 		return $this->$this->category;	}
+	protected function set_content($val){ $this->content = $val ;}
+	protected function get_content() { return $this->content;}
+	protected function set_header ($val) { $this->header = $val ;}
+	protected function get_header ()	{ return $this->get_header ; }
+	protected function set_footer ($val) { $this->footer = $val ;}
+	protected function get_footer () { return $this->footer ; }
+	protected function set_css ($val) { $this->css .= $val;}
+	protected function set_js  ($val) { $this->js .= $val ; }
+	protected function get_side(){ return $this->side;}
+	protected function set_side($val) { $this->side = $val;}
+	//! will get only css which you choose
+	protected function get_css_only(){ return $this->css;}
+	//! will get only js which you choose
+	protected function get_js_only (){ return $this->js;}
+	
 	protected function get_css(){
 		return sprintf('
 			<link href="%1$s" rel="stylesheet" type="text/css" />
@@ -51,13 +65,8 @@ abstract class root extends Controller {
 			$this->get_additional_js()
 			);
 	}
-	protected function get_additional_css(){
-		return sprintf(
-		'<link href="%1$s" rel="stylesheet" type="text/css"/>',
-		URL::to('/').'/asset/css/fudc.css'
-		);
-	}
-	protected function get_total_jump(){		return 15;	}
+	protected function get_total_jump(){		return $this->value ['jump'];	}
+	protected function set_total_jump($val) { $this->value ['jump'] = $val ; }
 	protected function base_url(){		return URL::to('/');	}
     protected function get_select( $items  , $array = array() ){
 		$attribute_select ="" ;
@@ -98,6 +107,18 @@ abstract class root extends Controller {
 		});
 		</script>' ,$input );
 	}
+	/* If you wanna use another select  which is not same with default select in html , you just call this function*/
+	protected function use_select( $input = '.selectpicker' , $with_jquery_ui = true){
+		if($with_jquery_ui){
+			$this->css .= sprintf('<link href="%1$s" rel="stylesheet" type="text/css"/>',URL::to('/').'/asset/bootstrap/css/bootstrap-select.css');
+			$this->js  .= sprintf('<script type="text/javascript" src="%1$s/asset/bootstrap/js/bootstrap-select.js"></script>',$this->base_url()); 
+		}
+		$this->js .= sprintf(
+				'<script type="text/javascript">
+					$(function() { $("%1$s").selectpicker("show");	});
+				</script>',$input);
+		
+	}
 	/**
 	 *	You should setting on app.config/mail.php like following 
 		return array('driver' => 'smtp','host' => 'smtp.gmail.com', 'port' => 587,
@@ -114,11 +135,16 @@ abstract class root extends Controller {
 		});		
 	}
 	protected function get_rupiah_root( $angka){
-		return number_format($angka,2,',','.');
+		return number_format($angka,0,',','.');
 	}
-	/*Nama yang akan dikirimi email*/
+	/*the name who will be sent email */
 	protected function get_nama_to_email(){
 		return "Syafii";
 	}
-	
+	protected function get_current_page(){
+       $page = Input::get( 'page') ; 
+        if( $page > 0)
+            return (Input::get( 'page')-1)* $this->get_total_jump();  
+        return 0;  		
+	}	
 }

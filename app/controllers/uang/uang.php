@@ -156,7 +156,7 @@ class uang extends root {
 		foreach ( $posts as $post) {
 			$isi .= sprintf( $this->get_row_html(5) ,
                     $post->income_id , $post->divisi_name, $post->divisisub_name,
-                    $post->jumlah , $post->tanggal
+                    $this->get_rupiah_root($post->jumlah) , $post->tanggal
 				);
 		}
 		$hasil = sprintf(
@@ -232,7 +232,7 @@ class uang extends root {
 		$obj = new Models_uang();
 		$obj->set_base_query_income();
 		$obj->set_limit( $this->get_current_page() , $this->get_total_jump() );
-		//$obj->set_order(' order by main.id DESC ');
+		$obj->set_order(' order by main.tanggal DESC ');
 		$obj->set_wheres( $wheres);        
 		$posts = $obj->get_model();
         $pagination = $obj->get_pagenation_link( $additional_data_for_pagenation );        

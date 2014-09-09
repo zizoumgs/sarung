@@ -18,14 +18,26 @@ abstract class Root_model {
 	private $group = "" ;
 	private $final_query = "";// Good for debug \
 	protected $limit = array( 'jump' => 0 , 'from' => 0 );
-	protected $pagenation  = "";
+	protected $value = array( 'database_name_my' => '');
+	protected $pagenation  = "";	
 	private $wheres = array( array() ); /* Two dimenational Array */
+	/* You just have one chance to set it*/
+	private $where_raw = "";
+	private $where_raw_vals = array();
+	public function __construct( $database_name = 'uang'){
+		//! this is not drivr , just a name that you can set up in config.php
+		$this->set_database_name( $database_name);
+	}
+	public function set_database_name($val){ $this->value ['database_name_my'] = $val ;}
+	public function get_database_name(){return $this->value ['database_name_my'];}
 	//! get from limit array
 	protected function get_jump(){		return $this->limit ['jump'] ;	}
 	protected function set_jump($val){	$this->limit ['jump'] = $val ;	}
 	protected function get_start(){		return $this->limit ['from'] ;	}
 	protected function set_start($val){	$this->limit ['from'] = $val ;	}
 	
+	protected function get_where_raw(){ return $this->where_raw ;}
+	protected function get_where_raw_vals(){ return $this->where_raw_vals ;}
 	/* @var is  $final_query*/
 	protected function set_final_query($val){		return $final_query = $val;	}
 	public function get_total_row(){ return $this->pagenation->getTotal();}
@@ -62,6 +74,11 @@ abstract class Root_model {
 				$where_val [] = $where ['val'] ;
 			}
 		}
+		//! raw query
+		$query .= $this->get_where_raw ();
+		foreach( $this->get_where_raw_vals() as $val){
+			$where_val [] = $val;
+		}
 		//! setting group
 		$query .= " " . $this->get_group() . " "; 
 		// setting order
@@ -72,7 +89,9 @@ abstract class Root_model {
 		// setting limit
 		$query .= $this->get_limit();	
 		$this->set_final_query( $query );
-		$posts = DB::select(DB::raw( $query ) 	 , $where_val ) ; 
+		$name_db = $this->get_database_name();
+		$posts = DB::connection( $name_db )->select( DB::raw( $query ) 	 , $where_val  );
+		//$posts = DB::select(DB::raw( $query ) 	 , $where_val ) ;
 		return $posts;
 	}
 	/* @var is  $order which is string */
@@ -114,16 +133,19 @@ abstract class Root_model {
 		You want fo show particular data ? . @var is  $wheres which is array 
 		$where = array( array ( 'text' => '', 'val' => '') 
 	*/
-	public function set_wheres( $additional ){
-		$this->wheres = $additional ; 
-	}
+	public function set_wheres( $additional ){	$this->wheres = $additional ; 	}
 	public function get_wheres(){ 		return $this->wheres;	}
 	/*Set where one by one */
-	public function set_where ( $text , $value ){
+	public function set_where ( $text , $value , $operator = '=' , $conjunction = 'and ' ){
+		$text = sprintf ( ' %1$s %2$s %3$s ? ' , $conjunction , $text ,$operator  );
 		$array = array( 'text' => $text , 'val' => $value);
 		$this->wheres [] = $array ;
 	}
-
+	/*set where raw , You just have one chance to call this */
+	public function set_where_raw ( $query , $values){
+		$this->where_raw = $query ;
+		$this->where_raw_vals = $values;
+	}
 
 	protected function get_base_query(){		return $this->base_query;		}
 	

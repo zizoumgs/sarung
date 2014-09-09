@@ -1,0 +1,276 @@
+@import url('reset.css');
+/*@import url('normalize.css');*/
+/*Reset*/
+@font-face {
+    font-family: 'BebasNeueRegular';
+    src: url('fonts/BebasNeue-webfont.eot');
+    src: url('fonts/BebasNeue-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/BebasNeue-webfont.woff') format('woff'),
+         url('fonts/BebasNeue-webfont.ttf') format('truetype'),
+         url('fonts/BebasNeue-webfont.svg#BebasNeueRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'SixCapsRegular';
+    src: url('fonts/SixCaps-webfont.eot');
+    src: url('fonts/SixCaps-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/SixCaps-webfont.woff') format('woff'),
+         url('fonts/SixCaps-webfont.ttf') format('truetype'),
+         url('fonts/SixCaps-webfont.svg#SixCapsRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'LeagueGothicRegular';
+    src: url('fonts/League_Gothic-webfont.eot');
+    src: url('fonts/League_Gothic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/League_Gothic-webfont.woff') format('woff'),
+         url('fonts/League_Gothic-webfont.ttf') format('truetype'),
+         url('fonts/League_Gothic-webfont.svg#LeagueGothicRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+body {
+        background: url(../images/body.jpg) ;    
+}
+footer {
+	margin: 50px 0;
+}
+/*Header*/
+.header-image{
+    width:250px;
+    height: 76px;
+}
+#masthead   .navbar:first-child{
+    background:#8F1F29 ;
+}
+#masthead   .navbar:first-child .follow div{
+    padding-top:15px;
+    vertical-align: middle;
+    height: 80px;
+    display: table-cell;
+}
+.follow div a{
+    display: block;
+}
+.follow  div a:last-child{
+    padding-top:5px !important;
+}
+#masthead   .navbar:first-child .follow div img{
+    height:25px;
+    width:125px;
+}
+#masthead   .navbar:first-child .navbar-right a{
+    color:white;
+    line-height: 3px;
+}
+.navbar-brand:nth-child(2),
+.navbar-nav:nth-child(2) li a {
+    line-height: 75px;
+    height: 85px;
+    padding-top: 0;
+}
+
+.navbar {
+    background-color:#77CCDD;
+    color:#ffffff;
+    border-radius:0px;
+}
+.navbar-nav > li > a {
+  	color:#fff;
+  	padding-left:20px;
+  	padding-right:20px;
+  	/*border-left:1px solid transparent;*/
+	border:none !important;
+
+}
+.navbar-nav > li:last-child > a {
+  	border-right:1px solid #66BBCC;
+}
+
+.navbar-nav li a:hover {
+  	background-color:#66BBCC;
+}
+
+.navbar-nav > .open > a, .navbar-nav > .open > a:hover, .navbar-nav > .open > a:focus {
+	color: #000;
+  	opacity:.9;
+}
+
+.navbar-brand {
+	color:#fff;    
+}
+
+.link_must {
+    width:100%;
+    margin:0px auto !important;
+}
+.link_must .col-md-3{
+    padding:10px;
+    text-align:center;
+    margin-right:10px;
+	border-radius: 10px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    background:#77CCDD;
+    
+}
+/*Menu*/
+.menu_pos{
+    background: transparent !important;
+	box-shadow: none;
+}
+.menu_pos .container{
+    /* .container:nth-child(2)*/
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;    
+    background: #DACAA8 !important  ;    
+    font-weight: bold;
+    font-size: 20px;
+    position:relative ;
+    padding:0px 40px ; 
+}
+.menu_pos .container .left , .menu_pos .container .right {
+    position: absolute ;
+    background: url(../images/body.jpg) ;
+    height:110%;
+}
+.menu_pos .container .left img , .menu_pos .container .right  img{
+    height:100%;
+}
+.menu_pos .container .left{
+    top:-2px;
+    left:0px;
+}
+.menu_pos .container .right{
+    top:-2px;
+    right:0px;
+}
+.menu_pos .container  .menu-primary-container >ul li:hover {
+    border-top:2px solid red;
+    border-bottom:2px solid red;
+}
+.menu_pos .container  .menu-primary-container >ul li a:hover{
+    margin:-2px 0px;
+}
+/*title*/
+.brow_by_cat , .title_post , .entry-title , .btn-default , aside.widget_categories .widget-title , footer[role='contentinfo']{
+    font-family: BebasNeueRegular;    
+}
+.entry-title{
+    font-size: 19px;
+    margin: 0px !important;
+    padding: 0px !important;
+}
+h2.title_post ,h3.title_post  , h1.title_post  {
+	font-size:33px;
+	line-height:33px	
+}
+.title_post , .widget-title{
+    background: url(../images/point-icon.png) left no-repeat;
+    border-bottom: 1px solid #C2BBAF;
+    font-weight: bold;
+    /*margin-top:30px !important;*/
+    margin-bottom:10px;
+    padding: 10px 4px 5px 30px;
+}
+
+
+.img-thumbnail{
+	padding: 4px;
+	border-radius: 3px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+.img-thumbnail-root{	position:relative;}
+.inside-img {
+	position: absolute;
+	bottom:10px;
+	left:5px;
+	margin-right:5px;
+}
+
+
+
+/*for thumb gallery*/
+.fugalleryboss	.thumb {
+	line-height: 1.42857143;
+	background-color: #ffffff;
+	transition: all 0.2s ease-in-out;
+
+	color: #004D00;
+    padding: 10px !important;
+	background:transparent !important;
+}
+.thumb > .row{
+	padding-bottom:5px;
+    border-bottom: 1px solid #C2BBAF;	
+}
+.fugalleryboss{
+   	margin:0px auto;
+	font-size:15px;
+	line-height: 1.5em;
+}
+
+.fugalleryboss .thumb a{	font-size:12px;			}
+.fugalleryboss .thumb:hover{    background:transparent;}
+.fugalleryboss img{
+	width: 100%;
+	max-height: 110px;
+}
+.thumb label{	font-size:11px;	margin:0px !important; padding:0px !important;}
+.bg-my{
+	background:#E4DBCC;
+	color:#8F1F29;
+}
+/*Form Default */
+.form-default{	
+	margin: 10px 0px;
+}
+.form-default > *{
+	margin-right:5px;
+}
+/*Pagenation*/
+.pagination{
+	margin-top:0px ;
+	margin-bottom:0px;
+}
+.thumnail-item > *{
+	margin:1px 0px !important;
+}
+.widget input[type='text'] , .widget select{
+    width:100% !important;
+    padding:5px;
+    background:#f1eae2;
+    font-weight: bold;
+}
+.widget input[type='submit']{
+    background:#8F1F29;
+    color:white;
+    border:none;
+    padding:5px 12px;
+}
+
+.clear_5 {
+    clear:both;
+    line-height:5px;
+}
+.img_fancy  {
+	margin: 3px 15px 1px 0;
+	/* Add fancy borders to all WordPress-added images but not things like badges and icons and the like */
+	border-radius: 10px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+	padding: 5px 5px;
+}
+
+
+.rm-margin{
+	margin:2px !important;
+	padding:0px !important;
+	line-height:12px !important;
+}
+a{
+	color:#8F1F29;
+}

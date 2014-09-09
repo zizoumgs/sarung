@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'default' => 'mysql',
+	'default' => 'uang',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -51,17 +51,7 @@ return array(
 			'database' => __DIR__.'/../database/production.sqlite',
 			'prefix'   => '',
 		),
-		'mysql' => array(
-			'driver'    => 'mysql',
-			'host'      => 'localhost',
-			'database'  => 'fusarung',
-			'username'  => 'root',
-			'password'  => '1',
-			'charset'   => 'utf8',
-			'collation' => 'utf8_unicode_ci',
-			'prefix'    => '',
-		),
-		'mysql' => array(
+		'uang' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
 			'database'  => 'test_1',
@@ -71,6 +61,16 @@ return array(
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
 		),
+		'fusarung' => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => 'fusarung',
+			'username'  => 'root',
+			'password'  => '1',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		),        
 		'pgsql' => array(
 			'driver'   => 'pgsql',
 			'host'     => 'localhost',

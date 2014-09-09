@@ -55,6 +55,8 @@ Route::controller('admin_uang/income_cud'      , 'Admin_income_cud');
 Route::controller('admin_uang/outcome_cud'      , 'Admin_outcome_cud');
 Route::controller('admin_uang/subdivisi_crud'      , 'Admin_subdivisi_crud');
 Route::controller('admin_uang/divisi_crud'      , 'Admin_divisi_crud');
+//! sarung
+Route::controller('/'      , 'sarung_controller');
 
 
 /*

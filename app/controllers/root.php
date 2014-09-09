@@ -21,7 +21,7 @@ abstract class root extends Controller {
 	protected function set_content($val){ $this->content = $val ;}
 	protected function get_content() { return $this->content;}
 	protected function set_header ($val) { $this->header = $val ;}
-	protected function get_header ()	{ return $this->get_header ; }
+	protected function get_header ()	{ return $this->header ; }
 	protected function set_footer ($val) { $this->footer = $val ;}
 	protected function get_footer () { return $this->footer ; }
 	protected function set_css ($val) { $this->css .= $val;}
@@ -35,15 +35,11 @@ abstract class root extends Controller {
 	
 	protected function get_css(){
 		return sprintf('
-			<link href="%1$s" rel="stylesheet" type="text/css" />
-			<link href="%2$s" rel="stylesheet" type="text/css"	/>
-			<link href="%3$s" rel="stylesheet" type="text/css"/>
-			<link href="%4$s" rel="stylesheet" type="text/css"/>
-			%5$s
-			%6$s
+			<link href="%1$s" rel="stylesheet" type="text/css"/>
+			<link href="%2$s" rel="stylesheet" type="text/css"/>			
+			%3$s
+			%4$s
 			' ,
-			URL::to('/').'/asset/css/normalize.css'					,
-			URL::to('/').'/asset/css/reset.css'						,
 			URL::to('/').'/asset/bootstrap/css/bootstrap.css'	 	, 
 			URL::to('/').'/asset/bootstrap/css/bootstrap-theme.css'	,
 			$this->css , 
@@ -146,5 +142,23 @@ abstract class root extends Controller {
         if( $page > 0)
             return (Input::get( 'page')-1)* $this->get_total_jump();  
         return 0;  		
-	}	
+	}
+	protected function get_link_must_root(){
+		$pertama = sprintf(
+			'<div class="bg-warning col-md-3 col-md-offset-1"><h2>Uang</h2>
+			<p>Uang adalah applikasi untuk mengetahui keluar masuknya uang Fatihul Ulum</p>
+			<a href="#">Go to here </a></div>
+			');
+		$sarung = sprintf(
+			'<div class="bg-info col-md-3"><h2>Sarung</h2>
+			<p>Sarung adalah applikasi yang dikhususkan untuk sekolah Fatihul Ulum</p>
+			<a href="#">Go to here </a></div>
+			');
+		$iman = sprintf(
+			'<div class="col-md-3 bg-danger"><h2>Iman</h2>
+			<p>Iman adalah applikasi yang dikhususkan untuk pesantrennya</p>
+			<a href="#">Go to here </a></div>
+			');		
+		return sprintf('<div class="container"><div class="row link_must">%1$s %2$s %3$s</div></div>',$pertama , $sarung , $iman);
+	}
 }

@@ -291,4 +291,6 @@ class Admin_divisi_crud extends Admin_uang{
 	public function get_del_divisi_url () { return sprintf('%1$s/divisi_crud/del' , $this->get_admin_url() ); }
 	//! override
     protected function get_selected_division(){		return $this->selected_divisi;	}
+	
+	
 }

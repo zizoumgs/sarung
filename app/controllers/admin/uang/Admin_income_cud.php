@@ -142,11 +142,7 @@ class Admin_income_cud extends Admin_income{
 	public function getEdit($id , $nama = "" , $message = ''  ){
 		$this->set_id($id);
 		$this->set_divisi($nama);
-		//! get table
-		$obj = new Models_uang();
-		$obj->set_base_query_income();		
-		$obj->set_where(' and main.id = ? ' , $id );
-		$posts = $obj->get_model() ;
+		$posts = $this->get_model_divisi_sub( ' and main.id = ? ' , $id) ;
 		foreach($posts as $post){
 			$this->set_jumlah($post->jumlah) ;
 			$this->set_tanggal( $post->tanggal);
@@ -216,10 +212,7 @@ class Admin_income_cud extends Admin_income{
 		$this->set_id($id);
 		$this->set_divisi($nama);
 		//! get table
-		$obj = new Models_uang();
-		$obj->set_base_query_income();		
-		$obj->set_where(' and main.id = ? ' , $id );
-		$posts = $obj->get_model() ;
+		$posts = $this->get_model_divisi_sub( ' and main.id = ? ' , $id) ;
 		foreach($posts as $post){
 			$this->set_jumlah($post->jumlah) ;
 			$this->set_tanggal( $post->tanggal);
@@ -284,12 +277,7 @@ class Admin_income_cud extends Admin_income{
 	protected function get_select_divisi_sub( $array = array() , $items = array()){
 		$data = $items;
 		if( $this->get_selected_division() != ""):
-		$obj = new Models_uang( ) ;
-		$obj -> set_base_query_income();
-		$obj -> set_where( " and third.nama = ? " , $this->get_selected_division() );
-		$obj -> set_group(' group by second.nama ');
-		$obj -> set_order(' order by second.nama ASC ');
-		$results = $obj->get_model();
+		$results = $this->get_model_divisi_sub( " and third.nama = ? " , $this->get_selected_division() );
 		$data  = array();
 		foreach($results as $result){
 			$data [$result->income_id] = $result->divisisub_name ;

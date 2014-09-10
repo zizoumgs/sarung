@@ -161,4 +161,14 @@ abstract class root extends Controller {
 			');		
 		return sprintf('<div class="container"><div class="row link_must">%1$s %2$s %3$s</div></div>',$pertama , $sarung , $iman);
 	}
+	//! about auth
+	protected function get_user_id(){ return Auth::id() ; }
+	protected function get_user_name() { return Auth::user()->email;}
+	protected function get_user_power() {return Auth::user()->admindgroup->power;}
+	protected function get_user_name_group() {return Auth::user()->admindgroup->nama;}
+	/*get url_admind uang */
+	protected function get_url_admin_uang	()  { 		return sprintf('%1$s/admin_uang' , $this->base_url());}
+	protected function get_url_admin_sarung ()  { 		return sprintf('%1$s/admin_sarung' , $this->base_url());}
+	protected function get_url_admin_iman   ()  { 		return sprintf('%1$s/admin_iman' , $this->base_url());}
+	protected function get_url_uang()			{       return sprintf('%1$s/uang' , $this->base_url()); }
 }

@@ -38,3 +38,12 @@ Icon
 /nbproject/private/
 vendor/composer/autoload_classmap.php
 vendor/composer/autoload_real.php
+public/asset/images/fatihulUlum1.gif
+app/config/mail.php
+app/config/mail.php
+*.jpg
+*.png
+*.eot
+*.svg
+*.ttf
+*.woff

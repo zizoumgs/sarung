@@ -49,6 +49,8 @@ Route::get('admin_uang/outcome'     , 'Admin_outcome@index');
 //! uang
 Route::controller('uang'      , 'uang');
 
+//! admin_uang
+//Route::controller('admin_uang/income_cud'      , 'Admin_uang_controller');
 //! admind_income
 Route::get('admin_uang/income'          , 'Admin_income@index');
 Route::controller('admin_uang/income_cud'      , 'Admin_income_cud');

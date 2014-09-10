@@ -45,9 +45,4 @@ abstract class Admin_root extends root {
 		$user->save();
 
 	}
-	//! about auth
-	protected function get_user_id(){ return Auth::id() ; }
-	protected function get_user_name() { return Auth::user()->email;}
-	protected function get_user_power() {return Auth::user()->admindgroup->power;}
-	protected function get_user_name_group() {return Auth::user()->admindgroup->nama;}
 }

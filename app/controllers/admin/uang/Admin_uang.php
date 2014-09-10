@@ -114,7 +114,7 @@ class Admin_uang extends Admin_root{
                 <div class="collapse navbar-collapse">
 	                <ul class="nav navbar-nav navbar-right">
                         <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#" rel="nofollow" target="_blank">Visit Site</a></li>
+                        <li><a href="%4$s" rel="nofollow" target="_blank">Visit Site</a></li>
                         <li><a href="#" rel="nofollow">Back up Database</a></li>
                         <li><a href="#" rel="nofollow">%2$s | %3$s</a></li>
 		                <li><a href="%1$s" rel="nofollow">Log out</a></li>
@@ -124,19 +124,22 @@ class Admin_uang extends Admin_root{
 		</nav>',
 		URL::to('/')."/logout" ,
 		$this->get_user_power() ,
-		$this->get_user_name_group()
+		$this->get_user_name_group(),
+		$this->get_url_uang()
 		);
 		return $hasil;
 	}
+
+	/*Header is important to decide which class should be entered by php*/
 	protected function get_side(){
         $list_menu = "";
         $list_menu .=  sprintf('<li><a href="%1$s" rel="nofollow" class="title"><span class="glyphicon glyphicon-dashboard"></span> %2$s</a></li>',
 							   $this->get_admin_url(),"Dashboard"); 
         $list = array(
-                        array('Outcome' 	,'<span class="glyphicon glyphicon-refresh"></span>'    , sprintf('%1$s/outcome' , $this->get_admin_url() )  ) ,
-                        array('Income'  	,'<span class="glyphicon glyphicon-cutlery"></span>'    , sprintf('%1$s/income'  	, $this->get_admin_url() ) ) ,
-                        array('Subdivisi'	,'<span class="glyphicon glyphicon-expand"></span>'     , sprintf('%1$s/subdivisi_crud' , $this->get_admin_url() ) ),
-						array('Divisi'		,'<span class="glyphicon glyphicon-user"></span>'       , sprintf('%1$s/divisi_crud' , $this->get_admin_url() ) )
+	        array('Outcome' 	,'<span class="glyphicon glyphicon-refresh"></span>'    , sprintf('%1$s/outcome' , $this->get_admin_url() )  ) ,
+            array('Income'  	,'<span class="glyphicon glyphicon-cutlery"></span>'    , sprintf('%1$s/income'  	, $this->get_admin_url() ) ) ,
+            array('Subdivisi'	,'<span class="glyphicon glyphicon-expand"></span>'     , sprintf('%1$s/subdivisi_crud' , $this->get_admin_url() ) ),
+			array('Divisi'		,'<span class="glyphicon glyphicon-user"></span>'       , sprintf('%1$s/divisi_crud' , $this->get_admin_url() ) )
                       );
         foreach($list as $key => $val ){
            $list_menu .= sprintf('<li><a href="%1$s" rel="nofollow"> %2$s    %3$s</a></li>', $val [2] , $val [1] ,$val[0]) ;
@@ -160,16 +163,6 @@ class Admin_uang extends Admin_root{
 				<ul>%1$s</ul>
 		',$list_menu);
 		return $side;
-		
-		return '
-	
-		<ul>
-			<li><a href="#">Outcome</a></li>
-			<li><a href="#">Income</a></li>
-			<li><a href="#">Subdivisi</a></li>
-			<li><a href="#">Divisi</a></li>
-		</ul>
-		';
 	}
 	protected function get_additional_css(){
 		return sprintf(

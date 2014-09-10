@@ -137,4 +137,13 @@ class Admin_income extends Admin_uang{
 	protected function get_edit_income_url(){ return sprintf('%1$s/income_cud/edit' , $this->get_admin_url() );	}
 	protected function get_add_income_url(){ return sprintf('%1$s/income_cud/add'   , $this->get_admin_url() );	}
 	protected function get_del_income_url(){ return sprintf('%1$s/income_cud/del'   , $this->get_admin_url() );	}
+	/* Will be used by select on its children*/
+	protected function get_model_divisi_sub( $text_where , $value_where){
+		$obj = new Models_uang( ) ;
+		$obj -> set_base_query_outcome();
+		$obj -> set_where_raw( $text_where , array($value_where) );
+		$obj -> set_group(' group by second.nama ');
+		$obj -> set_order(' order by second.nama ASC ');
+		return $obj->get_model();		
+	}
 }

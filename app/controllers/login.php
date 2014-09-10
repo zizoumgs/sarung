@@ -67,8 +67,7 @@ class login extends root {
 			$content = $this->get_login();
 		}
 		else{
-			$content = "<h1>Welcome Admind </h1>";
-			$content .= "<a href='logout' />LogOut</a>";
+			$content = $this->showWelcome();
 		}
         $data = array(
         	'body_attr'    => $this->get_body_attribute() , 
@@ -82,9 +81,49 @@ class login extends root {
                         )    ;		
         return View::make('uang/index' , $data);
     }
+	//! if succeded will take content in this function 
+	private function showWelcome(){
+		$content = "";
+		$this->get_user_id();
+		$power = $this->get_user_power();
+		if($power == 1) {
+			$content = sprintf ('<h1>Welcome %1$s </h1>' , $this->get_user_name() );
+		}
+		elseif($power < 1 && $power > 100) {
+			$content = sprintf ('<h1>Welcome Admind %1$s </h1>' , $this->get_user_name() );
+			$content .= $this->get_list_of_admin_url();
+		}
+		elseif( $power >= 1000) {
+			$content = sprintf ('<h1>Welcome Super Admind %1$s  , You can do anything s in this application </h1>' , $this->get_user_name() );
+			$content .= $this->get_list_of_admin_url();
+		}
+		else{
+			//! we should send email to developer
+			$content = sprintf ('<h1>There is error with this application </h1>' );
+			$content .= $this->get_list_of_admin_url();
+		}
+		$content .= "<a href='logout' >LogOut</a>";
+		return $content;
+		
+	}
+	protected function get_list_of_admin_url(){
+		$hasil = sprintf('<br>
+		<p>Please click below link to send you to place where you have right to access it </p>
+		<div class="list-group">
+			<a href="%1$s" class="list-group-item">Uang</a>
+			<a href="%2$s" class="list-group-item">Sarung</a>
+			<a href="%3$s" class="list-group-item">Iman</a>
+		</div>		
+		' , $this->get_url_admin_uang() , $this->get_url_admin_sarung() , $this->get_url_admin_iman());
+		return $hasil ;
+	}
     protected function get_header(){        return '';    }
     protected function get_side(){}
     protected function get_footer(){}
     protected function get_additional_js(){}
-	protected function get_additional_css(){}
+	protected function get_additional_css(){
+		return sprintf('
+			   			<link href="%1$s/asset/css/fudc.css" rel="stylesheet" type="text/css"/>
+					   ' , $this->base_url() );
+	}
 }

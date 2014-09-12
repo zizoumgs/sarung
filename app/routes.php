@@ -57,9 +57,11 @@ Route::controller('admin_uang/income_cud'      , 'Admin_income_cud');
 Route::controller('admin_uang/outcome_cud'      , 'Admin_outcome_cud');
 Route::controller('admin_uang/subdivisi_crud'      , 'Admin_subdivisi_crud');
 Route::controller('admin_uang/divisi_crud'      , 'Admin_divisi_crud');
-Route::controller('sarung_admin'      , 'Sarung_admin_controller');
-//! sarung
-Route::controller('/'                 , 'sarung_controller');
+//! event
+//Route::controller('sarung_admin'      , 'Sarung_admin_controller');
+Route::controller('sarung_admin/event'                 , 'Admin_sarung_event');
+Route::controller('sarung_admin/session'               , 'Admin_sarung_session');
+//Route::controller('/'                 , 'sarung_controller');
 
 
 /*

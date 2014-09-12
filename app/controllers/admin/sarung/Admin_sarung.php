@@ -16,6 +16,16 @@ class Admin_sarung extends Admin_root{
         parent::__construct();
 		$this->set_default_value();
     }
+    protected final function get_edit_delete_row($additional = ""){
+        /*
+        $edi = sprintf('<a href="%1$s/%2$s" class="btn btn-primary btn-xs" >Edit</a>'    , $this->get_url_admin_sarung()."/eventedit" , $additional );
+        $del = sprintf('<a href="%1$s/%2$s" class="btn btn-info btn-xs">Delete</a>'      , $this->get_url_admin_sarung()."/eventdel" , $additional );
+        */
+        $edi = sprintf('<a href="%1$s/%2$s" class="btn btn-primary btn-xs" >Edit</a>'    , $this->get_url_this_edit() , $additional );
+        $del = sprintf('<a href="%1$s/%2$s" class="btn btn-info btn-xs">Delete</a>'      , $this->get_url_this_dele() , $additional );
+        return $edi."  ".$del;
+    }
+	
     protected function set_default_value(){
         $this->set_view('sarung/admin/index');
         $this->set_min_power( 200 );
@@ -64,10 +74,11 @@ class Admin_sarung extends Admin_root{
 	protected function get_side(){
         $list_menu = "";
         $list_menu .=  sprintf('<li><a href="%1$s" rel="nofollow" class="title"><span class="glyphicon glyphicon-dashboard"></span> %2$s</a></li>',
-							   $this->get_url_admin_sarung(),"Dashboard"); 
+							   $this->get_url_admin_sarung(),"Dashboard");
+		$url = $this->get_url_admin_sarung();
         $list = array(
-	        array('Event' 	,'<span class="glyphicon glyphicon-refresh"></span>'    , sprintf('%1$s/event'        , $this->get_url_admin_sarung() )  ) ,
-            array('Income'  	,'<span class="glyphicon glyphicon-cutlery"></span>'    , sprintf('%1$s/income'  	    , $this->get_url_admin_sarung() ) ) ,
+	        array('Event' 		,'<span class="glyphicon glyphicon-refresh"></span>'    , sprintf('%1$s'          		, $this->get_url_admin_event() )  ) ,
+            array('Session'  	,'<span class="glyphicon glyphicon-tower"></span>'    , sprintf('%1$s'  	    		, $this->get_url_admin_session() ) ) ,
             array('Subdivisi'	,'<span class="glyphicon glyphicon-expand"></span>'     , sprintf('%1$s/subdivisi_crud' , $this->get_url_admin_sarung() ) ),
 			array('Divisi'		,'<span class="glyphicon glyphicon-user"></span>'       , sprintf('%1$s/divisi_crud'    , $this->get_url_admin_sarung() ) )
                       );

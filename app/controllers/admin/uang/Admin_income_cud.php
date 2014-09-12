@@ -17,6 +17,8 @@ class Admin_income_cud extends Admin_income{
 	protected function set_message_on_top($val)  { $this->value['message_on_top'] = $val;}
 	protected function get_message_on_top(){return $this->value['message_on_top'] ; }
 	public function get_form( $methode = ""	 ){
+		$this->set_input_date( ".tanggal_input", true);
+
 		$id = $this->get_id();
 		$url_to_submit = $this->get_admin_url() . "/income_cud/". $methode;
 		$url_ = $url_to_submit ."/";

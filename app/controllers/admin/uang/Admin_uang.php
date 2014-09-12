@@ -10,6 +10,8 @@ class Admin_uang extends Admin_root{
     protected function get_name_division_sub(){ return $this->name_division_sub ; }
     protected function get_selected_division(){        return Input::get( $this->name_division );    }
     protected function get_selected_division_sub(){    return Input::get( $this->name_division_sub );  }
+	public function getIndex(){}
+	
 	private function set_attribute_on_select( $from , $to ){
         foreach ( $from as $key => $value) {
             if( ! array_key_exists( $key , $to )){
@@ -67,6 +69,11 @@ class Admin_uang extends Admin_root{
 	
     public function __construct( $params = array( 'min_power' => 1000  )){
         parent::__construct( $params);
+		$this->after_construct();
+		$this->beforeFilter(function(){
+			return $this->check_power_admin();
+		});		
+		
 		$this->set_title('Admin Uang Fatihul Ulum');
 		$this->set_body_attribute( " class='admin admin_uang_body' " );
 		$this->set_view ('uang/admin/index'); 
@@ -77,12 +84,6 @@ class Admin_uang extends Admin_root{
 		if( $this->get_user_power() < $this->get_min_power()){
 			return Redirect::to('/login');			
 		}
-		/*
-		$users = User::all();
-		foreach ($users as $user){
-			echo $user -> admindgroup->power ; 
-		}
-		*/		
 	}
 	protected function get_content(){
 		$hasil = '<div class="thumbnail">
@@ -186,13 +187,7 @@ class Admin_uang extends Admin_root{
     }
 	
 	//! penting
-	protected function get_admin_url(){		return sprintf('%1$s/admin_uang' , URL::to('/') ) ;	}
-    protected function get_current_page(){    
-        $page = Input::get( 'page') ; 
-        if( $page > 0)
-            return (Input::get( 'page')-1)* $this->get_total_jump();  
-        return 0;  
-    }
+	protected function get_admin_url(){		return sprintf('%1$s/admin_uang' , $this->base_url() ) ;	}
 	//! message make , as you can see that message is array
 	public function make_message($messages){
 		$message_outputs  = "";

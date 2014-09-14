@@ -34,6 +34,28 @@ class Models_sarung extends Root_model{
 		$this->set_base_query($first);
 	}
 	/*Automatic Base Query , the alias header name will have 5 column*/
+	public function set_base_query_kalender( $alias_header_name = array( "id",'Session', "Nama" , "Awal" , 'Akhir' ,'Rating' ,'aktif' ,
+																		'Kalender' ,
+																		'Status'   ) ){
+		$first = sprintf( '
+			select kal.id as %2$s , concat(DATE_FORMAT(ses.awal,"%%y"),"-",DATE_FORMAT(ses.akhir,"%%y")) as  %3$s , eve.nama as %4$s,
+			kal.awal as %5$s,	kal.akhir as %6$s , kal.rating as %7$s, IF(kal.aktif=0,"Yes","No") as %8$s,
+			concat(DATEDIFF(kal.akhir,kal.awal),"D") as %8$s , if(CURDATE()<kal.awal,concat(DATEDIFF(kal.awal,CURDATE())," D"),"Pass") as %9$s
+			from %1$s.event eve , %1$s.kalender kal , %1$s.session ses 
+			where kal.idevent = eve.id and kal.idsession = ses.id 
+		',
+		$this->get_database_name()	,
+		$alias_header_name [0] 		,// id
+		$alias_header_name [1] 		,// Session 
+		$alias_header_name [2] 		,// nama Event
+		$alias_header_name [3] 		,// 
+		$alias_header_name [4] 		,
+		$alias_header_name [5]		
+		);
+		$this->set_alias($alias_header_name);
+		$this->set_base_query($first);
+	}
+	/*Automatic Base Query , the alias header name will have 5 column*/
 	public function set_base_query_outcome(){
 		$alias_header_name = array( "income_id" , "divisi_name" , "divisisub_name" , 'jumlah' , 'tanggal', 'updated_at' );
 		$first = sprintf( '

@@ -69,7 +69,7 @@ class Admin_uang extends Admin_root{
 	
     public function __construct( $params = array( 'min_power' => 1000  )){
         parent::__construct( $params);
-		$this->after_construct();
+		//$this->after_construct();
 		$this->beforeFilter(function(){
 			return $this->check_power_admin();
 		});		

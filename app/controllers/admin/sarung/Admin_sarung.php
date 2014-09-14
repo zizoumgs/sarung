@@ -78,8 +78,8 @@ class Admin_sarung extends Admin_root{
 		$url = $this->get_url_admin_sarung();
         $list = array(
 	        array('Event' 		,'<span class="glyphicon glyphicon-refresh"></span>'    , sprintf('%1$s'          		, $this->get_url_admin_event() )  ) ,
-            array('Session'  	,'<span class="glyphicon glyphicon-tower"></span>'    , sprintf('%1$s'  	    		, $this->get_url_admin_session() ) ) ,
-            array('Subdivisi'	,'<span class="glyphicon glyphicon-expand"></span>'     , sprintf('%1$s/subdivisi_crud' , $this->get_url_admin_sarung() ) ),
+            array('Session'  	,'<span class="glyphicon glyphicon-tower"></span>'      , sprintf('%1$s'  	    		, $this->get_url_admin_session() ) ) ,
+            array('Kalender'	,'<span class="glyphicon glyphicon-expand"></span>'     , sprintf('%1$s' 				, $this->get_url_admin_kalender() ) ),
 			array('Divisi'		,'<span class="glyphicon glyphicon-user"></span>'       , sprintf('%1$s/divisi_crud'    , $this->get_url_admin_sarung() ) )
                       );
         foreach($list as $key => $val ){

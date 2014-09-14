@@ -1,9 +1,11 @@
 <?php
 class Admin_sarung_session extends Admin_sarung_event{
     private $input;
+   
     public function __construct(){
         parent::__construct();
     }
+   
     protected function set_session_name($val)   {  $this->input ['session_name'] = $val; }
     protected function get_session_name()       {  return $this->input ['session_name'] ; }
     protected function get_session_selected ()  {  return Input::get( $this->get_session_name() ) ;}
@@ -56,7 +58,8 @@ class Admin_sarung_session extends Admin_sarung_event{
 		$hasil .= '</div></div>';
         $hasil .= Form::close();
         return $hasil;
-    }    
+    }
+
     /*You should call this on contructor ,and you should make this*/
     protected function set_default_value(){
         $this->set_view('sarung/admin/index');
@@ -72,6 +75,8 @@ class Admin_sarung_session extends Admin_sarung_event{
         $this->set_awal_name    ( 'awal_name');
         $this->set_akhir_name   ( 'akhir_name' );
     }
+
+
     public function getIndex(){
         $find_name = $this->get_name_for_text_selected();
         $href = sprintf('<a href="%1$s" class="btn btn-primary btn-xs" >Add</a>' , $this->get_url_this_add() );        
@@ -79,7 +84,9 @@ class Admin_sarung_session extends Admin_sarung_event{
         $row = "";
         $form = $this->get_form_filter( $this->get_url_this_view() );
         $session = new Session_Model();
+        $wheres = array();
         if( $find_name != ""){
+            $wheres [] = array( $this->get_name_for_text() => $find_name );
             $session = $session->where('nama' , 'LIKE' , "%".$find_name."%");
         }
         $sessions = $session->orderBy('updated_at','DESC')->paginate(15);
@@ -118,11 +125,14 @@ class Admin_sarung_session extends Admin_sarung_event{
    				$form               ,
                 $row                ,
                 //$events->appends( array() )->links()
-			 	$this->get_pagination_link($sessions) 
+			 	$this->get_pagination_link($sessions , $wheres) 
 			);
         $this->set_content($hasil);
         return $this->index();
     }
+
+
+
     public function postEventadd(){
         $data = Input::all();
    		$rules = $this->get_rules( true);
@@ -156,6 +166,9 @@ class Admin_sarung_session extends Admin_sarung_event{
 			return $this->getEventadd($message);            
         }        
     }
+
+
+
     public function postEventedit(){
 		$data = Input::all() ;
         $id = Input::get('id');
@@ -185,6 +198,9 @@ class Admin_sarung_session extends Admin_sarung_event{
 			return $this->getEventedit( $id , $message);
         }
     }
+
+
+
     protected function get_rules($with_id = false){
         $array = array(
             $this->get_session_name ()  => 'required' ,
@@ -197,8 +213,11 @@ class Admin_sarung_session extends Admin_sarung_event{
             $array ['id'] = "required|numeric" ; 
         return $array;
     }
+
+
+
    /* this will be called just before insert , edit */
-    private function Sarung_db_about($data , $edit = false){
+    protected function Sarung_db_about($data , $edit = false){
         $event = new Session_Model();
         if( !$edit ){
             $event->id = $data ['id'] ;
@@ -213,7 +232,10 @@ class Admin_sarung_session extends Admin_sarung_event{
         $event->akhir           = $data [ $this->get_akhir_name()   ]           ;
         return $event;
     }
-    private function get_max_id(){ return Session_Model::max('id');}
+
+
+    protected function get_max_id(){ return Session_Model::max('id');}
+
     protected function set_values_to_inputs($model){
         return array(
                      $this->get_session_name()              =>  $model->nama            ,
@@ -223,16 +245,11 @@ class Admin_sarung_session extends Admin_sarung_event{
                      $this->get_akhir_name()                =>  $model->akhir
         );
     }
+
     //! this will get table of database
-    protected function get_model_obj(){
-        return new Session_Model();
-    }
+    protected function get_model_obj(){        return new Session_Model();    }
     protected function get_url_this_view(){ return $this->get_url_admin_sarung()."/session" ;}
     protected function get_url_this_add(){ return $this->get_url_admin_sarung()."/session/eventadd" ;}
     protected function get_url_this_edit(){ return $this->get_url_admin_sarung()."/session/eventedit" ;}
     protected function get_url_this_dele(){ return $this->get_url_admin_sarung()."/session/eventdel" ;}
-    /*
-    protected function get_url_this_add () { return $this->get_url_admin_sarung()."/sarungadd"; }
-    protected function get_url_this_edit() { return $this->get_url_admin_sarung()."/sarungedit";}
-    */
 }

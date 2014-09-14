@@ -1,11 +1,16 @@
 <?php
+/*This is event , and this is not kalender*/
 class Admin_sarung_event extends Admin_sarung{
     private $input;
     public function __construct(){
         parent::__construct();
     }
     
-	private function get_form_group($input , $name_label){
+	/**
+     *  function usualy used for filtering result
+     *  return string
+    */
+    protected function get_form_group($input , $name_label){
 		return sprintf('<div class="form-group ">
         					   %1$s
 					   </div>' , $input , $name_label);
@@ -27,18 +32,7 @@ class Admin_sarung_event extends Admin_sarung{
         return $this->get_input_cud_group($label , $input );
     }
     protected function get_form_cud( $go_where  , $values = array()  ,$disabled = "" , $method = 'post'){
-        $array = array( $this->get_kalender_name() => '' , $this->get_kalender_name_sho() => '' );
-        $array = $this->make_one_two_array($array , $values);
-        $params = array('label' , 'value');
-   		$hasil  = Form::open(array('url' => $go_where, 'method' => $method , 'role' => 'form' ,'class' => 'form-horizontal')) ;
-        $hasil .= $this->get_text_cud_group( 'Kalender'    , $array [ $this->get_kalender_name()]       , $this->get_kalender_name()       , $disabled) ;
-        $hasil .= $this->get_text_cud_group( 'Short Name'  , $array [ $this->get_kalender_name_sho()]   , $this->get_kalender_name_sho()   , $disabled) ;
-   		$hasil .= Form::hidden('id', $this->get_id() );
-		$hasil .= '<div class="form-group"><div class="col-sm-offset-2 col-sm-10">';
-		$hasil .= Form::submit('Submit' , array( 'class' => 'btn btn-primary btn-sm' ) );
-		$hasil .= '</div></div>';
-        $hasil .= Form::close();
-        return $hasil;
+        return $this->get_form_cud_event( $go_where , $values , $disabled , $method);
     }
 	protected function get_form_filter_default( $go_where , $method , $additional){
    		$hasil  = Form::open(array('url' => $go_where, 'method' => $method , 'role' => 'form' ,'class' =>'form-inline form-filter')) ;
@@ -50,7 +44,8 @@ class Admin_sarung_event extends Admin_sarung{
 		$hasil .= $button;
 		$hasil .= Form::close();
 		return $hasil;
-	}    
+	}
+    
    	protected function get_form_filter( $go_where  , $method = 'get', $with_session = true ){
         $additional = $hasil = "";
 		$tmp = Form::text( $this->get_name_for_text()  , '', array( 'class' => 'form-control input-sm' , 'placeholder' => 'Name' , 'Value' =>  $this->get_name_for_text_selected() ));
@@ -83,6 +78,20 @@ class Admin_sarung_event extends Admin_sarung{
         $this->set_kalender_name_sho('kalender_sho');
         $this->set_table_name('event');
     }
+    protected final function get_form_cud_event($go_where  , $values = array()  ,$disabled = "" , $method = 'post'){
+        $array = array( $this->get_kalender_name() => '' , $this->get_kalender_name_sho() => '' );
+        $array = $this->make_one_two_array($array , $values);
+        $params = array('label' , 'value');
+   		$hasil  = Form::open(array('url' => $go_where, 'method' => $method , 'role' => 'form' ,'class' => 'form-horizontal')) ;
+        $hasil .= $this->get_text_cud_group( 'Kalender'    , $array [ $this->get_kalender_name()]       , $this->get_kalender_name()       , $disabled) ;
+        $hasil .= $this->get_text_cud_group( 'Short Name'  , $array [ $this->get_kalender_name_sho()]   , $this->get_kalender_name_sho()   , $disabled) ;
+   		$hasil .= Form::hidden('id', $this->get_id() );
+		$hasil .= '<div class="form-group"><div class="col-sm-offset-2 col-sm-10">';
+		$hasil .= Form::submit('Submit' , array( 'class' => 'btn btn-primary btn-sm' ) );
+		$hasil .= '</div></div>';
+        $hasil .= Form::close();
+        return $hasil;        
+    }
     /*
     protected function get_edit_delete_row($additional = ""){
         $edi = sprintf('<a href="%1$s/%2$s" class="btn btn-primary btn-xs" >Edit</a>'    , $this->get_url_admin_sarung()."/eventedit" , $additional );
@@ -94,11 +103,13 @@ class Admin_sarung_event extends Admin_sarung{
     public function getEvent(){
         $find_name = $this->get_name_for_text_selected();
         $href = sprintf('<a href="%1$s" class="btn btn-primary btn-xs" >Add</a>' , $this->get_url_this_add() );
-        $this->set_text_on_top('Kalender Table  '.$href);
+        $this->set_text_on_top('Event Table  '.$href);
         $row = "";
         $form = $this->get_form_filter( $this->get_url_this_view() );
         $events = new Event_Model();
+        $wheres = array();
         if( $find_name != ""){
+            $wheres [] = array( $this->get_name_for_text() => $find_name );
             $events = $events->where('nama' , 'LIKE' , "%".$find_name."%");
         }
         $events = $events->orderBy('updated_at' , 'DESC')->paginate(15);
@@ -132,8 +143,7 @@ class Admin_sarung_event extends Admin_sarung{
 			 	$this->get_text_on_top() ,
    				$form               ,
                 $row                ,
-                //$events->appends( array() )->links()
-			 	$this->get_pagination_link($events) 
+			 	$this->get_pagination_link($events , $wheres) 
 			);
         $this->set_content($hasil);
         return $this->index();
@@ -150,6 +160,7 @@ class Admin_sarung_event extends Admin_sarung{
                 <div class="panel-footer">%3$s</div>
             </div>', $heading , $body , $footer);
     }
+
     public function getEventdel($id , $message = ""){
         if($id >= 0){
             $heading    = 'Will Delete id ' . $id;
@@ -164,6 +175,7 @@ class Admin_sarung_event extends Admin_sarung{
             echo "You tried to put non positif id ";
         }
     }    
+
     public function postEventdel(){
 		$id = Input::get('id');
         if($id >= 0 ){
@@ -192,6 +204,7 @@ class Admin_sarung_event extends Admin_sarung{
             echo "You tried to put non positif id ";
         }
     }
+
     public function getEventedit($id , $message = ""){
         if($id >= 0){
             $heading    = 'Will edit id ' . $id;
@@ -206,6 +219,7 @@ class Admin_sarung_event extends Admin_sarung{
             echo "Your Id is Not positif";
         }
     }
+
     public function postEventedit(){
 		$data = Input::only( 'id' ,$this->get_kalender_name() , $this->get_kalender_name_sho() );
 		$rules = array( $this->get_kalender_name() => 'required' , $this->get_kalender_name_sho() => 'required');
@@ -237,12 +251,14 @@ class Admin_sarung_event extends Admin_sarung{
 			return $this->getEventedit($id , $message);
         }
     }
+
     public function getEventadd($messages = ""){
         $heading    = 'Add';
         $body       = $this->get_form_cud( $this->get_url_this_add());        
         $this->set_content( $this->get_panel($heading , $body , $messages ) );
         return $this->index();
     }
+
     public function postEventadd(){
 		$data = Input::only( $this->get_kalender_name() , $this->get_kalender_name_sho() );
 		$rules = array( $this->get_kalender_name() => 'required' , $this->get_kalender_name_sho() => 'required');
@@ -277,13 +293,16 @@ class Admin_sarung_event extends Admin_sarung{
 			return $this->getEventadd($message);            
         }
     }
+
     protected function set_values_to_inputs($model){
             return array($this->get_kalender_name() =>  $model->nama  , $this->get_kalender_name_sho() => $model->inisial );        
     }
     //! this will get table of database
+
     protected function get_model_obj(){
         return new Event_Model();
     }
+
     /* this will be called just before insert , edit */
     private function Sarung_db_about($data , $edit = false){
         $event = new Event_Model();
@@ -298,5 +317,6 @@ class Admin_sarung_event extends Admin_sarung{
         return $event;        
     }
     
+
     private function get_max_id(){ return Event_Model::max('id');}
 }

@@ -58,10 +58,11 @@ Route::controller('admin_uang/outcome_cud'      , 'Admin_outcome_cud');
 Route::controller('admin_uang/subdivisi_crud'      , 'Admin_subdivisi_crud');
 Route::controller('admin_uang/divisi_crud'      , 'Admin_divisi_crud');
 //! event
-//Route::controller('sarung_admin'      , 'Sarung_admin_controller');
 Route::controller('sarung_admin/event'                 , 'Admin_sarung_event');
 Route::controller('sarung_admin/session'               , 'Admin_sarung_session');
+Route::controller('sarung_admin/kalender'              , 'Admin_sarung_kalender');
 //Route::controller('/'                 , 'sarung_controller');
+Route::controller('sarung_admin'      , 'Sarung_admin_controller');
 
 
 /*

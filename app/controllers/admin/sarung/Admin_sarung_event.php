@@ -92,13 +92,6 @@ class Admin_sarung_event extends Admin_sarung{
         $hasil .= Form::close();
         return $hasil;        
     }
-    /*
-    protected function get_edit_delete_row($additional = ""){
-        $edi = sprintf('<a href="%1$s/%2$s" class="btn btn-primary btn-xs" >Edit</a>'    , $this->get_url_admin_sarung()."/eventedit" , $additional );
-        $del = sprintf('<a href="%1$s/%2$s" class="btn btn-info btn-xs">Delete</a>'      , $this->get_url_admin_sarung()."/eventdel" , $additional );
-        return $edi."  ".$del;
-    }
-    */
     public function getIndex(){        return $this->getEvent();    }
     public function getEvent(){
         $find_name = $this->get_name_for_text_selected();

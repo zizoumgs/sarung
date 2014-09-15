@@ -29,6 +29,8 @@ class Admin_sarung_kalender extends Admin_sarung_session{
 		
 		//! filter
 		$this->set_id_filter_name('id_filter');
+		//! editor
+		$this->set_editor_name('ckeditor');
 	}
 	/**
 	 *	return array which is default for input html
@@ -115,6 +117,11 @@ class Admin_sarung_kalender extends Admin_sarung_session{
     protected function set_aktif_name($val)   {  $this->input ['aktif_name'] = $val; }
     protected function get_aktif_name()       {  return $this->input ['aktif_name'] ; }
     protected function get_aktif_selected ()  {  return Input::get( $this->get_aktif_name() ) ;}
+	
+    protected function set_editor_name($val)   {  $this->input ['editor_name'] = $val; }
+    protected function get_editor_name()       {  return $this->input ['editor_name'] ; }
+    protected function get_editor_selected ()  {  return Input::get( $this->get_editor_name() ) ;}
+	
 	/**
 	 *	return select html for session
 	 */
@@ -215,6 +222,80 @@ class Admin_sarung_kalender extends Admin_sarung_session{
         return $hasil;
     }	
 	/**
+	 *	return add , edit and create  html link inside table view
+	*/
+    protected final function get_edit_delete_row_kalender($additional = ""){
+		$create = sprintf('<a href="%1$s/%2$s" class="btn btn-success btn-xs">Notice</a>'      , $this->get_url_this_notice(), $additional );
+        return parent::get_edit_delete_row($additional). " " . $create;
+    }
+	/**
+	 *	return @index()
+	*/
+	public function getNote($id , $messages = ""){
+		$text_content = "";
+		$tmp = Kalender_Note_Model::where('id_kalender' , '=' , $id)->first();
+		if($tmp){
+			$text_content = $tmp->note;
+		}
+		$this->use_ckEditor(".".$this->get_editor_name());
+		
+		$content ="";
+		if($messages != ""){
+			$content .= sprintf('<label class="label label-danger">%1$s</label>' , $messages);
+		}
+		$content .= Form::open(array('url' => $this->get_url_this_notice(), 'method' => 'post' , 'role' => 'form')) ;
+		$content .= sprintf('
+					<h1 class="title"><span class="glyphicon glyphicon-thumbs-up"></span> Please use as wise as possible</h1>
+					<hr />
+		            <textarea class="form-control ckeditor" rows="10" name="%1$s">%2$s</textarea><br>
+					<button type="submit" class="btn btn-sm btn-primary">Submit</button><br>
+						   ' , $this->get_editor_name() , $text_content);
+		$content .= Form::hidden('id', $id );
+		$content .= Form::close();
+		$this->set_content($content);
+		return $this->index();
+	}
+	/**
+	 *	will go here when form in editor has clicked
+	 *	return @getNote()
+	*/
+	public function postNote(){
+		$content = htmlentities( $this->get_editor_selected() );
+		$id = Input::get('id');
+		if( ! is_numeric($id) ){
+			echo "Haruslah numeric";
+			return ;
+		}
+		$kalender_note = $this->get_kalender_note_obj($id);
+		$kalender_note->id_kalender = $id ;
+		$kalender_note->note	 	= $content;
+		DB::transaction(function()use ( $kalender_note){
+			$kalender_note->save();
+		});
+		return $this->getNote($id , 'Berhaasil merubah');
+		//! we dont have delete feature for this database
+		
+	}
+	/**
+	 * return Kalender_note obj
+	*/
+	protected function get_kalender_note_obj($id_kalender){
+		$obj = new Kalender_Note_Model();
+		$result = $obj->where( 'id_kalender' ,'=',$id_kalender)->first();
+				
+		$kalender_note = New Kalender_Note_Model(); 
+		//! add
+		if($result){
+			$kalender_note = $result->find( $result->id);
+		}
+		else{
+			$id = Kalender_Note_Model::max('id');
+			$id++;
+			$kalender_note->id  = $id;
+		}
+		return $kalender_note;
+	}
+	/**
 	 *	Default view for admin kalender class
 	 *	return @index()
 	*/
@@ -251,8 +332,8 @@ class Admin_sarung_kalender extends Admin_sarung_session{
 				$diff_updated = $this->get_datediff(0 , $event->updated_at);
 				$diff_created = $this->get_datediff(0 , $event->created_at);
 									
+                $row .= sprintf('<td>%1$s</td>' 			, $this->get_edit_delete_row_kalender( $event->id ));
                 $row .= sprintf('<td>%1$s</td>' 			, $event->id);
-                $row .= sprintf('<td>%1$s</td>' 			, $this->get_edit_delete_row( $event->id ));
                 $row .= sprintf('<td>%1$s</td>' 			, $event->session->nama);
                 $row .= sprintf('<td>%1$s</td>' 			, $event->event->nama);
                 $row .= sprintf('<td>%1$s</td>' 			, $event->awal);
@@ -270,8 +351,8 @@ class Admin_sarung_kalender extends Admin_sarung_session{
             <div class="table_div">
     			<table class="table table-striped table-hover" >
     				<tr class ="header">
-    					<th>Id</th>
                         <th>Edit/Delete</th>
+    					<th>Id</th>
     					<th>Session</th>
 						<th>Event</th>
     					<th>Awal</th>
@@ -291,6 +372,41 @@ class Admin_sarung_kalender extends Admin_sarung_session{
 			);
         $this->set_content($hasil);
         return $this->index();        
+    }
+	/**
+	 *	Must override because we should delelte kalender_note table manually
+	 *	return getIndex();
+	*/
+    public function postEventdel(){
+		$id = Input::get('id');
+        if($id >= 0 ){
+            $event = $this->get_model_obj()->find($id);
+            $messages   = array("Gagal menghapus");
+            $message    =   sprintf('<span class="label label-danger">%1$s</span>' ,
+                            $this->make_message( $messages ));
+            $bool = false;
+   			$saveId  = $this->delete_db_admin_root( $this->get_table_name() , $id );
+			//! delete kalender_note
+			$kalender_note = $this->get_kalender_note_obj($id);
+    		DB::transaction(function()use ( $event , $saveId , $kalender_note , &$bool ){
+                $saveId->save();
+				$kalender_note->delete();
+    			$bool = true;
+    			$event->delete();
+    		});            
+			if($bool){
+				$messages = array(" Sukses Menghapus");
+				$message = sprintf('<span class="label label-info">%1$s</span>' ,
+							   $this->make_message( $messages ));
+			}
+            else{
+                return $this->getEventdel($id , $message);    
+            }
+            return $this->getIndex();            
+        }
+        else{
+            echo "You tried to put non positif id ";
+        }
     }
 	/**
 	 *	YOu need this in add ,edit and delete
@@ -404,5 +520,9 @@ class Admin_sarung_kalender extends Admin_sarung_session{
 	 *	return url string for delete
 	*/
     protected function get_url_this_dele(){ return $this->get_url_admin_sarung()."/kalender/eventdel" ;}
+	/**
+	 *	return url string for creating view
+	*/
+	protected function get_url_this_notice(){ return $this->get_url_admin_sarung()."/kalender/note" ; }
 
 }

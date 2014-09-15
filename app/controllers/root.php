@@ -103,7 +103,19 @@ abstract class root extends Controller {
 		});
 		</script>' ,$input );
 	}
-	/* If you wanna use another select  which is not same with default select in html , you just call this function*/
+	/*
+		If you wanna use another select  which is not same with default select in html , you just call this function
+		@variable = js , css
+		return none
+	*/
+	protected function use_ckEditor( $input = '.ckeditor' , $with_jquery_ui = true){
+		$this->js  .= sprintf('<script type="text/javascript" src="%1$s/asset/ckEditor/ckeditor.js"></script>',$this->base_url()); 
+	}	
+	/*
+		If you wanna use another select  which is not same with default select in html , you just call this function
+		@variable = js
+		return none 
+	*/
 	protected function use_select( $input = '.selectpicker' , $with_jquery_ui = true){
 		if($with_jquery_ui){
 			$this->css .= sprintf('<link href="%1$s" rel="stylesheet" type="text/css"/>',URL::to('/').'/asset/bootstrap/css/bootstrap-select.css');

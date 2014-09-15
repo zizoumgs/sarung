@@ -16,16 +16,19 @@ class Admin_sarung extends Admin_root{
         parent::__construct();
 		$this->set_default_value();
     }
+	/**
+	 *	Usually it is used inside table view html
+	 *	return add and edit html link
+	*/
     protected final function get_edit_delete_row($additional = ""){
-        /*
-        $edi = sprintf('<a href="%1$s/%2$s" class="btn btn-primary btn-xs" >Edit</a>'    , $this->get_url_admin_sarung()."/eventedit" , $additional );
-        $del = sprintf('<a href="%1$s/%2$s" class="btn btn-info btn-xs">Delete</a>'      , $this->get_url_admin_sarung()."/eventdel" , $additional );
-        */
         $edi = sprintf('<a href="%1$s/%2$s" class="btn btn-primary btn-xs" >Edit</a>'    , $this->get_url_this_edit() , $additional );
-        $del = sprintf('<a href="%1$s/%2$s" class="btn btn-info btn-xs">Delete</a>'      , $this->get_url_this_dele() , $additional );
+        $del = sprintf('<a href="%1$s/%2$s" class="btn btn-danger btn-xs">Delete</a>'      , $this->get_url_this_dele() , $additional );
         return $edi."  ".$del;
     }
-	
+	/**
+	 *	Setting all needed values
+	 *	return none
+	*/
     protected function set_default_value(){
         $this->set_view('sarung/admin/index');
         $this->set_min_power( 200 );
@@ -39,6 +42,10 @@ class Admin_sarung extends Admin_root{
         $this->set_default_value();
         return $this->index();
     }
+	/**
+	 *	return html div on top side of admin panel
+	 *	
+	*/
 	protected function get_header(){
 		$hasil = sprintf('
 		<nav class="navbar navbar-inverse top-header" role="navigation">
@@ -70,7 +77,9 @@ class Admin_sarung extends Admin_root{
 		);
 		return $hasil;
     }
-	/*Header is important to decide which class should be entered by php*/
+	/**
+	 *	return all side html , will be used by all subclass admin sarung
+	*/
 	protected function get_side(){
         $list_menu = "";
         $list_menu .=  sprintf('<li><a href="%1$s" rel="nofollow" class="title"><span class="glyphicon glyphicon-dashboard"></span> %2$s</a></li>',
@@ -106,6 +115,9 @@ class Admin_sarung extends Admin_root{
 		return $side;
 	}
     protected function check_power_admin(){        return true;    }
+	/**
+	 *	return additonal css string
+	*/
 	protected function get_additional_css(){
 		return sprintf(
 		'
@@ -115,6 +127,9 @@ class Admin_sarung extends Admin_root{
 		URL::to('/').'/asset/css/admin.css'
 		);
 	}
+	/**
+	 *	return additional js string
+	*/
     protected function get_additional_js(){
 		$js = sprintf('
 			<!-- additional css -->
@@ -126,8 +141,10 @@ class Admin_sarung extends Admin_root{
 			);
 		return $js;
     }
-
-	/* This class should be used when you want id to your table*/
+	/**
+	 *	This class should be used when you want id to your table
+	 *	return integer id from selected table
+	**/
 	protected function get_id_from_save_id( $name_table  , $max_id){
 		$id = 0 ;
 		$result = SaveId::NamaTable( $name_table )->first();
@@ -140,9 +157,9 @@ class Admin_sarung extends Admin_root{
 		}
 		return $id;
 	}
-
 	/**
 	 * this function will combine two array which has same key
+	 * return combinated arrays
 	*/
 	protected function make_one_two_array( $ori_array , $mod_array){
         foreach ($ori_array as $key => $val ){

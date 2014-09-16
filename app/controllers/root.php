@@ -183,6 +183,7 @@ abstract class root extends Controller {
 	protected function get_url_admin_event ()    { 		return sprintf('%1$s/sarung_admin/event' , $this->base_url());}
 	protected function get_url_admin_session ()  { 		return sprintf('%1$s/sarung_admin/session' , $this->base_url());}
 	protected function get_url_admin_kalender () { 		return sprintf('%1$s/sarung_admin/kalender' , $this->base_url());}
+	protected function get_url_admin_pelajaran (){ 		return sprintf('%1$s/sarung_admin/pelajaran' , $this->base_url());}
 	protected function get_url_admin_sarung ()   { 		return sprintf('%1$s/sarung_admin' , $this->base_url());}
 	protected function get_url_admin_iman   ()   { 		return sprintf('%1$s/admin_iman' , $this->base_url());}
 	protected function get_url_uang()			 {       return sprintf('%1$s/uang' , $this->base_url()); }

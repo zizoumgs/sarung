@@ -1,5 +1,5 @@
 <?php
-class Admin_sarung_kalender extends Admin_sarung_session{
+class Admin_sarung_kalender extends Admin_sarung_pelajaran{
     private $input;
     public function __construct(){
         parent::__construct();

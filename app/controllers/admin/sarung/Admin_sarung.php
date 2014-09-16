@@ -12,6 +12,10 @@ class Admin_sarung extends Admin_root{
 		endforeach;
 		return $message;
 	}
+	/**
+	 *	return none
+	 *	Will call @set_default_value()
+	*/
     public function __construct(){
         parent::__construct();
 		$this->set_default_value();
@@ -86,10 +90,10 @@ class Admin_sarung extends Admin_root{
 							   $this->get_url_admin_sarung(),"Dashboard");
 		$url = $this->get_url_admin_sarung();
         $list = array(
-	        array('Event' 		,'<span class="glyphicon glyphicon-refresh"></span>'    , sprintf('%1$s'          		, $this->get_url_admin_event() )  ) ,
-            array('Session'  	,'<span class="glyphicon glyphicon-tower"></span>'      , sprintf('%1$s'  	    		, $this->get_url_admin_session() ) ) ,
-            array('Kalender'	,'<span class="glyphicon glyphicon-expand"></span>'     , sprintf('%1$s' 				, $this->get_url_admin_kalender() ) ),
-			array('Divisi'		,'<span class="glyphicon glyphicon-user"></span>'       , sprintf('%1$s/divisi_crud'    , $this->get_url_admin_sarung() ) )
+	        array('Event' 		,'<span class="glyphicon glyphicon-refresh"></span>'    , sprintf('%1$s'        , $this->get_url_admin_event() )  ) ,
+            array('Session'  	,'<span class="glyphicon glyphicon-tower"></span>'      , sprintf('%1$s'  	    , $this->get_url_admin_session() ) ) ,
+            array('Kalender'	,'<span class="glyphicon glyphicon-expand"></span>'     , sprintf('%1$s' 		, $this->get_url_admin_kalender() ) ),
+			array('Pelajaran'		,'<span class="glyphicon glyphicon-user"></span>'       , sprintf('%1$s'    , $this->get_url_admin_pelajaran() ) )
                       );
         foreach($list as $key => $val ){
            $list_menu .= sprintf('<li><a href="%1$s" rel="nofollow"> %2$s    %3$s</a></li>', $val [2] , $val [1] ,$val[0]) ;
@@ -114,6 +118,9 @@ class Admin_sarung extends Admin_root{
 		',$list_menu);
 		return $side;
 	}
+	/**
+	 *	return bool
+	*/
     protected function check_power_admin(){        return true;    }
 	/**
 	 *	return additonal css string

@@ -69,7 +69,7 @@ class Admin_sarung extends Admin_root{
                         <li><a href="%4$s" rel="nofollow" target="_blank">Visit Site</a></li>
                         <li><a href="#" rel="nofollow">Back up Database</a></li>
                         <li><a href="#" rel="nofollow">%2$s | %3$s</a></li>
-		                <li><a href="%1$s" rel="nofollow">Log out</a></li>
+		                <li><a href="%1$s" rel="nofollow"><span class="glyphicon glyphicon-log-in"> </span> Log out</a></li>
                     </ul>
                 </div>
 			</div>
@@ -90,10 +90,12 @@ class Admin_sarung extends Admin_root{
 							   $this->get_url_admin_sarung(),"Dashboard");
 		$url = $this->get_url_admin_sarung();
         $list = array(
-	        array('Event' 		,'<span class="glyphicon glyphicon-refresh"></span>'    , sprintf('%1$s'        , $this->get_url_admin_event() )  ) ,
-            array('Session'  	,'<span class="glyphicon glyphicon-tower"></span>'      , sprintf('%1$s'  	    , $this->get_url_admin_session() ) ) ,
-            array('Kalender'	,'<span class="glyphicon glyphicon-expand"></span>'     , sprintf('%1$s' 		, $this->get_url_admin_kalender() ) ),
-			array('Pelajaran'		,'<span class="glyphicon glyphicon-user"></span>'       , sprintf('%1$s'    , $this->get_url_admin_pelajaran() ) )
+	        array('Event' 		,'<span class="glyphicon glyphicon-refresh"></span>'    , sprintf('%1$s'    , $this->get_url_admin_event() )  ) ,
+            array('Session'  	,'<span class="glyphicon glyphicon-tower"></span>'      , sprintf('%1$s'  	, $this->get_url_admin_session() ) ) ,
+			array('Pelajaran'	,'<span class="glyphicon glyphicon-user"></span>'   , sprintf('%1$s'    , $this->get_url_admin_pelajaran() ) ) ,
+			array('Jurusan'		,'<span class="glyphicon glyphicon-user"></span>'   , sprintf('%1$s'    , $this->get_url_admin_jurusan() ) ) ,
+            array('Kalender'	,'<span class="glyphicon glyphicon-expand"></span>'     , sprintf('%1$s' 	, $this->get_url_admin_kalender() ) )
+			
                       );
         foreach($list as $key => $val ){
            $list_menu .= sprintf('<li><a href="%1$s" rel="nofollow"> %2$s    %3$s</a></li>', $val [2] , $val [1] ,$val[0]) ;

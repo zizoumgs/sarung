@@ -62,6 +62,7 @@ Route::controller('sarung_admin/event'                 , 'Admin_sarung_event');
 Route::controller('sarung_admin/pelajaran'              , 'Admin_sarung_pelajaran');
 Route::controller('sarung_admin/session'               , 'Admin_sarung_session');
 Route::controller('sarung_admin/kalender'              , 'Admin_sarung_kalender');
+Route::controller('sarung_admin/jurusan'              , 'Admin_sarung_jurusan');
 
 //Route::controller('/'                 , 'sarung_controller');
 Route::controller('sarung_admin'      , 'Sarung_admin_controller');

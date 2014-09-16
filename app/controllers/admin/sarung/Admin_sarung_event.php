@@ -311,5 +311,12 @@ class Admin_sarung_event extends Admin_sarung{
     }
     
 
+	/**
+	 *	return integer	contains max id from particular table
+	*/
+    protected function get_max_id(){ return $this->get_model_obj()->max('id');}
+    /*
+        remove
     private function get_max_id(){ return Event_Model::max('id');}
+    */
 }

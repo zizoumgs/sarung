@@ -179,14 +179,16 @@ abstract class root extends Controller {
 	protected function get_user_power() {return Auth::user()->admindgroup->power;}
 	protected function get_user_name_group() {return Auth::user()->admindgroup->nama;}
 	/*get url_admind uang */
-	protected function get_url_admin_uang	()   { 		return sprintf('%1$s/admin_uang' , $this->base_url());}
-	protected function get_url_admin_event ()    { 		return sprintf('%1$s/sarung_admin/event' , $this->base_url());}
-	protected function get_url_admin_session ()  { 		return sprintf('%1$s/sarung_admin/session' , $this->base_url());}
-	protected function get_url_admin_kalender () { 		return sprintf('%1$s/sarung_admin/kalender' , $this->base_url());}
-	protected function get_url_admin_pelajaran (){ 		return sprintf('%1$s/sarung_admin/pelajaran' , $this->base_url());}
-	protected function get_url_admin_sarung ()   { 		return sprintf('%1$s/sarung_admin' , $this->base_url());}
-	protected function get_url_admin_iman   ()   { 		return sprintf('%1$s/admin_iman' , $this->base_url());}
-	protected function get_url_uang()			 {       return sprintf('%1$s/uang' , $this->base_url()); }
+	protected function get_url_admin_uang	   ()	{ 		return sprintf('%1$s/admin_uang' , $this->base_url());}
+	protected function get_url_admin_event     ()   { 		return sprintf('%1$s/sarung_admin/event' , $this->base_url());}
+	protected function get_url_admin_session   ()	{ 		return sprintf('%1$s/sarung_admin/session' , $this->base_url());}
+	protected function get_url_admin_kalender  () 	{ 		return sprintf('%1$s/sarung_admin/kalender' , $this->base_url());}
+	protected function get_url_admin_pelajaran ()	{ 		return sprintf('%1$s/sarung_admin/pelajaran' , $this->base_url());}
+	protected function get_url_admin_jurusan   ()	{ 		return sprintf('%1$s/sarung_admin/jurusan' , $this->base_url());}
+	
+	protected function get_url_admin_sarung		()   { 		return sprintf('%1$s/sarung_admin' , $this->base_url());}
+	protected function get_url_admin_iman   	()   { 		return sprintf('%1$s/admin_iman' , $this->base_url());}
+	protected function get_url_uang				()	 {       return sprintf('%1$s/uang' , $this->base_url()); }
 	/* Use this function to get pagination , you should use clas which is inheritanced by eloquent as an obj */
 	protected function get_pagination_link($obj , $wheres = array()){
 		return $obj->appends( $wheres )->links();

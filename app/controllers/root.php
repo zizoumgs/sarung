@@ -185,6 +185,8 @@ abstract class root extends Controller {
 	protected function get_url_admin_kalender  () 	{ 		return sprintf('%1$s/sarung_admin/kalender' , $this->base_url());}
 	protected function get_url_admin_pelajaran ()	{ 		return sprintf('%1$s/sarung_admin/pelajaran' , $this->base_url());}
 	protected function get_url_admin_jurusan   ()	{ 		return sprintf('%1$s/sarung_admin/jurusan' , $this->base_url());}
+	protected function get_url_admin_kelas_root   ()	{ 		return sprintf('%1$s/sarung_admin/kelas_root' , $this->base_url());}
+	protected function get_url_admin_kelas		()	{ 		return sprintf('%1$s/sarung_admin/kelas' , $this->base_url());}
 	
 	protected function get_url_admin_sarung		()   { 		return sprintf('%1$s/sarung_admin' , $this->base_url());}
 	protected function get_url_admin_iman   	()   { 		return sprintf('%1$s/admin_iman' , $this->base_url());}

@@ -11,6 +11,17 @@ class Admin_sarung_pelajaran extends Admin_sarung_session{
     protected function get_pelajaran_short_name()         { return $this->input['pelajaran_short_name'];}
     protected function get_pelajaran_short_selected ()     { return Input::get( $this->get_pelajaran_short_name());}
 	/**
+	 *	return input html
+	*/
+	protected function get_input( $parameters , $disabled){
+		$input = "<input ";
+		foreach($parameters as $key => $val ):
+			$input .= sprintf('%1$s="%2$s"',$key , $val) ; 
+		endforeach;
+		$input .= sprintf(' %1$s >' , $disabled);
+		return $input;
+	}
+	/**
 	 *	return form html for add , edit and delete
 	*/
     protected function get_form_cud( $go_where  , $values = array()  ,$disabled = "" , $method = 'post'){

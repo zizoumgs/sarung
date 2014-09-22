@@ -58,11 +58,13 @@ Route::controller('admin_uang/outcome_cud'      , 'Admin_outcome_cud');
 Route::controller('admin_uang/subdivisi_crud'      , 'Admin_subdivisi_crud');
 Route::controller('admin_uang/divisi_crud'      , 'Admin_divisi_crud');
 //! all sarung admin controller
-Route::controller('sarung_admin/event'                 , 'Admin_sarung_event');
+Route::controller('sarung_admin/event'                  , 'Admin_sarung_event');
 Route::controller('sarung_admin/pelajaran'              , 'Admin_sarung_pelajaran');
-Route::controller('sarung_admin/session'               , 'Admin_sarung_session');
-Route::controller('sarung_admin/kalender'              , 'Admin_sarung_kalender');
-Route::controller('sarung_admin/jurusan'              , 'Admin_sarung_jurusan');
+Route::controller('sarung_admin/session'                , 'Admin_sarung_session');
+Route::controller('sarung_admin/kalender'               , 'Admin_sarung_kalender');
+Route::controller('sarung_admin/jurusan'                , 'Admin_sarung_jurusan');
+Route::controller('sarung_admin/kelas_root'             , 'Admin_sarung_kelas_root');
+Route::controller('sarung_admin/kelas'                  , 'Admin_sarung_kelas');
 
 //Route::controller('/'                 , 'sarung_controller');
 Route::controller('sarung_admin'      , 'Sarung_admin_controller');

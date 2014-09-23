@@ -233,8 +233,14 @@ class Admin_sarung_session extends Admin_sarung_event{
         return $event;
     }
 
-
-    protected function get_max_id(){ return Session_Model::max('id');}
+    /**
+     *  return max id for particular table
+    */
+    protected function get_max_id(){
+        //return Session_Model::max('id');
+        $session = $this->get_model_obj();
+        return $session->max('id');
+    }
 
     protected function set_values_to_inputs($model){
         return array(

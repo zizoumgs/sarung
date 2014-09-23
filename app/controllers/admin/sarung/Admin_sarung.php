@@ -92,11 +92,11 @@ class Admin_sarung extends Admin_root{
         $list = array(
 	        array('Event' 		,'<span class="glyphicon glyphicon-refresh"></span>'    , sprintf('%1$s'    , $this->get_url_admin_event() )  ) ,
             array('Session'  	,'<span class="glyphicon glyphicon-tower"></span>'      , sprintf('%1$s'  	, $this->get_url_admin_session() ) ) ,
-			array('Pelajaran'	,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_pelajaran() ) ) ,
-			array('Jurusan'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_jurusan() ) ) ,
-			array('Kelas Root'	,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_kelas_root() ) ) ,
-			array('Kelas'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_kelas() ) ) ,
-            array('Kalender'	,'<span class="glyphicon glyphicon-expand"></span>'     , sprintf('%1$s' 	, $this->get_url_admin_kalender() ) )
+            array('Kalender'	,'<span class="glyphicon glyphicon-expand"></span>'     , sprintf('%1$s' 	, $this->get_url_admin_kalender() ) ) , 
+			array('Pelajaran'	,'<span class="glyphicon glyphicon-copyright-mark"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_pelajaran() ) ) ,
+			array('Jurusan'		,'<span class="glyphicon glyphicon-copyright-mark"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_jurusan() ) ) ,
+			array('Kelas Root'	,'<span class="glyphicon glyphicon-copyright-mark"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_kelas_root() ) ) ,
+			array('Kelas'		,'<span class="glyphicon glyphicon-copyright-mark"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_kelas() ) ) 
 			
                       );
         foreach($list as $key => $val ){

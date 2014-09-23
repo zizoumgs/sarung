@@ -1,5 +1,5 @@
 <?php
-class Admin_sarung_kelas_root extends Admin_sarung_pelajaran{
+class Admin_sarung_kelas_root extends Admin_sarung_jurusan{
     private $input;
     
     public function __construct(){

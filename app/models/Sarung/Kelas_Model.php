@@ -44,6 +44,7 @@ class Jurusan_Model extends Sarung_Model_Root{
  *	6.  catatan
  *	7.	idkelasroot
  *	8. 	idjurusan
+ *	Name must be unique
 */
 class Kelas_Model extends Sarung_Model_Root{
 	protected $table = 'kelas';

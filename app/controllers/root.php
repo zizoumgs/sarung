@@ -25,14 +25,34 @@ abstract class root extends Controller {
 	protected function set_footer ($val) { $this->footer = $val ;}
 	protected function get_footer () { return $this->footer ; }
 	protected function set_css ($val) { $this->css .= $val;}
+	/**
+	 *	Will add js
+	 *	return none
+	*/
 	protected function set_js  ($val) { $this->js .= $val ; }
+	/**
+	 *	return side html
+	*/		
 	protected function get_side(){ return $this->side;}
+	/**
+	 *	set html of side
+	 *	return none
+	*/	
 	protected function set_side($val) { $this->side = $val;}
-	//! will get only css which you choose
+	/**
+	 *	Will get css that you choosed / additional css
+	 *	return your css
+	*/
 	protected function get_css_only(){ return $this->css;}
-	//! will get only js which you choose
+	/**
+	 *	Will get js that you choosed / additional js
+	 *	return your js
+	*/
 	protected function get_js_only (){ return $this->js;}
-	
+	/**
+	 *	Will get css
+	 *	return css
+	*/	
 	protected function get_css(){
 		return sprintf('
 			<link href="%1$s" rel="stylesheet" type="text/css"/>
@@ -46,6 +66,10 @@ abstract class root extends Controller {
 			$this->get_additional_css()
 			);
 	}
+	/**
+	 *	Will get js 
+	 *	return js
+	*/
 	protected function get_js(){
 		return sprintf('
 			<script type="text/javascript" src="%1$s" ></script>
@@ -61,9 +85,23 @@ abstract class root extends Controller {
 			$this->get_additional_js()
 			);
 	}
+	/**
+	 *	it will be need by pagination
+	 *	return jump value
+	*/	
 	protected function get_total_jump(){		return $this->value ['jump'];	}
+	/**
+	 *	it will be need by pagination
+	*/	
 	protected function set_total_jump($val) { $this->value ['jump'] = $val ; }
+	/**
+	 *	in order to make as close as possible to codeigniter
+	 *	return base url
+	*/	
 	protected function base_url(){		return URL::to('/');	}
+	/**
+	 *	return html select 
+	*/	
     protected function get_select( $items  , $array = array() ){
 		$attribute_select ="" ;
 		foreach($array as $key => $val){
@@ -185,8 +223,10 @@ abstract class root extends Controller {
 	protected function get_url_admin_kalender  () 	{ 		return sprintf('%1$s/sarung_admin/kalender' , $this->base_url());}
 	protected function get_url_admin_pelajaran ()	{ 		return sprintf('%1$s/sarung_admin/pelajaran' , $this->base_url());}
 	protected function get_url_admin_jurusan   ()	{ 		return sprintf('%1$s/sarung_admin/jurusan' , $this->base_url());}
-	protected function get_url_admin_kelas_root   ()	{ 		return sprintf('%1$s/sarung_admin/kelas_root' , $this->base_url());}
+	protected function get_url_admin_kelas_root   ()	{ 	return sprintf('%1$s/sarung_admin/kelas_root' , $this->base_url());}
 	protected function get_url_admin_kelas		()	{ 		return sprintf('%1$s/sarung_admin/kelas' , $this->base_url());}
+	protected function get_url_admin_wali		()	{ 		return sprintf('%1$s/sarung_admin/wali' , $this->base_url());}
+	protected function get_url_admin_ujian		()	{ 		return sprintf('%1$s/sarung_admin/ujian' , $this->base_url());}
 	
 	protected function get_url_admin_sarung		()   { 		return sprintf('%1$s/sarung_admin' , $this->base_url());}
 	protected function get_url_admin_iman   	()   { 		return sprintf('%1$s/admin_iman' , $this->base_url());}

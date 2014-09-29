@@ -52,7 +52,7 @@ class Admin_sarung_kelas extends Admin_sarung_kelas_root{
     }
 
 	/**
-	 *	return form html for add , edit and delete
+	 *	return html form for add , edit and delete
 	**/
     protected function get_form_cud( $go_where  , $values = array()  ,$disabled = "" , $method = 'post'){
 		$this->use_select();
@@ -61,7 +61,7 @@ class Admin_sarung_kelas extends Admin_sarung_kelas_root{
 					$this->get_kelas_name()			=> 	'' ,
 					$this->get_jurusan_name()		=> '' ,
         );
-        $array = $this->make_one_two_array($array , $values);
+        $array = $this->make_one_two_array($array , $values);		
         $params = array('label' , 'value');
    		$hasil  = Form::open(array('url' => $go_where, 'method' => $method , 'role' => 'form' ,'class' => 'form-horizontal')) ;
         $hasil .= $this->get_text_cud_group( 'Nama Kelas'  	, $array [ $this->get_kelas_name()]     , $this->get_kelas_name()      , $disabled) ;

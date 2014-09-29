@@ -232,16 +232,6 @@ class Admin_sarung_session extends Admin_sarung_event{
         $event->akhir           = $data [ $this->get_akhir_name()   ]           ;
         return $event;
     }
-
-    /**
-     *  return max id for particular table
-    */
-    protected function get_max_id(){
-        //return Session_Model::max('id');
-        $session = $this->get_model_obj();
-        return $session->max('id');
-    }
-
     protected function set_values_to_inputs($model){
         return array(
                      $this->get_session_name()              =>  $model->nama            ,

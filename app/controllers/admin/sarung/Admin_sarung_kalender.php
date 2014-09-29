@@ -495,11 +495,6 @@ class Admin_sarung_kalender extends Admin_sarung_pelajaran{
 						 $this->get_money_name()	=>	$model->money 
 						 );        
     }
-	/**
-	 *	get maximum id for id of certain model
-	 *	return max id
-	*/
-    protected function get_max_id(){ return Kalender_Model::max('id');}	
     /*
 	  this will get table of database
 	*/

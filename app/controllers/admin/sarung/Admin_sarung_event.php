@@ -286,17 +286,23 @@ class Admin_sarung_event extends Admin_sarung{
 			return $this->getEventadd($message);            
         }
     }
-
+    /**
+     *  return array 
+     *  useful for edit and delele view
+    */
     protected function set_values_to_inputs($model){
             return array($this->get_kalender_name() =>  $model->nama  , $this->get_kalender_name_sho() => $model->inisial );        
     }
-    //! this will get table of database
+    /*
+    *   return object
+    *   this will get table of database
+    */
+    protected function get_model_obj(){        return new Event_Model();    }
 
-    protected function get_model_obj(){
-        return new Event_Model();
-    }
-
-    /* this will be called just before insert , edit */
+    /*
+     * you should overwrite  this .
+     * will be called just before insert , edit
+    */
     private function Sarung_db_about($data , $edit = false){
         $event = new Event_Model();
         if( !$edit ){
@@ -309,14 +315,12 @@ class Admin_sarung_event extends Admin_sarung{
    		$event->inisial    = $data [ $this->get_kalender_name_sho() ]	;
         return $event;        
     }
-    
-
-	/**
-	 *	return integer	contains max id from particular table
-	*/
-    protected function get_max_id(){ return $this->get_model_obj()->max('id');}
-    /*
-        remove
-    private function get_max_id(){ return Event_Model::max('id');}
+     /**
+     *  return max id for particular table
     */
+    protected function get_max_id(){
+        //return Session_Model::max('id');
+        $session = $this->get_model_obj();
+        return $session->max('id');
+    }
 }

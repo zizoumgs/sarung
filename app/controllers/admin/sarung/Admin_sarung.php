@@ -96,8 +96,9 @@ class Admin_sarung extends Admin_root{
 			array('Pelajaran'	,'<span class="glyphicon glyphicon-copyright-mark"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_pelajaran() ) ) ,
 			array('Jurusan'		,'<span class="glyphicon glyphicon-copyright-mark"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_jurusan() ) ) ,
 			array('Kelas Root'	,'<span class="glyphicon glyphicon-copyright-mark"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_kelas_root() ) ) ,
-			array('Kelas'		,'<span class="glyphicon glyphicon-copyright-mark"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_kelas() ) ) 
-			
+			array('Kelas'		,'<span class="glyphicon glyphicon-copyright-mark"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_kelas() ) ) ,
+			array('Wali'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_wali() ) ) ,
+			array('Ujian'		,'<span class="glyphicon glyphicon-glass"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_ujian() ) ) 			
                       );
         foreach($list as $key => $val ){
            $list_menu .= sprintf('<li><a href="%1$s" rel="nofollow"> %2$s    %3$s</a></li>', $val [2] , $val [1] ,$val[0]) ;
@@ -180,5 +181,23 @@ class Admin_sarung extends Admin_root{
         }
 		return $ori_array;
 	}
+	/**
+	 *	return value inside text
+	*/
+	protected function get_value($name){
+		return Input::get( $name );
+	}
+	/*
+		return form-group class which will be containter for input html
+	*/
+    protected function get_input_cud_group( $label , $input ){
+        return sprintf('
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label " >%1$s</label>
+            <div class="col-sm-8 ">
+                %2$s
+            </div>
+        </div>' , $label , $input);
+    }	
 }
 

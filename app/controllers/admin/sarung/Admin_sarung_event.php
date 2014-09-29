@@ -1,5 +1,8 @@
 <?php
-/*This is event , and this is not kalender*/
+/**
+ *  This is event , and this is not kalender
+ *  Sub class from this class if you want to semi automatic crud
+ **/
 class Admin_sarung_event extends Admin_sarung{
     private $input;
     public function __construct(){
@@ -8,14 +11,16 @@ class Admin_sarung_event extends Admin_sarung{
     
 	/**
      *  function usualy used for filtering result
-     *  return string
+     *  return only input html
     */
     protected function get_form_group($input , $name_label){
 		return sprintf('<div class="form-group ">
         					   %1$s
 					   </div>' , $input , $name_label);
 	}
-    /*For all input_group , but you should use input as a parameter*/
+    /**
+     *  return  html div which containt label and input
+    **/
     protected function get_input_cud_group( $label , $input ){
         return sprintf('
         <div class="form-group form-group-sm">
@@ -25,15 +30,24 @@ class Admin_sarung_event extends Admin_sarung{
             </div>
         </div>' , $label , $input);
     }
+    /**
+     *  return  html input only
+    **/
     protected function get_text_cud_group( $label , $value , $name , $disabled){
         $input =  sprintf('
             <input  name="%3$s" class=" %3$s form-control " type="text" placeholder="%1$s" Value="%2$s" %4$s >' ,
             $label , $value , $name , $disabled);
         return $this->get_input_cud_group($label , $input );
     }
+    /**
+     *  return  html div
+    **/
     protected function get_form_cud( $go_where  , $values = array()  ,$disabled = "" , $method = 'post'){
         return $this->get_form_cud_event( $go_where , $values , $disabled , $method);
     }
+    /**
+     *  return  html form which will be used for add, edit and delete
+    **/    
 	protected function get_form_filter_default( $go_where , $method , $additional){
    		$hasil  = Form::open(array('url' => $go_where, 'method' => $method , 'role' => 'form' ,'class' =>'form-inline form-filter')) ;
 		$hasil .= $additional ;
@@ -45,7 +59,9 @@ class Admin_sarung_event extends Admin_sarung{
 		$hasil .= Form::close();
 		return $hasil;
 	}
-    
+    /**
+     *  return  html form which will be used to filter table view
+    **/
    	protected function get_form_filter( $go_where  , $method = 'get', $with_session = true ){
         $additional = $hasil = "";
 		$tmp = Form::text( $this->get_name_for_text()  , '', array( 'class' => 'form-control input-sm' , 'placeholder' => 'Name' , 'Value' =>  $this->get_name_for_text_selected() ));
@@ -55,29 +71,33 @@ class Admin_sarung_event extends Admin_sarung{
 		//$hasil = sprintf('<div class="thumbnai">%1$s</div>' , $hasil);
 		return $hasil;
 	}
-
+    /**
+     *  return  html text on top of ...
+    **/
     protected function set_text_on_top($value){ $this->values ['text_on_top'] = $value; }
+    /**
+     *  return  none
+    **/    
     protected function get_text_on_top(){ return $this->values ['text_on_top']; }
     protected function set_name_for_text($val) { $this->values ['find_name'] = $val; }
     protected function get_name_for_text(){ return $this->values['find_name'];}
     protected function get_name_for_text_selected(){ return Input::get($this->get_name_for_text() ); }
+    /**
+     *  return  input name of kalender
+    **/    
     protected function set_kalender_name($val){ $this->input ['kalender'] = $val ; }
     protected function get_kalender_name(){return $this->input ['kalender'] ; }
     protected function get_kalander_name_selected() { return Input::get( $this->get_kalender_name()); }
+    /**
+     *  return  input name of short name of kalender
+    **/    
     protected function set_kalender_name_sho($val){ $this->input ['kalender_short'] = $val ; }
     protected function get_kalender_name_sho(){return $this->input ['kalender_short'] ; }
     protected function get_kalander_name_sho_selected() { return Input::get( $this->get_kalender_name()); }
-    /*You should call this on contructor ,and you should make this*/
-    protected function set_default_value(){
-        $this->set_view('sarung/admin/index');
-        $this->set_min_power( 100 );
-		$this->set_title('Kalender');
-		$this->set_body_attribute( " class='admin admin_sarung_body' " );
-        $this->set_name_for_text('kalender');
-        $this->set_kalender_name('kalender_name');
-        $this->set_kalender_name_sho('kalender_sho');
-        $this->set_table_name('event');
-    }
+    /**
+      *  called by @get_form_cud
+      *  return  none
+    **/
     protected final function get_form_cud_event($go_where  , $values = array()  ,$disabled = "" , $method = 'post'){
         $array = array( $this->get_kalender_name() => '' , $this->get_kalender_name_sho() => '' );
         $array = $this->make_one_two_array($array , $values);
@@ -92,7 +112,14 @@ class Admin_sarung_event extends Admin_sarung{
         $hasil .= Form::close();
         return $hasil;        
     }
+    /**
+      *  return  @getIndex()
+    **/
     public function getIndex(){        return $this->getEvent();    }
+    /**
+      *  called by getIndex()
+      *  return  @index()
+    **/
     public function getEvent(){
         $find_name = $this->get_name_for_text_selected();
         $href = sprintf('<a href="%1$s" class="btn btn-primary btn-xs" >Add</a>' , $this->get_url_this_add() );
@@ -141,10 +168,9 @@ class Admin_sarung_event extends Admin_sarung{
         $this->set_content($hasil);
         return $this->index();
     }
-    protected function get_url_this_view(){ return $this->get_url_admin_sarung()."/event" ;}
-    protected function get_url_this_add(){ return $this->get_url_admin_sarung()."/event/eventadd" ;}
-    protected function get_url_this_edit(){ return $this->get_url_admin_sarung()."/event/eventedit" ;}
-    protected function get_url_this_dele(){ return $this->get_url_admin_sarung()."/event/eventdel" ;}
+    /**
+      *  return html which was used as place of add , edit , delete form
+    **/
     protected function get_panel( $heading , $body , $footer=""){
         return sprintf('
             <div class="panel panel-primary">
@@ -153,7 +179,10 @@ class Admin_sarung_event extends Admin_sarung{
                 <div class="panel-footer">%3$s</div>
             </div>', $heading , $body , $footer);
     }
-
+    /**
+      *   first html if you want to delete from database
+      *  return  index() or blank if non positif
+    **/
     public function getEventdel($id , $message = ""){
         if($id >= 0){
             $heading    = 'Will Delete id ' . $id;
@@ -168,7 +197,10 @@ class Admin_sarung_event extends Admin_sarung{
             echo "You tried to put non positif id ";
         }
     }    
-
+    /**
+      *  after you click submit from delete from , you will go to here in order to delete from database
+      *  return  index() if success and getEventdel() if fail
+    **/
     public function postEventdel(){
 		$id = Input::get('id');
         if($id >= 0 ){
@@ -198,6 +230,10 @@ class Admin_sarung_event extends Admin_sarung{
         }
     }
 
+    /**
+      *   first html if you want to edit from database
+      *  return  index() or blank if non positif
+    **/
     public function getEventedit($id , $message = ""){
         if($id >= 0){
             $heading    = 'Will edit id ' . $id;
@@ -213,13 +249,23 @@ class Admin_sarung_event extends Admin_sarung{
         }
     }
 
+    /**
+      *  after you click submit from edit form , you will go to here in order to edit from database
+      *  return  getEventedit()
+    **/
     public function postEventedit(){
+        /*
 		$data = Input::only( 'id' ,$this->get_kalender_name() , $this->get_kalender_name_sho() );
 		$rules = array( $this->get_kalender_name() => 'required' , $this->get_kalender_name_sho() => 'required');
     	$validator = Validator::make($data, $rules);
         $id                 = $data ['id'] ;
 		$kalender_name 	    = $data [ $this->get_kalender_name() ];
 		$kalender_name_sho  = $data [ $this->get_kalender_name_sho() ];
+        */
+		$data = Input::all() ;
+        $id = Input::get('id');
+		$rules = $this->get_rules(true);
+       	$validator = Validator::make($data, $rules);
 		if ($validator->fails())    {
 			$messages = $validator->messages();
 			$message = sprintf('<span class="label label-danger">%1$s</span>' ,
@@ -245,6 +291,10 @@ class Admin_sarung_event extends Admin_sarung{
         }
     }
 
+    /**
+      *   first html if you want to add 
+      *  return  index()
+    **/
     public function getEventadd($messages = ""){
         $heading    = 'Add';
         $body       = $this->get_form_cud( $this->get_url_this_add());        
@@ -252,12 +302,15 @@ class Admin_sarung_event extends Admin_sarung{
         return $this->index();
     }
 
+    /**
+      *   after you click submit from add form , you will go to here in order to add into database 
+      *  return  getEventAdd()
+    **/
     public function postEventadd(){
-		$data = Input::only( $this->get_kalender_name() , $this->get_kalender_name_sho() );
-		$rules = array( $this->get_kalender_name() => 'required' , $this->get_kalender_name_sho() => 'required');
+		//$data = Input::only( $this->get_kalender_name() , $this->get_kalender_name_sho() );
+		$data = Input::all();
+   		$rules = $this->get_rules(true);
     	$validator = Validator::make($data, $rules);
-		$kalender_name 	    = $data [ $this->get_kalender_name() ];
-		$kalender_name_sho  = $data [ $this->get_kalender_name_sho() ];
 		if ($validator->fails())    {
 			$messages = $validator->messages();
 			$message = sprintf('<span class="label label-danger">%1$s</span>' ,
@@ -265,9 +318,13 @@ class Admin_sarung_event extends Admin_sarung{
 			return $this->getEventadd( $message );
 		}
         else{
+            /*
+    		$kalender_name 	    = $data [ $this->get_kalender_name() ];
+    		$kalender_name_sho  = $data [ $this->get_kalender_name_sho() ];
+            */
             $id = $this->get_id_from_save_id ( $this->get_table_name() ,$this->get_max_id() );
             $data ['id'] = $id ;
-            $event = $this->Sarung_db_about($data  );
+            $event = $this->Sarung_db_about( $data  );
 			$messages = array("Gagal Memasukkan ");
 			$message = sprintf('<span class="label label-danger">%1$s</span>' ,
 							   $this->make_message( $messages ));
@@ -275,7 +332,8 @@ class Admin_sarung_event extends Admin_sarung{
             $saveId = $this->del_item_from_save_id( $this->get_table_name() , $id );
 			DB::transaction(function()use ($event , $saveId , &$bool , $id){
 				$event->save();
-       			$saveId->delete();		
+                if($saveId)
+           			$saveId->delete();		
 				$bool = true;				
 			});
 			if($bool){
@@ -286,6 +344,84 @@ class Admin_sarung_event extends Admin_sarung{
 			return $this->getEventadd($message);            
         }
     }
+
+    /**
+      *  will be used by get_rules()
+      *  input = array
+    **/
+    protected function set_inputs_rules($val){ $this->input ['inputs_rules'] = $val;}
+    /**
+      *  will be used by get_rules()
+      *  return  array
+    **/
+    protected function get_inputs_rules(){return $this->input['inputs_rules'];}
+	/**
+	 *	return array
+	 *	will be called in add , edit function 
+	*/
+    protected function get_rules($with_id = false){
+        $rules = $this->get_inputs_rules();
+        if($with_id)
+            $rules ['id'] = "required|numeric" ; 
+        return $rules;
+    }
+    /**
+      *  set url for table
+    **/
+    protected function set_url_this_view($val){  $this->input ['table_url'] = $val  ; }
+    /**
+      *  return  url table which will be used for navigating
+    **/
+    protected function get_url_this_view(){ return $this->input ['table_url'] ;}
+    /**
+     *  set url for adding
+    */
+    protected function set_url_this_add($val){ $this->input ['add_url'] = $val  ; }
+    /**
+      *  return  url add which will be used for navigating
+    **/
+    protected function get_url_this_add(){ return $this->input ['add_url'] ;}
+    /**
+     *  set url for editing
+    */
+    protected function set_url_this_edit($val){ $this->input ['edit_url'] = $val  ; }
+    /**
+      *  return  url edit which will be used for navigating
+    **/
+    protected function get_url_this_edit(){ return $this->input ['edit_url']  ;}
+    /**
+     *  set url for deleting
+    */
+    protected function set_url_this_dele($val){ $this->input ['delete_url'] = $val  ; }
+    /**
+      *  return  url which will be used for delete
+    **/
+    protected function get_url_this_dele(){ return $this->input ['delete_url'] ;}
+     /**
+     *  This is must be function you should make if you make subclass from this class 
+     *  return  none
+    **/
+    protected function set_default_value(){
+        $this->set_view('sarung/admin/index');
+        $this->set_min_power( 100 );
+		$this->set_title('Kalender');
+		$this->set_body_attribute( " class='admin admin_sarung_body' " );
+        $this->set_name_for_text('kalender');
+        $this->set_kalender_name('kalender_name');
+        $this->set_kalender_name_sho('kalender_sho');
+        $this->set_table_name('event');
+        
+        //! for url
+        $this->set_url_this_dele($this->get_url_admin_sarung()."/event/eventdel" );
+        $this->set_url_this_edit($this->get_url_admin_sarung()."/event/eventedit");
+        $this->set_url_this_add ($this->get_url_admin_sarung()."/event/eventadd" );
+        $this->set_url_this_view($this->get_url_admin_sarung()."/event");
+        //!
+        $this->set_model_obj(new Event_Model() );
+        //! input rules
+   		$rules = array( $this->get_kalender_name() => 'required' , $this->get_kalender_name_sho() => 'required');
+        $this->set_inputs_rules($rules);
+    }
     /**
      *  return array 
      *  useful for edit and delele view
@@ -294,17 +430,22 @@ class Admin_sarung_event extends Admin_sarung{
             return array($this->get_kalender_name() =>  $model->nama  , $this->get_kalender_name_sho() => $model->inisial );        
     }
     /*
+    *   set object of database
+    *   this will get table of database
+    */
+    protected function set_model_obj($val){ $this->input ['model_obj'] = $val ;}
+    /*
     *   return object
     *   this will get table of database
     */
-    protected function get_model_obj(){        return new Event_Model();    }
-
-    /*
-     * you should overwrite  this .
+    protected function get_model_obj(){        return $this->input ['model_obj'] ;    }
+    /**
+     * you should override  this .
      * will be called just before insert , edit
-    */
-    private function Sarung_db_about($data , $edit = false){
-        $event = new Event_Model();
+    **/
+    protected function Sarung_db_about($data , $edit = false){
+        // $event = new Event_Model();
+        $event = $this->get_model_obj();
         if( !$edit ){
             $event->id = $data ['id'] ;
         }
@@ -317,7 +458,7 @@ class Admin_sarung_event extends Admin_sarung{
     }
      /**
      *  return max id for particular table
-    */
+    **/
     protected function get_max_id(){
         //return Session_Model::max('id');
         $session = $this->get_model_obj();

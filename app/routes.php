@@ -65,8 +65,13 @@ Route::controller('sarung_admin/kalender'               , 'Admin_sarung_kalender
 Route::controller('sarung_admin/jurusan'                , 'Admin_sarung_jurusan');
 Route::controller('sarung_admin/kelas_root'             , 'Admin_sarung_kelas_root');
 Route::controller('sarung_admin/kelas'                  , 'Admin_sarung_kelas');
-Route::controller('sarung_admin/wali'                  , 'Admin_sarung_wali');
+Route::controller('sarung_admin/wali'                   , 'Admin_sarung_wali');
 Route::controller('sarung_admin/ujian'                  , 'Admin_sarung_ujian');
+Route::controller('sarung_admin/negara'                 , 'Admin_sarung_negara');
+Route::controller('sarung_admin/propinsi'                 , 'Admin_sarung_propinsi');
+Route::controller('sarung_admin/kabupaten'                 , 'Admin_sarung_kabupaten');
+Route::controller('sarung_admin/kecamatan'                 , 'Admin_sarung_kecamatan');
+Route::controller('sarung_admin/desa'                 , 'Admin_sarung_desa');
 
 //Route::controller('/'                 , 'sarung_controller');
 Route::controller('sarung_admin'      , 'Sarung_admin_controller');

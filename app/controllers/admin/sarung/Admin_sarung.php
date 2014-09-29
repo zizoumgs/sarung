@@ -100,28 +100,42 @@ class Admin_sarung extends Admin_root{
 			array('Wali'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_wali() ) ) ,
 			array('Ujian'		,'<span class="glyphicon glyphicon-glass"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_ujian() ) ) 			
                       );
+		$address = $this->get_side_of_address();
+        $list_menu .= sprintf('<li>%1$s</li>', $address) ;
         foreach($list as $key => $val ){
            $list_menu .= sprintf('<li><a href="%1$s" rel="nofollow"> %2$s    %3$s</a></li>', $val [2] , $val [1] ,$val[0]) ;
         }
-        $menu  = '
-            <a id="element" href="#" tabindex="0" 
-                data-toggle="popover" 
-                data-trigger="focus"
-                data-html="true"
-                title="<span class=\'title_side_content\'>Dismissible popover</span>" 
-                data-content="
-                    <a class=\'inside_side_content\' href=\'#\'>Fudc</a>
-                    <a class=\'inside_side_content\' href=\'#\'>Fudc</a>
-                    <a class=\'inside_side_content\' href=\'#\'>Fudc</a>
-                "
-                >Dismissible popover</a>
-
-        ';
-        $list_menu .= sprintf('<li>%1$s</li>', $menu) ;
 		$side = sprintf('
 				<ul>%1$s</ul>
 		',$list_menu);
 		return $side;
+	}
+	/**
+	 *	return html which contains address 
+	*/
+	private function get_side_of_address(){
+        $menu  = sprintf('
+            <a id="element" href="#" tabindex="0" 
+                data-toggle="popover" 
+                data-trigger="focus"
+                data-html="true"
+                title="<span class=\'title_side_content\'>Address</span>" 
+                data-content="
+                    <a class=\'inside_side_content\' href=\'%1$s\'><span class=\'glyphicon glyphicon-map-marker\'></span> Negara</a>
+                    <a class=\'inside_side_content\' href=\'%2$s\'><span class=\'glyphicon glyphicon-map-marker\'></span> Propinsi</a>
+                    <a class=\'inside_side_content\' href=\'%3$s\'><span class=\'glyphicon glyphicon-map-marker\'></span> Kabupaten</a>
+					<a class=\'inside_side_content\' href=\'%4$s\'><span class=\'glyphicon glyphicon-map-marker\'></span> Kecamatan</a>
+					<a class=\'inside_side_content\' href=\'%5$s\'><span class=\'glyphicon glyphicon-map-marker\'></span> Desa</a>
+                "
+                ><span class="glyphicon glyphicon-map-marker"></span>Address</a>
+        ',
+		$this->get_url_admin_negara(),
+		$this->get_url_admin_propinsi(),
+		$this->get_url_admin_kabupaten() 	,
+		$this->get_url_admin_kecamatan() 	,
+		$this->get_url_admin_desa()
+		);
+		return $menu;
 	}
 	/**
 	 *	return bool

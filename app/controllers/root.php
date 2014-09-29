@@ -216,7 +216,11 @@ abstract class root extends Controller {
 	protected function get_user_name() { return Auth::user()->email;}
 	protected function get_user_power() {return Auth::user()->admindgroup->power;}
 	protected function get_user_name_group() {return Auth::user()->admindgroup->nama;}
-	/*get url_admind uang */
+	/**
+	 *	get url_admind uang
+	 *	You should set up anymore on routes.php in order to make laravel know where it should be routed
+	 *	And finally you should write it on Admin_sarung.php in order to make link on side of admin panel
+	*/
 	protected function get_url_admin_uang	   ()	{ 		return sprintf('%1$s/admin_uang' , $this->base_url());}
 	protected function get_url_admin_event     ()   { 		return sprintf('%1$s/sarung_admin/event' , $this->base_url());}
 	protected function get_url_admin_session   ()	{ 		return sprintf('%1$s/sarung_admin/session' , $this->base_url());}
@@ -227,6 +231,11 @@ abstract class root extends Controller {
 	protected function get_url_admin_kelas		()	{ 		return sprintf('%1$s/sarung_admin/kelas' , $this->base_url());}
 	protected function get_url_admin_wali		()	{ 		return sprintf('%1$s/sarung_admin/wali' , $this->base_url());}
 	protected function get_url_admin_ujian		()	{ 		return sprintf('%1$s/sarung_admin/ujian' , $this->base_url());}
+	protected function get_url_admin_negara		()	{ 		return sprintf('%1$s/sarung_admin/negara' , $this->base_url());}
+	protected function get_url_admin_propinsi	()	{ 		return sprintf('%1$s/sarung_admin/propinsi' , $this->base_url());}
+	protected function get_url_admin_kabupaten	()	{ 		return sprintf('%1$s/sarung_admin/kabupaten' , $this->base_url());}
+	protected function get_url_admin_kecamatan	()	{ 		return sprintf('%1$s/sarung_admin/kecamatan' , $this->base_url());}
+	protected function get_url_admin_desa		()	{ 		return sprintf('%1$s/sarung_admin/desa' , $this->base_url());}
 	
 	protected function get_url_admin_sarung		()   { 		return sprintf('%1$s/sarung_admin' , $this->base_url());}
 	protected function get_url_admin_iman   	()   { 		return sprintf('%1$s/admin_iman' , $this->base_url());}

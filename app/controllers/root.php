@@ -100,6 +100,28 @@ abstract class root extends Controller {
 	*/	
 	protected function base_url(){		return URL::to('/');	}
 	/**
+	 *	value and text is differect
+	 *	return html select 
+	*/	
+    protected function get_select_by_key ( $items  , $array = array() ){
+		$attribute_select ="" ;
+		foreach($array as $key => $val){
+			if( $key != "selected")
+				$attribute_select .= sprintf( ' %1$s = "%2$s" ' , $key , $val );
+		}
+		$select = sprintf('<select %1$s >' , $attribute_select);
+        foreach ( $items as $key => $value) {
+        	$selected = "";
+        	if($key == $array ['selected']){
+        		$selected = ' selected="selected" ' ;
+        	}
+            $select .= sprintf('<option value="%1$s" %3$s >%2$s</option>',$key,$value , $selected );
+        }
+        $select .= "</select>";
+        return $select;
+    }
+	/**
+	 *	value and text is same
 	 *	return html select 
 	*/	
     protected function get_select( $items  , $array = array() ){
@@ -221,23 +243,6 @@ abstract class root extends Controller {
 	 *	You should set up anymore on routes.php in order to make laravel know where it should be routed
 	 *	And finally you should write it on Admin_sarung.php in order to make link on side of admin panel
 	*/
-	protected function get_url_admin_uang	   ()	{ 		return sprintf('%1$s/admin_uang' , $this->base_url());}
-	protected function get_url_admin_event     ()   { 		return sprintf('%1$s/sarung_admin/event' , $this->base_url());}
-	protected function get_url_admin_session   ()	{ 		return sprintf('%1$s/sarung_admin/session' , $this->base_url());}
-	protected function get_url_admin_kalender  () 	{ 		return sprintf('%1$s/sarung_admin/kalender' , $this->base_url());}
-	protected function get_url_admin_pelajaran ()	{ 		return sprintf('%1$s/sarung_admin/pelajaran' , $this->base_url());}
-	protected function get_url_admin_jurusan   ()	{ 		return sprintf('%1$s/sarung_admin/jurusan' , $this->base_url());}
-	protected function get_url_admin_kelas_root   ()	{ 	return sprintf('%1$s/sarung_admin/kelas_root' , $this->base_url());}
-	protected function get_url_admin_kelas		()	{ 		return sprintf('%1$s/sarung_admin/kelas' , $this->base_url());}
-	protected function get_url_admin_wali		()	{ 		return sprintf('%1$s/sarung_admin/wali' , $this->base_url());}
-	protected function get_url_admin_ujian		()	{ 		return sprintf('%1$s/sarung_admin/ujian' , $this->base_url());}
-	protected function get_url_admin_negara		()	{ 		return sprintf('%1$s/sarung_admin/negara' , $this->base_url());}
-	protected function get_url_admin_propinsi	()	{ 		return sprintf('%1$s/sarung_admin/propinsi' , $this->base_url());}
-	protected function get_url_admin_kabupaten	()	{ 		return sprintf('%1$s/sarung_admin/kabupaten' , $this->base_url());}
-	protected function get_url_admin_kecamatan	()	{ 		return sprintf('%1$s/sarung_admin/kecamatan' , $this->base_url());}
-	protected function get_url_admin_desa		()	{ 		return sprintf('%1$s/sarung_admin/desa' , $this->base_url());}
-	
-	protected function get_url_admin_sarung		()   { 		return sprintf('%1$s/sarung_admin' , $this->base_url());}
 	protected function get_url_admin_iman   	()   { 		return sprintf('%1$s/admin_iman' , $this->base_url());}
 	protected function get_url_uang				()	 {       return sprintf('%1$s/uang' , $this->base_url()); }
 	/* Use this function to get pagination , you should use clas which is inheritanced by eloquent as an obj */

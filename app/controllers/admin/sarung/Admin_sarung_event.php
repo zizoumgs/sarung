@@ -8,7 +8,6 @@ class Admin_sarung_event extends Admin_sarung{
     public function __construct(){
         parent::__construct();
     }
-    
 	/**
      *  function usualy used for filtering result
      *  return only input html

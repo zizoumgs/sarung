@@ -24,7 +24,7 @@ class Admin_sarung extends Admin_root{
 	 *	Usually it is used inside table view html
 	 *	return add and edit html link
 	*/
-    protected final function get_edit_delete_row($additional = ""){
+    protected function get_edit_delete_row($additional = ""){
         $edi = sprintf('<a href="%1$s/%2$s" class="btn btn-primary btn-xs" >Edit</a>'    , $this->get_url_this_edit() , $additional );
         $del = sprintf('<a href="%1$s/%2$s" class="btn btn-danger btn-xs">Delete</a>'      , $this->get_url_this_dele() , $additional );
         return $edi."  ".$del;
@@ -98,7 +98,8 @@ class Admin_sarung extends Admin_root{
 			array('Kelas Root'	,'<span class="glyphicon glyphicon-copyright-mark"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_kelas_root() ) ) ,
 			array('Kelas'		,'<span class="glyphicon glyphicon-copyright-mark"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_kelas() ) ) ,
 			array('Wali'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_wali() ) ) ,
-			array('Ujian'		,'<span class="glyphicon glyphicon-glass"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_ujian() ) ) 			
+			array('Ujian'		,'<span class="glyphicon glyphicon-glass"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_ujian() ) ) , 
+			array('User'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_user() ) )
                       );
 		$address = $this->get_side_of_address();
         $list_menu .= sprintf('<li>%1$s</li>', $address) ;
@@ -110,6 +111,24 @@ class Admin_sarung extends Admin_root{
 		',$list_menu);
 		return $side;
 	}
+	protected function get_url_admin_uang	   ()	{ 		return sprintf('%1$s/admin_uang' , $this->base_url());}
+	protected function get_url_admin_event     ()   { 		return sprintf('%1$s/sarung_admin/event' , $this->base_url());}
+	protected function get_url_admin_session   ()	{ 		return sprintf('%1$s/sarung_admin/session' , $this->base_url());}
+	protected function get_url_admin_kalender  () 	{ 		return sprintf('%1$s/sarung_admin/kalender' , $this->base_url());}
+	protected function get_url_admin_pelajaran ()	{ 		return sprintf('%1$s/sarung_admin/pelajaran' , $this->base_url());}
+	protected function get_url_admin_jurusan   ()	{ 		return sprintf('%1$s/sarung_admin/jurusan' , $this->base_url());}
+	protected function get_url_admin_kelas_root   ()	{ 	return sprintf('%1$s/sarung_admin/kelas_root' , $this->base_url());}
+	protected function get_url_admin_kelas		()	{ 		return sprintf('%1$s/sarung_admin/kelas' , $this->base_url());}
+	protected function get_url_admin_wali		()	{ 		return sprintf('%1$s/sarung_admin/wali' , $this->base_url());}
+	protected function get_url_admin_ujian		()	{ 		return sprintf('%1$s/sarung_admin/ujian' , $this->base_url());}
+	protected function get_url_admin_negara		()	{ 		return sprintf('%1$s/sarung_admin/negara' , $this->base_url());}
+	protected function get_url_admin_propinsi	()	{ 		return sprintf('%1$s/sarung_admin/propinsi' , $this->base_url());}
+	protected function get_url_admin_kabupaten	()	{ 		return sprintf('%1$s/sarung_admin/kabupaten' , $this->base_url());}
+	protected function get_url_admin_kecamatan	()	{ 		return sprintf('%1$s/sarung_admin/kecamatan' , $this->base_url());}
+	protected function get_url_admin_desa		()	{ 		return sprintf('%1$s/sarung_admin/desa' , $this->base_url());}
+	protected function get_url_admin_user		()	{ 		return sprintf('%1$s/sarung_admin/user' , $this->base_url());}
+	
+	protected function get_url_admin_sarung		()   { 		return sprintf('%1$s/sarung_admin' , $this->base_url());}	
 	/**
 	 *	return html which contains address 
 	*/

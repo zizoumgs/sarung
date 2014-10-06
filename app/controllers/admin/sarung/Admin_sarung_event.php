@@ -198,6 +198,7 @@ class Admin_sarung_event extends Admin_sarung{
     }    
     /**
       *  after you click submit from delete from , you will go to here in order to delete from database
+      *  sequence : @$this->delete_db_admin_root()
       *  return  index() if success and getEventdel() if fail
     **/
     public function postEventdel(){
@@ -250,17 +251,10 @@ class Admin_sarung_event extends Admin_sarung{
 
     /**
       *  after you click submit from edit form , you will go to here in order to edit from database
+      *  sequence : @get_rules() , @Sarung_db_about()
       *  return  getEventedit()
     **/
     public function postEventedit(){
-        /*
-		$data = Input::only( 'id' ,$this->get_kalender_name() , $this->get_kalender_name_sho() );
-		$rules = array( $this->get_kalender_name() => 'required' , $this->get_kalender_name_sho() => 'required');
-    	$validator = Validator::make($data, $rules);
-        $id                 = $data ['id'] ;
-		$kalender_name 	    = $data [ $this->get_kalender_name() ];
-		$kalender_name_sho  = $data [ $this->get_kalender_name_sho() ];
-        */
 		$data = Input::all() ;
         $id = Input::get('id');
 		$rules = $this->get_rules(true);
@@ -269,7 +263,7 @@ class Admin_sarung_event extends Admin_sarung{
 			$messages = $validator->messages();
 			$message = sprintf('<span class="label label-danger">%1$s</span>' ,
 							   $this->make_message( $messages->all() ));
-			return $this->getEventedit( $message );
+			return $this->getEventedit( $id , $message );
 		}
         else{
             $event = $this->Sarung_db_about( $data , true  );
@@ -291,7 +285,8 @@ class Admin_sarung_event extends Admin_sarung{
     }
 
     /**
-      *   first html if you want to add 
+      *   first html if you want to add
+      *   sequence: @get_form_cud , 
       *  return  index()
     **/
     public function getEventadd($messages = ""){
@@ -302,25 +297,22 @@ class Admin_sarung_event extends Admin_sarung{
     }
 
     /**
-      *   after you click submit from add form , you will go to here in order to add into database 
+      *   after you click submit from add form , you will go to here in order to add into database
+      *   sequence : @get_rules() , @get_max_id() , @Sarung_db_about()
       *  return  getEventAdd()
     **/
     public function postEventadd(){
 		//$data = Input::only( $this->get_kalender_name() , $this->get_kalender_name_sho() );
 		$data = Input::all();
-   		$rules = $this->get_rules(true);
+   		$rules = $this->get_rules();
     	$validator = Validator::make($data, $rules);
 		if ($validator->fails())    {
 			$messages = $validator->messages();
 			$message = sprintf('<span class="label label-danger">%1$s</span>' ,
 							   $this->make_message( $messages->all() ));
-			return $this->getEventadd( $message );
+			return $this->getEventAdd($message);
 		}
         else{
-            /*
-    		$kalender_name 	    = $data [ $this->get_kalender_name() ];
-    		$kalender_name_sho  = $data [ $this->get_kalender_name_sho() ];
-            */
             $id = $this->get_id_from_save_id ( $this->get_table_name() ,$this->get_max_id() );
             $data ['id'] = $id ;
             $event = $this->Sarung_db_about( $data  );

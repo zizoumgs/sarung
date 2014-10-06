@@ -2,14 +2,14 @@
 /**
  *  This claas will be crud for user table
 */
-class Admin_sarung_user extends Admin_sarung_event{
+class Admin_sarung_user_support extends Admin_sarung_support{
+	public function __construct(){
+		parent::__construct();
+	}
     /**
      *  @var array
     */
-    private $user_attr;
-    public function __construct(){
-        parent::__construct();        
-    }
+    protected $user_attr;
     protected function set_email_name($val){ $this->user_attr ['email_'] = $val ; }
     protected function get_email_name(){ return $this->user_attr ['email_'] ;}
     protected function get_email_selected(){return $this->get_value( $this->get_email_name() );}
@@ -79,7 +79,12 @@ class Admin_sarung_user extends Admin_sarung_event{
     protected function get_order()    { return $this->user_attr ['order_data'] ; }
     protected function set_order_name($val){ $this->user_attr ['order_data_name'] = $val ; }
     protected function get_order_name()    { return $this->user_attr ['order_data_name'] ; }
-    protected function get_order_name_selected()    { return $this->get_value( $this->get_order_name() ) ; }
+    protected function get_order_name_selected()    { return $this->get_value( $this->get_order_name() ) ; }	
+}
+class Admin_sarung_user_filter extends Admin_sarung_user_support{
+	public function __construct(){
+		parent::__construct();
+	}
     /**
      *  @override
      *  form which will be used to filter table view
@@ -120,84 +125,6 @@ class Admin_sarung_user extends Admin_sarung_event{
 		//$hasil = sprintf('%1$s',$hasil );
 		return $hasil;
 	}
-    /**
-     *  @override
-     *  This is must be function you should make if you make subclass from this class 
-     *  return  none
-    **/
-    protected function set_default_value(){
-        $this->set_view('sarung/admin/index');
-        $this->set_min_power( 1000 );
-		$this->set_title('User register');
-		$this->set_body_attribute( " class='admin admin_sarung_body' " );
-        $this->set_name_for_text('Sarung');
-        $this->set_table_name('admind');
-        //! filter
-        $this->set_name_filter_name('name_filter');
-        $this->set_email_filter_name('email_filter');
-        $this->set_status_select_name('sinbad');
-        $this->set_year_filter_name('year_filter');
-        $this->set_apply_button_name('apply_button');
-        $this->set_select_bulk_name('select_bulk');
-        //! input
-        $this->set_email_name('email_boss');
-        //! for url
-        $this->set_url_this_dele($this->get_url_admin_sarung()."/user/eventdel" );
-        $this->set_url_this_edit($this->get_url_admin_sarung()."/user/eventedit");
-        $this->set_url_this_add ($this->get_url_admin_sarung()."/user/eventadd" );
-        $this->set_url_this_view($this->get_url_admin_sarung()."/user");
-        $this->set_url_for_click_header($this->get_url_admin_sarung()."/user/clickheader");
-        $this->set_url_for_bulk_act($this->get_url_admin_sarung()."/user/bulkaction");
-        //!
-        $this->set_model_obj(new User_Model() );
-        //! input rules
-   		$rules = array( $this->get_email_name() => 'required');
-        $this->set_inputs_rules($rules);
-        //! special
-        $this->set_foto_folder($this->base_url()."/foto/santri");
-        $this->set_order(2);
-        $this->set_order_name('order_name');
-        $this->set_table_form_name('tidak_penting');
-        $this->set_signal_bulk_name('signal_bulk_name');
-        $this->set_total_item_name('total_item');
-        $this->set_prefix_cb_name('check_box');
-        //! below is must be last command to executed
-        $this->set_special_js();
-        
-    }
-    /**
-     * this will display all user admind with respect to his admind status
-     * Return string
-    */
-    protected function get_user_status($model){        
-        $status  = sprintf('<span><span class="glyphicon glyphicon-question-sign"></span> status: %1$s</span><br>', $this->get_status($model->status) );
-        $updated  = sprintf('<span><span class="glyphicon glyphicon-calendar"></span> Updated: %1$s</span><br>', $model->updated_at);
-        $created  = sprintf('<span><span class="glyphicon glyphicon-time"></span> Created: %1$s</span>', $model->created_at);
-        $role = '';
-        $role       = sprintf('<span><span class="glyphicon glyphicon-magnet"></span> Role: %1$s</span><br>', $model->admindgroup->nama);
-        $nama = sprintf('<div class="x-small-font">%1$s %2$s %3$s %4$s</div>' , $status  , $role, $updated, $created );
-        return $nama;        
-    }
-    /**
-     * this will display all user information
-     * Return string
-    */
-    protected function get_user_data($model){
-        $foto  = sprintf('<img src="%1$s/%2$s" class="small-img thumbnail">',$this->get_foto_folder() , $model->foto);
-        $jenis = sprintf('<span>%1$s</span>', $model->jenis);
-        $email  = sprintf('<span><span class="glyphicon glyphicon-envelope"></span> Email: %1$s</span><br>', $model->email);
-        $ttl    = sprintf('<span><span class="glyphicon glyphicon-info-sign"></span> TTL: %1$s %2$s</span>', $model->tempat->nama , $model->lahir);
-        $alamat = sprintf('<span><span class="glyphicon glyphicon-map-marker"></span> Alamat:%1$s %2$s %3$s</span><br>' ,
-                          $model->desa->kecamatan->kabupaten->nama ,
-                          $model->desa->kecamatan->nama ,
-                          $model->desa->nama);
-        $nama = sprintf('<span><span class="glyphicon glyphicon-user"></span> Nama: %1$s %2$s</span><br>' , $model->first_name , $model->second_name);
-        $nama = sprintf('<div class="row">
-                        <div class="col-md-2">%1$s</div>
-                        <div class="col-md-10 x-small-font">%2$s %3$s %4$s %5$s</div>
-                        </div>' , $foto  , $nama, $email, $alamat , $ttl );
-        return $nama;
-    }
     /**
      * this will filter admind which will be seen , admind with lower/same power can`t see higher power
      * Return obj
@@ -253,7 +180,85 @@ class Admin_sarung_user extends Admin_sarung_event{
         }
         return $model_obj;
     }
-
+}
+class Admin_sarung_user extends Admin_sarung_user_filter{
+	public function __construct(){
+		parent::__construct();
+	}
+    /**
+     *  @override
+     *  This is must be function you should make if you make subclass from this class 
+     *  return  none
+    **/
+    protected function set_default_value(){
+        $this->set_view('sarung/admin/index');
+        $this->set_min_power( 1000 );
+		$this->set_title('User register');
+		$this->set_body_attribute( " class='admin admin_sarung_body' " );
+        $this->set_table_name('admind');
+        //! filter
+        $this->set_name_filter_name('name_filter');
+        $this->set_email_filter_name('email_filter');
+        $this->set_status_select_name('sinbad');
+        $this->set_year_filter_name('year_filter');
+        $this->set_apply_button_name('apply_button');
+        $this->set_select_bulk_name('select_bulk');
+        //! input
+        $this->set_email_name('email_boss');
+        //! for url
+        $this->set_url_this_dele($this->get_url_admin_sarung()."/user/eventdel" );
+        $this->set_url_this_edit($this->get_url_admin_sarung()."/user/eventedit");
+        $this->set_url_this_add ($this->get_url_admin_sarung()."/user/eventadd" );
+        $this->set_url_this_view($this->get_url_admin_sarung()."/user");
+        $this->set_url_for_click_header($this->get_url_admin_sarung()."/user/clickheader");
+        $this->set_url_for_bulk_act($this->get_url_admin_sarung()."/user/bulkaction");
+        //!
+        $this->set_model_obj(new User_Model() );
+        //! special
+        $this->set_foto_folder($this->base_url()."/foto/santri");
+        $this->set_order(2);
+        $this->set_order_name('order_name');
+        $this->set_table_form_name('tidak_penting');
+        $this->set_signal_bulk_name('signal_bulk_name');
+        $this->set_total_item_name('total_item');
+        $this->set_prefix_cb_name('check_box');
+        //! below is must be last command to executed
+        //$this->set_special_js();
+        
+    }
+    /**
+     * this will display all user admind with respect to his admind status
+     * Return string
+    */
+    protected function get_user_status($model){        
+        $status  = sprintf('<span><span class="glyphicon glyphicon-question-sign"></span> status: %1$s</span><br>', $this->get_status($model->status) );
+        $updated  = sprintf('<span><span class="glyphicon glyphicon-calendar"></span> Updated: %1$s</span><br>', $model->updated_at);
+        $created  = sprintf('<span><span class="glyphicon glyphicon-time"></span> Created: %1$s</span>', $model->created_at);
+        $role = '';
+        $role       = sprintf('<span><span class="glyphicon glyphicon-magnet"></span> Role: %1$s</span><br>', $model->admindgroup->nama);
+        $nama = sprintf('<div class="x-small-font">%1$s %2$s %3$s %4$s</div>' , $status  , $role, $updated, $created );
+        return $nama;        
+    }
+    /**
+     * this will display all user information
+     * Return string
+    */
+    protected function get_user_data($model){
+        $foto  = sprintf('<img src="%1$s/%2$s" class="small-img thumbnail">',$this->get_foto_folder() , $model->foto);
+        $jenis = sprintf('<span>%1$s</span>', $model->jenis);
+        $email  = sprintf('<span><span class="glyphicon glyphicon-envelope"></span> Email: %1$s</span><br>', $model->email);
+        $ttl    = sprintf('<span><span class="glyphicon glyphicon-info-sign"></span> TTL: %1$s %2$s</span>', $model->tempat->nama , $model->lahir);
+        $alamat = sprintf('<span><span class="glyphicon glyphicon-map-marker"></span> Alamat:%1$s %2$s %3$s</span><br>' ,
+                          $model->desa->kecamatan->kabupaten->nama ,
+                          $model->desa->kecamatan->nama ,
+                          $model->desa->nama);
+        $nama = sprintf('<span><span class="glyphicon glyphicon-user"></span> Nama: %1$s %2$s</span><br>' , $model->first_name , $model->second_name);
+        $nama = sprintf('<div class="row">
+                        <div class="col-md-2">%1$s</div>
+                        <div class="col-md-10 x-small-font">%2$s %3$s %4$s %5$s</div>
+                        </div>' , $foto  , $nama, $email, $alamat , $ttl );
+        return $nama;
+    }
     /**
      *  @override
      *  default view for get methode
@@ -356,7 +361,7 @@ class Admin_sarung_user extends Admin_sarung_event{
         return $events;
     }
     /**
-     *  url for bulk action 
+     *  url for bulk action , it related with database
      *  return getIndex()
      */
     public function getBulkaction(){
@@ -371,7 +376,6 @@ class Admin_sarung_user extends Admin_sarung_event{
                 }
             }
         }
-        //echo $this->get_signal_bulk_selected().$this->get_total_item_selected();
         return $this->getIndex();        
     }
     /**

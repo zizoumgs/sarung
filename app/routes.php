@@ -72,7 +72,7 @@ Route::controller('sarung_admin/propinsi'                 , 'Admin_sarung_propin
 Route::controller('sarung_admin/kabupaten'                 , 'Admin_sarung_kabupaten');
 Route::controller('sarung_admin/kecamatan'                 , 'Admin_sarung_kecamatan');
 Route::controller('sarung_admin/desa'                 , 'Admin_sarung_desa');
-Route::controller('sarung_admin/user'                 , 'Admin_sarung_user');
+Route::controller('sarung_admin/user'                 , 'Admin_sarung_user_cud');
 //! for updating
 Route::controller('update'                 , 'first_update');
 

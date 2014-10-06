@@ -4,4 +4,8 @@
 */
 class Sarung_Model_Root extends Eloquent{
 	protected $connection = 'fusarung';
+	/*If you decided to use raw query , use below*/
+	protected function get_db(){
+		return "fusarung";
+	}
 }

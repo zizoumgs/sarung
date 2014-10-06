@@ -3,7 +3,21 @@
  *  id
  *  nama
 */
-class Negara_Model extends Sarung_Model_Root{
+class Alamat_Model extends Sarung_Model_Root{
+	/**
+	 *	var bool
+	*/
+	protected $ema;
+	/**
+	 *	var obj
+	*/
+	protected $obj;
+	public function get_anti_fake(){
+		return $this->ema;
+	}
+	
+}
+class Negara_Model extends Alamat_Model{
 	protected $table = 'negara';    
 	/**
 	 *	Get id negara by its name
@@ -18,7 +32,7 @@ class Negara_Model extends Sarung_Model_Root{
  *  nama
  *  idnegara
 */
-class Propinsi_Model extends Sarung_Model_Root{
+class Propinsi_Model extends Alamat_Model{
 	protected $table = 'propinsi';    
     public function Negara(){
 		return $this->belongsTo('Negara_Model', 'idnegara');
@@ -42,13 +56,25 @@ class Propinsi_Model extends Sarung_Model_Root{
 		return $query->where('idnegara' , '=' , $negara_id->id)
         ->where('nama','=',$propinsi_name)->first();
     }
+	/**
+	 *	Get id propinsi by its name and negara id
+	 *	return namas
+	*/
+    public function get_namas( $column = "nama" , $order = "DESC"){
+		$items = array();
+		foreach( $this->orderBy($column , $order)->get() as $result){
+			$items [] = $result->nama;
+		}
+		
+		return $items;
+    }	
 }
 /**
  *  id
  *  nama
  *  idpropinsi
 */
-class Kabupaten_Model extends Sarung_Model_Root{
+class Kabupaten_Model extends Alamat_Model{
 	protected $table = 'kabupaten';
     public function Propinsi(){
 		return $this->belongsTo('Propinsi_Model', 'idpropinsi');
@@ -66,9 +92,13 @@ class Kabupaten_Model extends Sarung_Model_Root{
 	 *	return list of propinsi
 	**/
     public function scopeGet_kabupatens_of_propinsi($query , $negara_name , $propinsi_name){
-        $propinsi_id = $this->get_id_propinsi($negara_name , $propinsi_name);
-        if ($propinsi_id->exists())
-      		return $query->where('idpropinsi' , '=' , $propinsi_id->id);
+		$this->ema = false;
+        $obj = $this->get_id_propinsi($negara_name , $propinsi_name);
+        if ( count($obj->first()) == 1){
+			$this->ema = true;
+      		return $query->where('idpropinsi' , '=' , $obj->id);
+		}
+		
     }
 	/**
 	 *	Get id kabupaten by its name and propinsi and negara name
@@ -76,16 +106,32 @@ class Kabupaten_Model extends Sarung_Model_Root{
 	*/
     public function scopeGet_id($query , $negara_name , $propinsi_name , $kabupaten_name){
         $propinsi_id = $this->get_id_propinsi( $negara_name , $propinsi_name );
-		return $query->where('idpropinsi' , '=' , $propinsi_id->id)
-        ->where('nama','=', $kabupaten_name)->first();
+		if ( $propinsi_id->exists()){
+			return $query->where('idpropinsi' , '=' , $propinsi_id->id)
+	        ->where('nama','=', $kabupaten_name)->first();
+		}
+		return null;
     }
+	/**
+	 *	Get id kabupaten by its name and propinsi and negara name
+	 *	return id
+	*/
+    public function scopeGet_first($query , $negara_name , $propinsi_name , $kabupaten_name){
+        $propinsi_id = $this->get_id_propinsi( $negara_name , $propinsi_name );
+		if ( $propinsi_id->exists()){
+			return $query->where('idpropinsi' , '=' , $propinsi_id->id)
+	        ->where('nama','=', $kabupaten_name)->first();
+		}
+		return null;
+    }
+
 }
 /**
  *  id
  *  nama
  *  idkabupaten
 */
-class Kecamatan_Model extends Sarung_Model_Root{
+class Kecamatan_Model extends Alamat_Model{
 	protected $table = 'kecamatan';
     public function Kabupaten(){
 		return $this->belongsTo('Kabupaten_Model', 'idkabupaten');
@@ -94,17 +140,31 @@ class Kecamatan_Model extends Sarung_Model_Root{
      *  return id kabupaten
     */
     private function get_id_kabupaten($negara_name , $propinsi_name , $kabupaten_name){
+		$this->ema  = false;
    		$obj = new Kabupaten_Model();
-        return $obj->get_id( $negara_name , $propinsi_name , $kabupaten_name);
+        $kab_id = $obj->get_id( $negara_name , $propinsi_name , $kabupaten_name);
+		if( !is_null($kab_id) ){
+			return $kab_id->first();
+		}
+		return null;
     }
 	/**
 	 *	Get kecamatans by propinsi`s and negara  and kabupaten name
 	 *	return list of kecamatan
 	**/
     public function scopeGet_kecamatans_of_kabupaten($query , $negara_name , $propinsi_name , $kabupaten_name){
-        $obj = $this->get_id_kabupaten($negara_name , $propinsi_name , $kabupaten_name);
-        if ( $obj->exists())
-      		return $query->where('idkabupaten' , '=' , $obj->id);
+		$db = $this->get_db();
+		$results = DB::select( DB::raw("SELECT kec.id as id ,  kec.nama as nama
+									   FROM $db.kecamatan kec, $db.kabupaten kab , $db.propinsi pro , fusarung.negara neg
+									   WHERE  neg.id = pro.idnegara
+									   and pro.id = kab.idpropinsi
+									   and kab.id = kec.idkabupaten
+									   and neg.nama = ?
+									   and pro.nama = ?
+									   and kab.nama = ?
+									   order by kec.nama DESC "),
+									array($negara_name , $propinsi_name , $kabupaten_name));
+		return $results;		
     }
 	/**
 	 *	Get id kabupaten by its name and propinsi and negara name
@@ -112,19 +172,71 @@ class Kecamatan_Model extends Sarung_Model_Root{
 	*/
     public function scopeGet_id($query , $negara_name , $propinsi_name , $kabupaten_name , $kecamatan_name){
         $obj = $this->get_id_kabupaten( $negara_name , $propinsi_name , $kabupaten_name );
-		return $query->where('idkabupaten' , '=' , $obj->id)
-        ->where('nama','=', $kecamatan_name)->first();
+		if ( count($obj->get()) == 1){
+			return $query->where('idkabupaten' , '=' , $obj->id)
+	        ->where('nama','=', $kecamatan_name)->first();			
+		}
+		return null;
     }
+
 }
 /**
  *  id
  *  nama
  *  idkecamatan
 */
-class Desa_Model extends Sarung_Model_Root{
+class Desa_Model extends Alamat_Model{
 	protected $table = 'desa';
     public function Kecamatan(){
 		return $this->belongsTo('Kecamatan_Model', 'idkecamatan');
+    }
+	/**
+	 *	Get kecamatans by propinsi`s and negara  and kabupaten name
+	 *	return list of kecamatan
+	**/
+    public function scopeGet_desas_of_kecamatan($query , $negara_name , $propinsi_name , $kabupaten_name,$kecamatan_name){
+		$db = $this->get_db();
+		$results = DB::select( DB::raw("SELECT des.id as id ,  des.nama as nama
+									   FROM $db.kecamatan kec, $db.kabupaten kab , $db.propinsi pro , $db.negara neg,
+									   $db.desa des 
+									   WHERE  neg.id = pro.idnegara
+									   and pro.id = kab.idpropinsi
+									   and kab.id = kec.idkabupaten
+									   and kec.id = des.idkecamatan
+									   and neg.nama = ?
+									   and pro.nama = ?
+									   and kab.nama = ?
+									   and kec.nama = ?
+									   order by des.nama DESC "),
+									array($negara_name , $propinsi_name , $kabupaten_name , $kecamatan_name));
+		return $results;		
+    }
+	/**
+	 *	Get only one row
+	 *	return one row array
+	**/
+    public function get_first($negara_name , $propinsi_name , $kabupaten_name,$kecamatan_name , $desa_name){
+		$db = $this->get_db();
+		$results = DB::select( DB::raw("SELECT des.id as id ,  des.nama as nama
+									   FROM $db.kecamatan kec, $db.kabupaten kab , $db.propinsi pro , $db.negara neg,
+									   $db.desa des 
+									   WHERE  neg.id = pro.idnegara
+									   and pro.id = kab.idpropinsi
+									   and kab.id = kec.idkabupaten
+									   and kec.id = des.idkecamatan
+									   and neg.nama = ?
+									   and pro.nama = ?
+									   and kab.nama = ?
+									   and kec.nama = ?
+									   and des.nama = ?
+									   "),
+									array($negara_name , $propinsi_name , $kabupaten_name , $kecamatan_name , $desa_name));
+
+		foreach($results as $val ){
+			$array ['id'] =  $val->id;
+			$array ['nama'] =  $val->nama;
+		}
+		return (object) $array;
     }
 }
 

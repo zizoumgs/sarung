@@ -12,12 +12,19 @@ class AdmindGroup extends Sarung_Model_Root {
     }
 	/**
 	 *  get id of lesser power
-	 *	return id 
+	 *	return model
 	*/
-    public function scopeGet_id_lesser_power($query, $current_power)
+    public function scopeGet_lesser_power($query, $current_power)
     {
 		return $query->where('power' , '<' , $current_power );
     }	
+	/**
+	 *	return obj
+	*/
+	public function scopeGet_first($query,$admind_nama){
+        return $query->where('nama' , '=' , $admind_nama )->first();
+	}
+
 }
 /**
  *	This class will be model for user which will login into this application
@@ -63,6 +70,7 @@ class User_Model extends Sarung_Model_Root implements UserInterface, RemindableI
 	public function scopeGetlesserpowerid($query,$current_power){
         return $query->whereHas('admindgroup', function($q) use ($current_power){
             $q->where('power', '<', $current_power );
-        });		
+        });
 	}
+
 }

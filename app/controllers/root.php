@@ -103,13 +103,15 @@ abstract class root extends Controller {
 	 *	value and text is differect
 	 *	return html select 
 	*/	
-    protected function get_select_by_key ( $items  , $array = array() ){
+    protected function get_select_by_key ( $items  , $array = array() , $disabled = ""){
 		$attribute_select ="" ;
 		foreach($array as $key => $val){
 			if( $key != "selected")
-				$attribute_select .= sprintf( ' %1$s = "%2$s" ' , $key , $val );
+				if($key != "disabled"){
+					$attribute_select .= sprintf( ' %1$s = "%2$s" ' , $key , $val );
+				}
 		}
-		$select = sprintf('<select %1$s >' , $attribute_select);
+		$select = sprintf('<select %1$s %2$s>' , $attribute_select , $disabled);
         foreach ( $items as $key => $value) {
         	$selected = "";
         	if($key == $array ['selected']){
@@ -124,13 +126,15 @@ abstract class root extends Controller {
 	 *	value and text is same
 	 *	return html select 
 	*/	
-    protected function get_select( $items  , $array = array() ){
+    protected function get_select( $items  , $array = array() , $disabled = ""){
 		$attribute_select ="" ;
 		foreach($array as $key => $val){
 			if( $key != "selected")
-				$attribute_select .= sprintf( ' %1$s = "%2$s" ' , $key , $val );
+				if($key != "disabled"){
+					$attribute_select .= sprintf( ' %1$s = "%2$s" ' , $key , $val );
+				}
 		}
-		$select = sprintf('<select %1$s >' , $attribute_select);
+		$select = sprintf('<select %1$s %2$s>' , $attribute_select , $disabled);
         foreach ( $items as $key => $value) {
         	$selected = "";
         	if($value == $array ['selected']){

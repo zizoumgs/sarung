@@ -16,13 +16,7 @@ class Admin_sarung_desa extends Admin_sarung_kecamatan{
         $choosen_negara = $this->get_negara_select_selected();
 		$choosen_propinsi = $this->get_propinsi_select_selected();
         $choosen_kabupaten = $this->get_kabupaten_select_selected();
-        if(     $choosen_propinsi != "" && $choosen_propinsi != "All" && $choosen_negara != "" && $choosen_negara != "All"
-                && $choosen_kabupaten != "" && $choosen_kabupaten != "All"
-           ){
-            $session = $session->get_kecamatans_of_kabupaten($choosen_negara , $choosen_propinsi , $choosen_kabupaten);
-			
-        }
-		$sessions = $session->orderBy('updated_at' , 'DESC')->get();
+        $sessions = $session->get_kecamatans_of_kabupaten($choosen_negara , $choosen_propinsi , $choosen_kabupaten);
 		$items = array( "All" => "All" );
 		foreach($sessions as $val){
 			$items [$val->id] = $val->nama;

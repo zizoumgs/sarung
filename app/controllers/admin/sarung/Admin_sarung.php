@@ -2,6 +2,7 @@
 class Admin_sarung extends Admin_root{
 	protected function set_id($val) {$this->values['id'] = $val;}
 	protected function get_id(){ return $this->values['id'];}
+	/*will be usen upon deleting */
 	protected function set_table_name($val){$this->values ['table_name'] = $val ;}
 	protected function get_table_name(){ return $this->values ['table_name'] ;}
 	//! message make , as you can see that message is array
@@ -35,7 +36,7 @@ class Admin_sarung extends Admin_root{
 	*/
     protected function set_default_value(){
         $this->set_view('sarung/admin/index');
-        $this->set_min_power( 200 );
+        $this->set_min_power( 100 );
 		$this->set_title('Admin Sarung Fatihul Ulum');
 		$this->set_body_attribute( " class='admin admin_sarung_body' " );
     }

@@ -215,7 +215,7 @@ class Admin_sarung_user extends Admin_sarung_user_filter{
         //!
         $this->set_model_obj(new User_Model() );
         //! special
-        $this->set_foto_folder($this->base_url()."/foto/santri");
+        $this->set_foto_folder($this->base_url()."/foto");
         $this->set_order(2);
         $this->set_order_name('order_name');
         $this->set_table_form_name('tidak_penting');
@@ -244,7 +244,7 @@ class Admin_sarung_user extends Admin_sarung_user_filter{
      * Return string
     */
     protected function get_user_data($model){
-        $foto  = sprintf('<img src="%1$s/%2$s" class="small-img thumbnail">',$this->get_foto_folder() , $model->foto);
+        $foto  = sprintf('<img src="%1$s/%2$s/%3$s" class="small-img thumbnail">',$this->get_foto_folder() , $model->id, $model->foto );
         $jenis = sprintf('<span>%1$s</span>', $model->jenis);
         $email  = sprintf('<span><span class="glyphicon glyphicon-envelope"></span> Email: %1$s</span><br>', $model->email);
         $ttl    = sprintf('<span><span class="glyphicon glyphicon-info-sign"></span> TTL: %1$s %2$s</span>', $model->tempat->nama , $model->lahir);
@@ -265,6 +265,7 @@ class Admin_sarung_user extends Admin_sarung_user_filter{
      *  return  @index()
     **/
     public function getIndex(){
+		parent::getIndex();
         $href = sprintf('<a href="%1$s" class="btn btn-primary btn-xs" >Add</a>' , $this->get_url_this_add() );
         $this->set_text_on_top('<span class="glyphicon glyphicon-user"></span> User Table  '.$href);        
         $form = $this->get_form_filter( $this->get_url_this_view()  );

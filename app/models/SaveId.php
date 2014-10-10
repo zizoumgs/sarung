@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `saveid` (
   UNIQUE KEY `namatable` (`namatable`,`idtable`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 **/
-class SaveId extends Eloquent{
+class SaveId extends Sarung_Model_Root{
     //! we are no need to use table created_at and update_at for this table
     public $timestamps = false;
     protected $table = 'saveid';

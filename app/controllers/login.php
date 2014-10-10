@@ -114,7 +114,7 @@ class login extends root {
 			<a href="%2$s" class="list-group-item">Sarung</a>
 			<a href="%3$s" class="list-group-item">Iman</a>
 		</div>		
-		' , $this->get_url_admin_uang() , $this->get_url_admin_sarung() , $this->get_url_admin_iman());
+		' , helper_get_url_admin_uang() , helper_get_url_admin_sarung() , $this->get_url_admin_iman());
 		return $hasil ;
 	}
     protected function get_header(){        return '';    }

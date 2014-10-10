@@ -73,12 +73,28 @@ Route::controller('sarung_admin/kabupaten'                 , 'Admin_sarung_kabup
 Route::controller('sarung_admin/kecamatan'                 , 'Admin_sarung_kecamatan');
 Route::controller('sarung_admin/desa'                 , 'Admin_sarung_desa');
 Route::controller('sarung_admin/user'                 , 'Admin_sarung_user_cud');
+// for uploading
+Route::any('/upload_santri',
+				array('uses'=>'Admin_sarung_user_cud@set_upload','as' => 'set_upload')
+			);
+// for uploading
+Route::any('/upload_santri__succeded',
+				array('uses'=>'Admin_sarung_user_cud@set_upload__succeded','as' => 'set_upload__succeded')
+			);
+
+Route::any('/delete_img',
+				array('uses'=>'Admin_sarung_user_cud@getDelete_img','as' => 'delete_img')
+			);
+
 //! for updating
 Route::controller('update'                 , 'first_update');
 
 //Route::controller('/'                 , 'sarung_controller');
 Route::controller('sarung_admin'      , 'Sarung_admin_controller');
 
+
+/* for uploading*/
+//Route::put('eventupload', array('as' => 'admin.upload', 'uses' => 'App\Controllers\Admin\ImageController@postUpload'));
 
 /*
 Route::get('outcome', 'outcome@index');

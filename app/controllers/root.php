@@ -96,9 +96,14 @@ abstract class root extends Controller {
 	protected function set_total_jump($val) { $this->value ['jump'] = $val ; }
 	/**
 	 *	in order to make as close as possible to codeigniter
-	 *	return base url
+	 *	return string 
 	*/	
 	protected function base_url(){		return URL::to('/');	}
+	/**
+	 *	folder in which js laid
+	 *	return string 
+	*/	
+	protected function get_url_js(){		return $this->base_url()."/asset/js";	}
 	/**
 	 *	value and text is differect
 	 *	return html select 
@@ -264,4 +269,9 @@ abstract class root extends Controller {
 			return floor($diff/86400);
 		return "Please Insert 0 as a first parameter";
 	}
+	/*
+		If you wanna use another select  which is not same with default select in html , you just call this function
+		@variable = js
+		return none
+	*/
 }

@@ -26,7 +26,7 @@ aside .title{
 	padding-top:15px;
 	color:#F5ECDD;
 }
-.table_div{
+.table_div , .relatvie{
 	position:relative;
 }
 .form-filter {
@@ -107,6 +107,17 @@ article.col-md-10{
 	margin:5px;
 	/*color:#2A92D3;*/
 }
-.table_div{
-	margin-top:0px !important;
+.table_div{	margin-top:0px !important;}
+#list-img-user{
+	margin:5px ;
+}
+#list-img-user img{
+	width:100% ; height:99px;
+}
+.absolute-left{
+	position:absolute;
+	left:10px;top:5px;
+}
+.home-foto-upload:hover{
+//	cursor: pointer; cursor: hand;
 }

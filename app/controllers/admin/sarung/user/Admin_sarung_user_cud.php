@@ -74,15 +74,506 @@ class Admin_sarung_user_cud_support extends Admin_sarung_user{
     protected function set_gender_name($val){ $this->user_attr ['gender'] = $val ; }
     protected function get_gender_name(){ return $this->user_attr ['gender'] ;}
     protected function get_gender_selected(){return $this->get_value( $this->get_gender_name() );}
-
+    /* name for foto */
+    protected function set_foto_name($val) {$this->user_attr ['foto_user'] = $val ; }
+    protected function get_foto_name(){return $this->user_attr ['foto_user'] ;}
+    protected function get_foto_selected() {return $this->get_value($this->get_foto_name());}
+    
+    protected function set_dialog_upload_name($val) {$this->user_attr ['dialog_upload'] = $val ; }
+    protected function get_dialog_upload_name(){return $this->user_attr ['dialog_upload'] ;}
 }
 
 /**
- *  this class contains  all input
+ * this class contains something about folder
 */
-class Admin_sarung_user_cud_input extends Admin_sarung_user_cud_support{
+class Admin_sarung_user_cud_folder extends Admin_sarung_user_cud_support{
     public function __construct(){
         parent::__construct();
+    }
+    /**
+     *
+    **/
+    protected function set_tab_name($val){ $this->user_attr ['tab_widget'] = $val ;}
+    protected function get_tab_name(){return $this->user_attr ['tab_widget'];}
+    
+    protected function set_btn_upload_name($val){ $this->user_attr ['btn_upload'] = $val ;}
+    protected function get_btn_upload_name(){return $this->user_attr ['btn_upload'];}
+    
+    protected function set_des_dir_url($val){ $this->user_attr ['destination_dir_url'] = $val ; }
+    protected function get_des_dir_url(){return $this->user_attr ['destination_dir_url'] ;}
+    
+    protected function set_des_dir_path($val){ $this->user_attr ['destination_dir_path'] = $val ; }
+    protected function get_des_dir_path(){return $this->user_attr ['destination_dir_path'] ;}
+    
+    protected function set_des_dir_url_name($val){ $this->user_attr ['destination_dir_url_name'] = $val ; }
+    protected function get_des_dir_url_name(){return $this->user_attr ['destination_dir_url_name'] ;}
+    
+    protected function set_des_dir_path_name($val){ $this->user_attr ['destination_dir_path_name'] = $val ; }
+    protected function get_des_dir_path_name(){return $this->user_attr ['destination_dir_path_name'] ;}
+    
+    protected function set_upload_route($val){ $this->user_attr ['upload_route'] = $val ; }
+    protected function get_upload_route(){return $this->user_attr ['upload_route'] ;}
+
+    protected function set_del_img_route($val){ $this->user_attr ['del_img_route'] = $val ; }
+    protected function get_del_img_route(){return $this->user_attr ['del_img_route'] ;}
+
+    protected function set_del_img_btn_name($val){ $this->user_attr ['del_img_btn_name'] = $val ; }
+    protected function get_del_img_btn_name(){return $this->user_attr ['del_img_btn_name'] ;}
+
+    /*Watch out , $vals is array  , store all name of file */
+    protected function set_store_files($vals){$this->user_attr ['store_files'] = $vals ;}
+    protected function get_store_files(){ return $this->user_attr ['store_files'] ;}
+    
+    /**
+     * make and create dir if necessary
+     * @ param id: whole number
+     * return none
+    */
+    protected function prepare_dir($id){
+        if($id < 1):
+            return;
+        endif;
+        $url =  helper_get_url_foto().'/'.$id;
+        $this->set_des_dir_url($url);
+        $path = helper_get_path_foto().'/'.$id;
+        $this->set_des_dir_path( $path );
+        
+        if( ! $this->is_dir_exist( $path )):
+            File::makeDirectory($path);    
+        endif;
+        return $path;
+    }
+    /**
+     *  @ parameter is string of path not url
+     *  return array files
+    */
+    protected function get_all_file($path){
+        return helper_get_all_file_in_dir($path);
+    }
+    /**
+     *  @ params  $img_urls  : array
+     *  @ params  id         : $id
+     *  make url for image from its id and name
+     *  return url of image
+    */
+    private function make_img_url_from_id($dir , $files){
+        $imgs = array();
+        foreach( $files as $file){
+            $imgs [] = sprintf('%1$s/%2$s'    ,
+                $dir   ,
+                $file
+            );
+        }
+        return $imgs;
+    }
+    /**
+     *  @ params  $img_urls : array
+     *  return html string
+    */
+    private function make_files_as_img($img_urls , $with_js = true){
+        $result = "";
+        $uniques = array();
+        foreach( $img_urls as $file){
+            $unique = helper_make_name_from_path($file);
+            $uniques [] = $unique ; 
+            $result .= sprintf('<div class="col-md-4 home-foto-upload" >
+                               <form class="thumbnail relative" id="%3$s" name="%3$s" method="Get" onsubmit="delete_handle(this);">
+                                    <img src="%1$s" />
+                                    <input type="hidden" value="%1$s" name="full_name_list_foto" id="full_name_list_foto">
+                                    <input type="hidden" value="%4$s" name="base_name_list_foto" id="base_name_list_foto">
+                                    <div class"absolute-left">
+                                        <button class="btn btn-primary btn-xs ">Delete</button>
+                                        <button class="btn btn-primary btn-xs " onclick="select_handle(this)">Select</button>
+                                    </div>
+                               </form></div>' ,
+                             $file ,
+                             $this->get_del_img_btn_name() ,
+                             $unique ,
+                             helper_anti_make_name($unique) /*useless*/
+            );
+        }
+        $this->set_store_files($uniques);
+        if($with_js):
+            $this->set_js_for_ajax();
+        endif;
+        return $result;
+    }
+    /**
+     *  Make home for our image
+     *  return html div
+    */
+    private function get_image_home( $img_html){
+        $file  = "<div class='row' id='list-img-user'>";
+            $file .= $img_html ;
+        $file .= "</div>";
+        return $file;
+    }
+    /**
+     *  best if you insert it outside of form
+     *  return string html
+    **/
+    protected function get_dialog_add_file($values = array() , $disable = ""){
+        $id         = $values ['id'];
+        $path       = $this->prepare_dir( $id );
+        $files      = $this->get_all_file($path);
+        $urls       = $this->make_img_url_from_id( helper_get_url_foto()."/".$id, $files) ;
+        $img_html   = $this->make_files_as_img($urls);
+        $list       = $this->get_image_home($img_html);
+        $des = sprintf('
+                       <div id="%1$s"  class="hidden">%2$s</div>
+                       <div id="%3$s" class="hidden">%4$s</div>
+                       <div id="files"></div>
+        ' , $this->get_des_dir_path_name() , $this->get_des_dir_path() ,
+        $this->get_des_dir_url_name()       ,   $this->get_des_dir_url());
+        return sprintf('
+            <!-- Modal -->
+            <div class="modal fade" id="%1$s" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="myModalLabel"><label class="label label-primary">Add Foto</label></h4>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Dialog -->
+                            <ul class="nav nav-tabs" role="tablist" id="%3$s">
+                                <li class="active" ><a href="#home" role="tab" data-toggle="tab">Uploads</a></li>
+                                <li ><a href="#list-file" role="tab" data-toggle="tab">Media Library</a></li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane  active" id="home">
+                                    <br>
+                                    <span class="btn btn-success fileinput-button">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                        <span>Select files...</span>
+                                        <input type="file" name="files[]" multiple id="%4$s">
+                                    </span>
+                                </div>
+                                %5$s
+                                <div class="tab-pane" id="list-file">%2$s</div>
+                            </div>
+                            <br>
+                            %5$s
+                            <h4 class="label label-info"> You allow to keep total 1mb file only</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        ' ,
+        $this->get_dialog_upload_name() ,
+        $list,
+        $this->get_tab_name() ,
+        $this->get_btn_upload_name()    ,
+        $des
+        );
+    }
+    /**
+     * check directory
+     * return bool
+    **/
+    protected function is_dir_exist($file_name){
+        return file_exists ( $file_name );
+    }
+    /**
+     * all necessary js for uploading
+     * return string
+    **/
+    private function set_special_js_this(){
+		$js = sprintf('
+		<script type="text/javascript">
+			$(function() {
+                $("#%1$s a[href="#list-file"]").tab("show");
+			});
+		</script>
+        ' , $this->get_tab_name() , $this->get_dialog_upload_name()
+		);
+        $activated  =sprintf('$("#list-file").attr("class", "tab-pane  active")');
+        $activated .=sprintf('$("#home").attr("class", "tab-pane")');
+
+        $amigo = $this->base_url()."/upload_santri" ;
+        $js .= sprintf(
+        '
+        <script src="%1$s/js/jquery.ui.widget.js"></script>
+        <script src="%1$s/js/jquery.iframe-transport.js"></script>
+        <script src="%1$s/js/jquery.fileupload.js"></script>
+        <script>
+            $(function () {
+                // "use strict";
+                var dir_url  = $("#%4$s").text();
+                var dir_path = $("#%5$s").text();
+                var url = "%3$s";
+                $("#%2$s").fileupload({
+                    url: url,
+                    formData: { "%4$s": dir_url , "%5$s": dir_path , "test":"test_mydata"},
+                    dataType: "json",
+                    maxFileSize: 500000, // 0.5 MB
+                    progressall: function (e, data) {
+                    },
+                    /*
+                    add: function (e, data) {
+                        $.getJSON("%3$s_test", function (result) {
+                            data.formData = result; // e.g. {id: 123}
+                            data.submit();
+                        });
+                    },
+                    */
+                    start: function (e, data) {
+                        $("#%6$s a:last").tab("show") // Select last tab
+                    },
+                    done: function (e, data) {
+                        $("#list-file").html( data.result.test );
+                        //alert(data.formData.test);
+                        //alert(data.result.test);
+                        //$("#list-file").html( data.result );
+                    }
+                }).prop("disabled", !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : "disabled");
+            });
+        </script>',
+        helper_get_url_blueimp(),
+        $this->get_btn_upload_name(),
+        $this->get_upload_route() ,
+        $this->get_des_dir_path_name() ,
+        $this->get_des_dir_url_name()  ,
+        $this->get_tab_name()
+        );
+        $this->set_js( $js);
+    }
+    /**
+     *  to upload by ajax
+     *  return none
+    **/
+    public function set_upload(){
+        $this->init_dialog_with_ajax();
+        if (Request::ajax()){
+            $this->set_des_dir_path( $this->get_value($this->get_des_dir_path_name()) );
+            $this->set_des_dir_url ( $this->get_value($this->get_des_dir_url_name()) );
+            //Log::info ($this->get_value($this->get_des_dir_url_name()));
+    		$option = array(
+    			'upload_dir' => $this->get_des_dir_path()."/", 
+    			'upload_url' => $this->get_des_dir_url()."/"
+    		);
+    		$upload_handler = new UploadHandler($option , false);
+            $upload_handler->set_filter( $this , "set_upload_succeded" , array() );
+            $upload_handler->initialize();
+        }
+    }
+    /**
+     *  have succeded to upload
+     *  return none
+    **/
+    public function set_upload_succeded(){
+       $files      = $this->get_all_file( $this->get_des_dir_path() );
+       $urls       = $this->make_img_url_from_id( $this->get_des_dir_url() , $files) ;
+       $img_html   = $this->make_files_as_img($urls , false);
+       $list       = $this->get_image_home($img_html);
+        return array("test" => $list);
+    }
+    /**
+     *  function to handle ajax 
+     *  return none;
+    **/
+    private function set_js_for_ajax(){
+        $name_of_foto = $this->get_foto_name();
+        $select_handle  = sprintf('
+            function select_handle(obj){
+                var form  = obj.form;
+                var base_name = $("#base_name_list_foto", obj.form).val();
+                var full_name = $("#full_name_list_foto", obj.form).val();
+                $("#%1$s_src").attr("src",full_name);
+                $("#%1$s").val(base_name);
+                $("#%2$s").modal("hide");
+                //alert($(form).attr("name"));
+                event.preventDefault(); // disable normal form submit behavior
+                return false; // prevent further bubbling of event        
+        }' , $name_of_foto , $this->get_dialog_upload_name());
+        $js = sprintf('<script>
+            %2$s
+            function delete_handle(obj){
+                var url = "%1$s";
+                var postData = $(obj).serializeArray();
+                var nilai = $(obj).attr("name");
+                $.ajax({
+                    url:url,
+                    data : postData,
+                    success:function(result){
+                        $("#list-file").html( result );
+                    }
+                }); // end of ajax
+                event.preventDefault(); // disable normal form submit behavior
+                return false; // prevent further bubbling of event        
+            }
+            ', $this->get_del_img_route(),
+            $select_handle);
+        $js.= "</script>";
+        $this->set_js($js);
+    }
+    /**
+     *  All function that i dont use anymore
+     **/
+    private function not_used_function(){
+        //! below used to be inside of get_js_for_delete
+        $js = sprintf(
+        '
+        <script>
+            $(function () {
+                var url = "%1$s";
+        ',$this->get_del_img_route() );
+        foreach($this->get_store_files() as $file ):
+            $js .= sprintf(
+                '
+                    $("#%1$s").submit(function(e) {
+                        var postData = $(this).serializeArray();
+                        $.ajax({
+                            url:url,
+                            data : postData,
+                            success:function(result){
+                                $("#show_div").html( result );
+                            }
+                        }); // end of ajax                  
+                        e.preventDefault(); //STOP default action
+                        e.unbind(); //unbind. to stop multiple form submit.
+                        return false;
+                    }); // end of submit                    
+                ', $file
+            );
+        endforeach;
+        $js .= "
+            })
+        </script>";
+        return $js;
+    
+    }
+    /**
+     *  delete file via ajax
+     *  return none
+    **/
+    public function getDelete_img(){
+        $original    = Input::get('full_name_list_foto');
+        $nama_file   = helper_get_path_from_abs_url($original);
+        $dir_url     = pathinfo($original , PATHINFO_DIRNAME  );
+        $dir_path    = pathinfo($nama_file , PATHINFO_DIRNAME  );
+        $thumbnail   = $dir_path."/thumbnail/".pathinfo($nama_file , PATHINFO_BASENAME  );
+        if(unlink($nama_file) ){
+            unlink($thumbnail);
+            $this->init_dialog_with_ajax();
+            
+            $files      = $this->get_all_file($dir_path);
+            $urls       = $this->make_img_url_from_id( $dir_url , $files) ;
+            $img_html   = $this->make_files_as_img($urls , false);
+            $list       = $this->get_image_home($img_html);
+            echo $list;
+        }
+        else{
+            echo "Not Sukses to delete file";
+        }
+
+    }
+    /**
+     *  Default value
+    **/
+    private function set_default_value_for_this(){
+        //parent::set_default_value();
+        $this->set_tab_name('tab_name');
+        $this->set_btn_upload_name('btn_upload');
+        $this->set_css_for_this();
+        $this->set_des_dir_path_name('des_path_name');
+        $this->set_des_dir_url_name('des_url_name');
+        $this->set_upload_route( $this->base_url()."/upload_santri" );
+        $this->set_del_img_route( $this->base_url()."/delete_img" );
+        $this->set_del_img_btn_name('delete_img_btn');
+    }
+	/**
+	 *	add special css for upload
+	**/
+	protected function set_css_for_this (){
+        $hasil = "
+        <style>
+        .fileinput-button {
+            position: relative;
+            overflow: hidden;
+        }
+        .fileinput-button input {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            font-size: 200px;
+            direction: ltr;
+            cursor: pointer;
+        }
+        /* Fixes for IE < 8 */
+        @media screen\9 {
+            .fileinput-button input {
+                filter: alpha(opacity=0);
+                font-size: 100%;
+                height: 100%;
+            }
+        }
+        </style>
+        ";
+        $this->set_css($hasil );
+    }
+    
+	/**
+	 *	init for anythings ecxept ajax
+	**/
+    protected function init_dialog(){
+        $this->set_default_value_for_this();
+        $this->set_special_js_this();
+    }
+	/**
+	 *	init when you activated via ajax
+	*/
+    protected function init_dialog_with_ajax(){
+        $this->set_default_value_for_this();
+    }
+}
+/**
+ *  this class contains  all input
+*/
+class Admin_sarung_user_cud_input extends Admin_sarung_user_cud_folder{
+    public function __construct(){
+        parent::__construct();
+    }
+    /**
+     *  return foto input along with its button 
+    **/
+    protected function get_foto_input( $values = array() , $disable = ""){
+        $widget = "";
+        $unallow = "disabled";
+        if($this->get_purpose() == 2){
+            $unallow = "";
+        }
+        $foto_dir =  sprintf('%1$s/%2$s/%3$s' , $this->get_foto_folder() , $values ['id'], $values [$this->get_foto_name()] );
+        $hasil = sprintf ('
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="thumbnail">
+                            <img src="%1$s" name="%3$s_src" class= "%2$s" id="%3$s_src" %4$s style="width:128px;height:128px;margin:0px auto;" >
+                            <input type="hidden" value="%2$s" name="%3$s" id="%3$s" >
+                            <a class="btn btn-default btn-xs %6$s" data-toggle="modal" data-target="#%5$s">Add Foto</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          ' ,
+            $foto_dir,
+            $values [$this->get_foto_name()] ,
+            $this->get_foto_name() ,
+            $disable ,
+            $this->get_dialog_upload_name(),
+            $unallow
+          );
+        return $hasil; 
     }
     /**
      *  return group input for adding , editing and deleting
@@ -243,7 +734,7 @@ class Admin_sarung_user_cud_input extends Admin_sarung_user_cud_support{
     }
     
     /**
-     *  return email input
+     *  return date input
     **/
     protected function get_date_input( $values = array() , $disable = ""){
         $names = sprintf ('
@@ -363,6 +854,7 @@ class Admin_sarung_user_cud_input extends Admin_sarung_user_cud_support{
     */
     protected function set_special_js(){
         //parent::set_special_js();
+        //parent::set_special_js();
 		$propinsi = sprintf('
 				$( "#%1$s"  ).change(function () {
                     $("#%2$s").val("1");
@@ -390,19 +882,22 @@ class Admin_sarung_user_cud_input extends Admin_sarung_user_cud_support{
                 $this->get_signal_name(),
                 $this->get_table_form_name()
 		);
-        
-		$js = sprintf('
+        $upload = sprintf('<script src="%1$s/jquery.fileupload.js"></script>',
+                          $this->get_url_js());
+		$js = sprintf('                    
 		<script type="text/javascript">
 			$(function() {
                 %1$s  %2$s %3$s
 			});
-		</script>' ,
+		</script>
+        %4$s
+        ' ,
             $propinsi ,
             $kabupaten,
-            $kecamatan
+            $kecamatan ,
+            $upload
 		);
-        $this->set_js( $js);
-
+        $this->set_js( $js);     
     }
     /**
      *  return index
@@ -421,12 +916,24 @@ class Admin_sarung_user_cud_input extends Admin_sarung_user_cud_support{
         $this->use_select();
         $array = $this->set_values_to_inputs();
         $values = $this->make_one_two_array($array , $values);
-
+        $dialog = "" ;
+        if($this->get_purpose() == parent::EDIT || $this->get_purpose() == parent::DELE){
+            $this->init_dialog();
+            $dialog = $this->get_dialog_add_file($values , $disabled);            
+        }
+        
    		$hasil  = Form::open(array('url' => $go_where, 'method' => $method , 'role' => 'form' , 'id' => $this->get_table_form_name() )) ;
         
         $hasil .= '<div class="row"><div class="thumbnail col-md-7">';
+            $hasil .= '<div class="row"><div class="col-md-8">';
             $hasil .= $this->get_names_input($values , $disabled). $this->get_email_input($values, $disabled).
-            $this->get_passwords_input($values, $disabled).$this->get_date_input($values, $disabled).
+            $this->get_passwords_input($values, $disabled);
+            $hasil .= "</div>";
+            $hasil .= '<div class="col-md-4">';
+                $hasil .= $this->get_foto_input($values, $disabled);
+            $hasil .= "</div></div>";
+            
+            $hasil .= $this->get_date_input($values, $disabled).
             $this->get_tempat_lahir_select($values, $disabled) .
             $this->get_gender_input( $values, $disabled);
         $hasil .="</div>";
@@ -444,9 +951,13 @@ class Admin_sarung_user_cud_input extends Admin_sarung_user_cud_support{
 		$hasil .= Form::submit('Submit' , array( 'class' => 'btn btn-primary btn-lg' ) );
 		$hasil .= '</div></div>';
         $hasil .= Form::close();
+        //!
+        //$hasil  .= $this->get_foto_input($values, $disabled);
+        $hasil  .= $dialog;
         return $hasil;
     }
     /**
+     *  all input name
      *  return array
     */
     protected function get_all_name_input(){
@@ -467,8 +978,9 @@ class Admin_sarung_user_cud_input extends Admin_sarung_user_cud_support{
             $this->get_kabupaten_name()     =>  ''  ,
             $this->get_kecamatan_name()     =>  ''  ,
             $this->get_desa_name()          =>  ''  ,
-            $this->get_gender_name()  =>  ''  ,
-            $this->get_store_url_name()     =>  ''
+            $this->get_gender_name()        =>  ''  ,
+            $this->get_store_url_name()     =>  ''  ,
+            $this->get_foto_name()          =>  '' 
         );
         return $array;
     }
@@ -500,6 +1012,7 @@ class Admin_sarung_user_cud_input extends Admin_sarung_user_cud_support{
             $array [$this->get_kabupaten_name()]       = $model->desa->kecamatan->kabupaten->nama ;
             $array [$this->get_kecamatan_name()]       = $model->desa->kecamatan->nama ;
             $array [$this->get_desa_name()]       = $model->desa->nama;
+            $array [$this->get_foto_name()]         =   $model->foto;
             //echo $this->get_status($model->status);
         endif;
         return $array;
@@ -513,10 +1026,15 @@ class Admin_sarung_user_cud_input extends Admin_sarung_user_cud_support{
         foreach($array as $key => $val):
             $array [$key] = 'required'; 
         endforeach;
+        $array [$this->get_foto_name()]  = '';
         $array [$this->get_day_name()]  = 'required|numeric';
         $array [$this->get_mnt_name()]  = 'required|numeric';
         $array [$this->get_year_name()] = 'required|numeric';
-        $array ['id']                   = ''; 
+        $array ['id']                   = '';        
+        if( $this->get_purpose() == parent::EDIT ){
+            $array [$this->get_password_name()] = '';
+            $array [$this->get_password_over_name()] = '';
+        }
         return $array;
     }
 }
@@ -541,13 +1059,14 @@ class Admin_sarung_user_cud extends Admin_sarung_user_cud_input {
         $this->set_min_power( 1000 );
 		$this->set_title('User register');
 		$this->set_body_attribute( " class='admin admin_sarung_body' " );
-        $this->set_table_name('admind');        
+        $this->set_table_name('admind');
+        $this->set_purpose( parent::VIEW);
         //! input
         $this->set_first_name_name('first_name');
         $this->set_second_name_name('second_name');
         $this->set_email_name('email_name');
         $this->set_password_name('password_one');
-        $this->set_password_over_name('password_two');
+        $this->set_password_over_name('password_over');
         $this->set_day_name('day');
         $this->set_mnt_name('mnt');
         $this->set_year_name('year');
@@ -556,12 +1075,14 @@ class Admin_sarung_user_cud extends Admin_sarung_user_cud_input {
         $this->set_signal_name('signal_name');
         $this->set_gender_name('ahmad_sakip');
         $this->set_status_select_name('status_select');
-        
+
+        $this->set_dialog_upload_name('dialog_upload');        
         $this->set_propinsi_name('propinsi');
         $this->set_kabupaten_name('kabupaten');
         $this->set_kecamatan_name('kecamatan');
         $this->set_desa_name('desa');
         
+        $this->set_foto_name('name_of_foto');
         $this->set_store_url_name('store_url');
         //! input rules
    		$rules = $this->setting_and_get_rules();        
@@ -581,6 +1102,11 @@ class Admin_sarung_user_cud extends Admin_sarung_user_cud_input {
 			return $this->on_changing_select($values);
 		}
         else{
+    		$this->set_purpose( parent::EDIT);
+            //! input rules
+       		$rules = $this->setting_and_get_rules();        
+            //! it should be on last 
+            $this->set_inputs_rules($rules);
             return parent::postEventedit();
         }
     }
@@ -616,6 +1142,10 @@ class Admin_sarung_user_cud extends Admin_sarung_user_cud_input {
         }
         else{
             $event = $event->find( $data ['id'] );
+            if( $data [$this->get_password_over_name()] != ""){
+                $event->password        =   Hash::make($data [$this->get_password_over_name()]);                
+            }
+            $event->foto = $data [ $this->get_foto_name()] ;
         }
         $desa = new Desa_Model() ;
         $kab = new Kabupaten_Model();
@@ -644,7 +1174,35 @@ class Admin_sarung_user_cud extends Admin_sarung_user_cud_input {
         $event->jenis           =   $data [$this->get_gender_name()] ;
         $event->email           =   $data [$this->get_email_name()];
         $event->status          =   $this->get_status( $data [$this->get_status_select_name()] , 1);
-        $event->password        =   Hash::make($data [$this->get_password_over_name()]);
+        
         return $event;
     }
+    /**
+     *  to upload by ajax
+     *  return none
+    */
+    public function set_upload(){
+        parent::set_upload();
+    }
+	/**
+     *  @override
+	 *	 onsucceded delete
+	 *	 return @ index 
+	*/
+	protected function postEventdelsucceded($parameter = array()){
+        $id = Input::get('id');
+        $name_of_foto = Input::get( $this->get_foto_name() );
+        $dir            = $this->get_foto_folder();
+        $original   =   sprintf('%1$s/%2$s/%3$s' , $dir , $id , $name_of_foto);
+        $nama_file   = helper_get_path_from_abs_url($original);
+        $dir_path    = pathinfo($nama_file , PATHINFO_DIRNAME  );
+        $thumbnail   = $dir_path."/thumbnail/".pathinfo($nama_file , PATHINFO_BASENAME  );
+        if($success = File::deleteDirectory($dir_path)){
+            Log::info("Delete succeded");
+        }
+        
+		$messages = array(" Sukses Menghapus ");
+		$message = sprintf('<span class="label label-info">%1$s</span>' , $this->make_message( $messages ));
+        return $this->getIndex();
+	}
 }

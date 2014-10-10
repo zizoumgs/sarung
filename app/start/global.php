@@ -26,7 +26,9 @@ ClassLoader::addDirectories(array(
 	app_path().'/controllers',
 	app_path().'/models',
 	app_path().'/database/seeds',
+	app_path().'/libs/blueimp',
 	app_path().'/libs'
+	
 ));
 
 /*
@@ -88,3 +90,5 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
+/*This will make something helper*/
+require app_path().'/libs/helpers.php';

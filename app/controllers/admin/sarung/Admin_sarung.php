@@ -112,7 +112,6 @@ class Admin_sarung extends Admin_root{
 		',$list_menu);
 		return $side;
 	}
-	protected function get_url_admin_uang	   ()	{ 		return sprintf('%1$s/admin_uang' , $this->base_url());}
 	protected function get_url_admin_event     ()   { 		return sprintf('%1$s/sarung_admin/event' , $this->base_url());}
 	protected function get_url_admin_session   ()	{ 		return sprintf('%1$s/sarung_admin/session' , $this->base_url());}
 	protected function get_url_admin_kalender  () 	{ 		return sprintf('%1$s/sarung_admin/kalender' , $this->base_url());}
@@ -129,7 +128,7 @@ class Admin_sarung extends Admin_root{
 	protected function get_url_admin_desa		()	{ 		return sprintf('%1$s/sarung_admin/desa' , $this->base_url());}
 	protected function get_url_admin_user		()	{ 		return sprintf('%1$s/sarung_admin/user' , $this->base_url());}
 	
-	protected function get_url_admin_sarung		()   { 		return sprintf('%1$s/sarung_admin' , $this->base_url());}	
+	protected function get_url_admin_sarung		()   { 		return helper_get_url_admin_sarung();}	
 	/**
 	 *	return html which contains address 
 	*/

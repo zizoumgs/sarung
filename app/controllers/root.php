@@ -143,7 +143,7 @@ abstract class root extends Controller {
         foreach ( $items as $key => $value) {
         	$selected = "";
         	if($value == $array ['selected']){
-        		$selected = ' selected="selected" ' ;
+        		$selected = ' selected ' ;
         	}
             $select .= sprintf('<option value="%2$s" %3$s >%2$s</option>',$key,$value , $selected );
         }

@@ -134,6 +134,10 @@ class first_update extends Controller{
     	$santri = 'santri';
     	$this->add_column($santri , 'idadmind'  , ' int(11) NOT NULL DEFAULT 1 ,		
     		ADD CONSTRAINT fk_admind FOREIGN KEY (idadmind) REFERENCES admind (id) ON DELETE NO ACTION ON UPDATE CASCADE' );
+		
+		//! new
+        $sql = sprintf('ALTER TABLE santri ADD CONSTRAINT constr_ID UNIQUE (idadmind)');
+        $this->exe_non_query( $sql ) ;		
     }
     /**
      *  remove some of santri`s cols

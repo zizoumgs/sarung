@@ -1,5 +1,26 @@
 <?php
-class Admin_sarung extends Admin_root{
+abstract class  Admin_sarung_urls extends Admin_root {
+	protected function get_url_admin_event     ()   { 		return sprintf('%1$s/sarung_admin/event' , $this->base_url());}
+	protected function get_url_admin_session   ()	{ 		return sprintf('%1$s/sarung_admin/session' , $this->base_url());}
+	protected function get_url_admin_kalender  () 	{ 		return sprintf('%1$s/sarung_admin/kalender' , $this->base_url());}
+	protected function get_url_admin_pelajaran ()	{ 		return sprintf('%1$s/sarung_admin/pelajaran' , $this->base_url());}
+	protected function get_url_admin_jurusan   ()	{ 		return sprintf('%1$s/sarung_admin/jurusan' , $this->base_url());}
+	protected function get_url_admin_kelas_root   ()	{ 	return sprintf('%1$s/sarung_admin/kelas_root' , $this->base_url());}
+	protected function get_url_admin_kelas		()	{ 		return sprintf('%1$s/sarung_admin/kelas' , $this->base_url());}
+	protected function get_url_admin_wali		()	{ 		return sprintf('%1$s/sarung_admin/wali' , $this->base_url());}
+	protected function get_url_admin_ujian		()	{ 		return sprintf('%1$s/sarung_admin/ujian' , $this->base_url());}
+	protected function get_url_admin_negara		()	{ 		return sprintf('%1$s/sarung_admin/negara' , $this->base_url());}
+	protected function get_url_admin_propinsi	()	{ 		return sprintf('%1$s/sarung_admin/propinsi' , $this->base_url());}
+	protected function get_url_admin_kabupaten	()	{ 		return sprintf('%1$s/sarung_admin/kabupaten' , $this->base_url());}
+	protected function get_url_admin_kecamatan	()	{ 		return sprintf('%1$s/sarung_admin/kecamatan' , $this->base_url());}
+	protected function get_url_admin_desa		()	{ 		return sprintf('%1$s/sarung_admin/desa' 	, $this->base_url());}
+	protected function get_url_admin_user		()	{ 		return sprintf('%1$s/sarung_admin/user' 	, $this->base_url());}
+	protected function get_url_admin_santri		()	{ 		return sprintf('%1$s/sarung_admin/santri	' , $this->base_url());}
+	
+	protected function get_url_admin_sarung		()   { 		return helper_get_url_admin_sarung();}
+	
+}
+class Admin_sarung extends Admin_sarung_urls{
 	protected function set_id($val) {$this->values['id'] = $val;}
 	protected function get_id(){ return $this->values['id'];}
 	/*will be usen upon deleting */
@@ -42,9 +63,9 @@ class Admin_sarung extends Admin_root{
     }
     /*All of */
     public function getIndex(){
+		$this->set_default_value();
 		$content = "<h1>Assalamu alaikum Admin</h1>";
-		$this->set_content($content);
-        $this->set_default_value();
+		$this->set_content($content);        
         return $this->index();
     }
 	/**
@@ -100,8 +121,9 @@ class Admin_sarung extends Admin_root{
 			array('Kelas'		,'<span class="glyphicon glyphicon-copyright-mark"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_kelas() ) ) ,
 			array('Wali'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_wali() ) ) ,
 			array('Ujian'		,'<span class="glyphicon glyphicon-glass"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_ujian() ) ) , 
-			array('User'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_user() ) )
-                      );
+			array('User'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_user() ) ),
+			array('Santri'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_santri() ) )
+        );
 		$address = $this->get_side_of_address();
         $list_menu .= sprintf('<li>%1$s</li>', $address) ;
         foreach($list as $key => $val ){
@@ -112,23 +134,6 @@ class Admin_sarung extends Admin_root{
 		',$list_menu);
 		return $side;
 	}
-	protected function get_url_admin_event     ()   { 		return sprintf('%1$s/sarung_admin/event' , $this->base_url());}
-	protected function get_url_admin_session   ()	{ 		return sprintf('%1$s/sarung_admin/session' , $this->base_url());}
-	protected function get_url_admin_kalender  () 	{ 		return sprintf('%1$s/sarung_admin/kalender' , $this->base_url());}
-	protected function get_url_admin_pelajaran ()	{ 		return sprintf('%1$s/sarung_admin/pelajaran' , $this->base_url());}
-	protected function get_url_admin_jurusan   ()	{ 		return sprintf('%1$s/sarung_admin/jurusan' , $this->base_url());}
-	protected function get_url_admin_kelas_root   ()	{ 	return sprintf('%1$s/sarung_admin/kelas_root' , $this->base_url());}
-	protected function get_url_admin_kelas		()	{ 		return sprintf('%1$s/sarung_admin/kelas' , $this->base_url());}
-	protected function get_url_admin_wali		()	{ 		return sprintf('%1$s/sarung_admin/wali' , $this->base_url());}
-	protected function get_url_admin_ujian		()	{ 		return sprintf('%1$s/sarung_admin/ujian' , $this->base_url());}
-	protected function get_url_admin_negara		()	{ 		return sprintf('%1$s/sarung_admin/negara' , $this->base_url());}
-	protected function get_url_admin_propinsi	()	{ 		return sprintf('%1$s/sarung_admin/propinsi' , $this->base_url());}
-	protected function get_url_admin_kabupaten	()	{ 		return sprintf('%1$s/sarung_admin/kabupaten' , $this->base_url());}
-	protected function get_url_admin_kecamatan	()	{ 		return sprintf('%1$s/sarung_admin/kecamatan' , $this->base_url());}
-	protected function get_url_admin_desa		()	{ 		return sprintf('%1$s/sarung_admin/desa' , $this->base_url());}
-	protected function get_url_admin_user		()	{ 		return sprintf('%1$s/sarung_admin/user' , $this->base_url());}
-	
-	protected function get_url_admin_sarung		()   { 		return helper_get_url_admin_sarung();}	
 	/**
 	 *	return html which contains address 
 	*/
@@ -187,22 +192,6 @@ class Admin_sarung extends Admin_root{
 		return $js;
     }
 	/**
-	 *	This class should be used when you want id to your table
-	 *	return integer id from selected table
-	**/
-	protected function get_id_from_save_id( $name_table  , $max_id){
-		$id = 0 ;
-		$result = SaveId::NamaTable( $name_table )->first();
-		if ( $result ){
-			$id =  $result->idtable;
-		}
-		else{
-			$id = $max_id;
-			$id++;
-		}
-		return $id;
-	}
-	/**
 	 * this function will combine two array which has same key
 	 * return combinated arrays
 	*/
@@ -231,6 +220,22 @@ class Admin_sarung extends Admin_root{
                 %2$s
             </div>
         </div>' , $label , $input);
+    }
+    /*
+    *   set object of database
+    *   this will get table of database
+    */
+    protected function set_model_obj($val){ $this->values ['model_obj_adm_sar'] = $val ;}
+    /*
+    *   return object
+    *   this will get table of database
+    */
+    protected function get_model_obj(){        return $this->values ['model_obj_adm_sar'] ;    }	
+    /**
+     *  return max id for particular table
+    **/
+    protected function get_max_id(){
+        return $this->get_model_obj()->max('id');
     }	
 }
 

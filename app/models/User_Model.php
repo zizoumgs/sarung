@@ -63,6 +63,7 @@ class User_Model extends Sarung_Model_Root implements UserInterface, RemindableI
 	public function Tempat(){
 		return $this->belongsTo('Kabupaten_Model' , 'idtempat' , 'id');
 	}
+
 	/**
 	 * get userr which has lesser power 
 	 *return obj
@@ -72,5 +73,18 @@ class User_Model extends Sarung_Model_Root implements UserInterface, RemindableI
             $q->where('power', '<', $current_power );
         });
 	}
-
+	/**
+	 *	return object of Kabupaten_Model
+	 **/
+	public function Santri(){
+		return $this->hasOne('Santri_Model' , 'idadmind');
+	}
+	/**
+	 * get userr which has no id in santri
+	 * parameter is 0 or 1
+	 *return obj
+	*/
+	public function scopeGetstatussantri($query, $status = 0){
+		return $query->has('santri' , '=', $status );
+	}
 }

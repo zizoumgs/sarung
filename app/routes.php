@@ -33,6 +33,11 @@ $user->password = Hash::make('example');
 $user->idgroup = 1;
 $user->save();
 */
+/**
+ * this route is prepared to give a developer an information about something that should be wrong
+ * @ params is an array
+ */ 
+
 //Route::get('home', 'HomeController');
 //Route::controller('home', 'HomeController');
 Route::get('logout', function()
@@ -58,6 +63,7 @@ Route::controller('admin_uang/outcome_cud'      , 'Admin_outcome_cud');
 Route::controller('admin_uang/subdivisi_crud'      , 'Admin_subdivisi_crud');
 Route::controller('admin_uang/divisi_crud'      , 'Admin_divisi_crud');
 //! all sarung admin controller
+//                  url name                                class  name
 Route::controller('sarung_admin/event'                  , 'Admin_sarung_event');
 Route::controller('sarung_admin/pelajaran'              , 'Admin_sarung_pelajaran');
 Route::controller('sarung_admin/session'                , 'Admin_sarung_session');
@@ -68,11 +74,12 @@ Route::controller('sarung_admin/kelas'                  , 'Admin_sarung_kelas');
 Route::controller('sarung_admin/wali'                   , 'Admin_sarung_wali');
 Route::controller('sarung_admin/ujian'                  , 'Admin_sarung_ujian');
 Route::controller('sarung_admin/negara'                 , 'Admin_sarung_negara');
-Route::controller('sarung_admin/propinsi'                 , 'Admin_sarung_propinsi');
-Route::controller('sarung_admin/kabupaten'                 , 'Admin_sarung_kabupaten');
-Route::controller('sarung_admin/kecamatan'                 , 'Admin_sarung_kecamatan');
-Route::controller('sarung_admin/desa'                 , 'Admin_sarung_desa');
-Route::controller('sarung_admin/user'                 , 'Admin_sarung_user_cud');
+Route::controller('sarung_admin/propinsi'               , 'Admin_sarung_propinsi');
+Route::controller('sarung_admin/kabupaten'              , 'Admin_sarung_kabupaten');
+Route::controller('sarung_admin/kecamatan'              , 'Admin_sarung_kecamatan');
+Route::controller('sarung_admin/desa'                   , 'Admin_sarung_desa');
+Route::controller('sarung_admin/user'                   , 'Admin_sarung_user_cud');
+Route::controller('sarung_admin/santri'                   , 'Admin_sarung_santri_cud');
 // for uploading
 Route::any('/upload_santri',
 				array('uses'=>'Admin_sarung_user_cud@set_upload','as' => 'set_upload')

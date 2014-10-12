@@ -47,11 +47,32 @@ abstract class Admin_root extends root {
 		//$user->save();
 
 	}
+	/**
+	 *	This class should be used when you want id to your table
+	 *	return integer id from selected table
+	**/
+	protected function get_id_from_save_id( $name_table  , $max_id){
+		$id = 0 ;
+		$result = SaveId::NamaTable( $name_table )->first();
+		if ( $result ){
+			$id =  $result->idtable;
+		}
+		else{
+			$id = $max_id;
+			$id++;
+		}
+		return $id;
+	}
+	
 	//! return object , you should do $obj->save inside transaction , see Admin_sarung_event on add Section
 	protected function del_item_from_save_id( $table_name , $id_table){
    		$saveId = new SaveId();
         return $saveId->where('namatable' , '=' , $table_name)->where('idtable' ,'=' , $id_table )->first();
 	}
-	//! i think we didnt need this anymore
-	// abstract protected function get_admin_url();
+	//! return object , you should do $obj->save inside transaction , see Admin_sarung_event on add Section
+	protected function del_item_from_save_nis($session_name){
+   		$saveId = new SaveId();
+        return $saveId->where('namatable' , '=' , $table_name)->where('idtable' ,'=' , $id_table )->first();
+	}
+
 }

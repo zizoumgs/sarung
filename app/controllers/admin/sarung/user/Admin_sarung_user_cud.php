@@ -1,6 +1,6 @@
 <?php
 /**
- *  This claas will handle add , edit and delete user
+ *  This claas will handle add , edit and delete santri
  *  of course power which is user has will be key
 */
 class Admin_sarung_user_cud_support extends Admin_sarung_user{

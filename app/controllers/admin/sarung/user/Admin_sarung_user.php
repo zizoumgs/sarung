@@ -1,8 +1,10 @@
 <?php
 /**
- *  This claas will be crud for user table
+ *  This claas will be view for user (not santri)table
+ *  another class that is to edit m delete and add is in Admin_sarung_user_cud file
+ *  
 */
-class Admin_sarung_user_support extends Admin_sarung_support{
+class Admin_sarung_user_support extends Admin_sarung_support_user{
 	public function __construct(){
 		parent::__construct();
 	}
@@ -84,7 +86,7 @@ class Admin_sarung_user_filter extends Admin_sarung_user_support{
         $default = array( "class" => "selectpicker col-md-12" , "id" => "" ,
                          "name" => $this->get_status_select_name() ,
                          'selected' => $this->get_status_select_selected() 
-						 );
+		);
         $statues = $this->get_select_by_key( $this->get_available_status() , $default);
 		$tmp  = Form::text( $this->get_name_filter_name()  , '', array( 'class' => 'form-control input-sm' ,
                                                                        'placeholder' => 'Name' ,
@@ -133,6 +135,9 @@ class Admin_sarung_user_filter extends Admin_sarung_user_support{
         return $model_obj;
     }
 }
+/**
+ *	this table is used to smoething about santri
+*/
 class Admin_sarung_user extends Admin_sarung_user_filter{
 	public function __construct(){
 		parent::__construct();
@@ -316,6 +321,10 @@ class Admin_sarung_user extends Admin_sarung_user_filter{
         return $this->get_select( $this->get_available_status('Bulk Action') , $default);
     }
 
+    /**
+     *  js for button to executed check box
+     *  return none
+    */
 	private function set_special_js_for_view(){
 		$js = sprintf('
 		<script type="text/javascript">

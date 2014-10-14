@@ -1,6 +1,9 @@
 <?php
 class Santri_Model extends Sarung_Model_Root{
 	protected $table = 'santri';
+	/**
+	*	Session
+	**/
     public function Fusip(){
 		return $this->belongsTo('Session_Model' , 'id');
     }
@@ -9,6 +12,12 @@ class Santri_Model extends Sarung_Model_Root{
 	*/
     public function User(){
 		return $this->belongsTo('User_Model', 'id');
+    }
+	/**
+	 *	child table
+	*/    
+    public function Kelasisi(){
+    	return $this->hasMany('Class_Model' , 'idsantri');
     }
 	/**
 	*/
@@ -66,7 +75,7 @@ class Santri_Model extends Sarung_Model_Root{
 			return null;
 		$max = $this->where('idsession' , '=' , $there->id )->max('nis');
 		return $max + 1 ;
-    }
+    }    
 
 }
 class Save_Nis_Model extends Sarung_Model_Root{

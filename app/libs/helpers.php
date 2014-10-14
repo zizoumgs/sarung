@@ -153,5 +153,13 @@ function helper_get_all_file_in_dir($path){
 	}
     return array_diff($files, array('.', '..'));
 }
-
+/**
+ ** Checking is array empty
+ ** @param : array to be checked
+ ** return true if empty , false otherwise
+**/
+function helper_is_array_empty($array){
+	// array_filter() function's default behavior will remove all values from array which are equal to null, 0, '' or false
+	return array_filter( $array );
+}
 

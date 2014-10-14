@@ -1,6 +1,7 @@
 <?php
 /**
- *	this class will support to things , user and santri
+ *	this class will support to things , user and santri , class
+ *	this class has develope base on event class 
 */
 interface Admin_sarung_crud {
 	const VIEW = 0;
@@ -25,12 +26,12 @@ interface Admin_sarung_crud {
 /**
  *	i separated class` in order to learn easily
 */
-abstract class Admin_sarung_support_user extends Admin_sarung{
+abstract class Admin_sarung_support_root extends Admin_sarung{
+    protected $input;
 	const BANNED 	= 	-1	;
 	const NEWS		=	0	;
 	const NON_ANTIF	=	1	;
 	const AKTIF		=	2	;
-    protected $input;
 	/**
 	 *	setting purpose
 	 *	@param val : integer
@@ -43,16 +44,6 @@ abstract class Admin_sarung_support_user extends Admin_sarung{
     */
     protected function set_foto_folder($val){ $this->input ['folder_foto_'] = $val ; }
     protected function get_foto_folder(){ return $this->input ['folder_foto_'] ;}
-    /* Below is name of select which contains status to filter*/
-    protected function set_status_select_name($val){ $this->input ['status_select'] = $val ; }
-    protected function get_status_select_name(){ return $this->input ['status_select'] ;}
-    protected function get_status_select_selected(){ return $this->get_value( $this->get_status_select_name() ); }
-
-    /* Below is name of filter input which will filter output by its name */
-    protected function set_name_filter_name($val){ $this->input ['filter_name'] = $val ; }
-    protected function get_name_filter_name(){ return $this->input ['filter_name'] ;}
-    protected function get_name_filter_selected(){ return $this->get_value( $this->get_name_filter_name() ); }
-
 	/**
 	 *	return array
 	 *	will be called in add , edit function 
@@ -105,58 +96,29 @@ abstract class Admin_sarung_support_user extends Admin_sarung{
       *  return  array
     **/
     protected function get_inputs_rules(){return $this->input['inputs_rules'];}
+    //
+    protected function set_session_select_name($val){ $this->input ['session_select'] = $val ; }
+    protected function get_session_select_name(){ return $this->input ['session_select'] ;}
     /**
-     *  return  html text on top of ...
-    **/
-    protected function set_text_on_top($value){ $this->values ['text_on_top'] = $value; }
-    /**
-     *  return  none
-    **/    
-    protected function get_text_on_top(){ return $this->values ['text_on_top']; }
-	/**
-     *  function usualy used for filtering result
-     *  return only input html
+     *  get session
+     *  return select
     */
-    protected function get_form_group($input , $name_label){
-		return sprintf('<div class="form-group ">
-        					   %1$s
-					   </div>' , $input , $name_label);
-	}
-    /**
-     *  return  html div which containt label and input
-    **/
-    protected function get_input_cud_group( $label , $input ){
-        return sprintf('
-        <div class="form-group form-group-sm">
-            <label class="col-sm-2 control-label" >%1$s</label>
-            <div class="col-sm-3">
-                %2$s
-            </div>
-        </div>' , $label , $input);
-    }
-    /**
-      *  return html which was used as place of add , edit , delete form
-    **/
-    protected function get_panel( $heading , $body , $footer=""){
-        return sprintf('
-            <div class="panel panel-primary">
-                <div class="panel-heading">%1$s</div>
-                <div class="panel-body">%2$s</div>
-                <div class="panel-footer">%3$s</div>
-            </div>', $heading , $body , $footer);
-    }
-    /**
-     * this will display all user admind with respect to his admind status
-     * Return string
-    */
-    protected function get_user_status($model){        
-        $status  = sprintf('<span><span class="glyphicon glyphicon-question-sign"></span> status: %1$s</span><br>', $this->get_status($model->status) );
-        $updated  = sprintf('<span><span class="glyphicon glyphicon-calendar"></span> Updated: %1$s</span><br>', $model->updated_at);
-        $created  = sprintf('<span><span class="glyphicon glyphicon-time"></span> Created: %1$s</span>', $model->created_at);
-        $role = '';
-        $role       = sprintf('<span><span class="glyphicon glyphicon-magnet"></span> Role: %1$s</span><br>', $model->admindgroup->nama);
-        $nama = sprintf('<div class="x-small-font">%1$s %2$s %3$s %4$s</div>' , $status  , $role, $updated, $created );
-        return $nama;        
+    protected function get_session_select( $attributes = array()){
+        $default = array( "class" => "selectpicker col-md-12",
+                         "name" => $this->get_session_select_name() ,
+                         'id'   => $this->get_session_select_name() , 
+                         'selected' => '',
+						 );
+		//! transfer to default array
+		foreach( $attributes as $key => $val){
+			$default [$key] = $val ;
+		}			
+        $hasil = array();
+        $sessions = Session_Model::orderby('nama' , 'DESC')->get();
+        foreach($sessions as $item){
+            $hasil [] = $item->nama ;
+        }
+        return $this->get_select( $hasil , $default);
     }
     /**
      *  check whether give asking for foto or just give default foto
@@ -164,7 +126,7 @@ abstract class Admin_sarung_support_user extends Admin_sarung{
     */
     protected function get_foto_file($model){
         $file = sprintf('%1$s/%2$s/%3$s',$this->get_foto_folder() , $model->id_user, $model->foto);
-		return $this->check_and_get_file($file);
+		return $this->get_and_check_file($file);
     }
 	/*
 		Check and get file
@@ -172,121 +134,16 @@ abstract class Admin_sarung_support_user extends Admin_sarung{
     protected function get_and_check_file($file){
 		$path = helper_get_path_from_abs_url($file);
         if( ! File::exists($path) ){
-			Log::info("-----------------------");
-			Log::info("There are no file");
-			Log::info($file);
-			Log::info("-----------------------");
-            return "";
+			$file = sprintf('%1$s/unknow-48.png' , $this->get_foto_folder());
         }
         return $file;
     }	
-    /**
-     * this will display all user information
-     * Return string
-    */
-    protected function get_user_data($model , $col_array = array( "col-md-2" , "col-md-10 x-small-font" )){
-		$file = sprintf('%1$s/%2$s/%3$s',$this->get_foto_folder() , $model->id, $model->foto);
-        $foto  = sprintf('<img src="%1$s" class="small-img thumbnail">', $this->get_and_check_file($file) );
-        //$foto  = sprintf('<img src="%1$s/%2$s/%3$s" class="small-img thumbnail">',$this->get_foto_folder() , $model->id, $model->foto );
-        $jenis = sprintf('<span>%1$s</span>', $model->jenis);
-        $email  = sprintf('<span><span class="glyphicon glyphicon-envelope"></span> Email: %1$s</span><br>', $model->email);
-        $ttl    = sprintf('<span><span class="glyphicon glyphicon-info-sign"></span> TTL: %1$s %2$s</span>', $model->tempat->nama , $model->lahir);
-        $alamat = sprintf('<span><span class="glyphicon glyphicon-map-marker"></span> Alamat:%1$s %2$s %3$s</span><br>' ,
-                          $model->desa->kecamatan->kabupaten->nama ,
-                          $model->desa->kecamatan->nama ,
-                          $model->desa->nama);
-        $nama = sprintf('<span><span class="glyphicon glyphicon-user"></span> Nama: %1$s %2$s</span><br>' , $model->first_name , $model->second_name);
-        $nama = sprintf('<div class="row">
-                        <div class="%6$s">%1$s</div>
-                        <div class="%7$s">%2$s %3$s %4$s %5$s</div>
-                        </div>' , $foto  , $nama, $email, $alamat , $ttl  ,
-						$col_array [0] , $col_array[1]);
-        return $nama;
-	}
-
-  	/**
-     *  will get user status , see admind`s table
-     *  input : integer or Text 
-     *  return string if input mode = 0 , meanwhile 1 return number
-   	*/    
-    protected function get_status( $signal , $mode = 0){
-        /*
-   		-1: banned studend 
-   		0: not inserted into santri table , this for new registering student
-   		1 : non_aktif -> cannot edit , just view 
-   		2 : aktif 	 -> can edit
-        */
-        $value = array(
-                       -1 => 'Banned users'     ,
-                        0 => 'New Registering'  ,
-                        1 => "Non Aktif"        ,
-                        2 => "Aktif"
-                       );
-        if($mode == 0 ):
-            if( isset($value [$signal]) ):
-                return $value [$signal];
-            endif;
-        elseif($mode == 1):
-            foreach($value as $key => $val){
-                if( $val == $signal){
-                    return $key;
-                }
-            }
-        endif;
-        return "Error";
-
-    }	
-    /**
-     *  return array
-    */
-    protected function get_available_status( $default = 'All'){
-        return array(
-                    '-100'    =>  $default,
-                     '-1'  =>  'Banned',
-                      '0'   =>  'Registered' ,
-                      '1'   =>  'Non Aktif' ,
-                      '2'   =>  'Aktif'                           
-                     );        
-    }
-    /**
-     * this will filter admind which will be seen , admind with lower/same power can`t see higher power
-     * Return obj
-    */
-    protected function set_filter_by_user($model_obj){
-        return $model_obj->getlesserPowerid($this->get_user_power());
-    }
-    /**
-     * this will filter view by name
-     * Return obj
-    */
-    protected function set_filter_by_name($model_obj , & $wheres ){
-        if( $this->get_name_filter_selected() != ""){
-            $wheres [$this->get_name_filter_name()] = $this->get_name_filter_selected();
-            return $model_obj->whereRaw(" (first_name LIKE ? or second_name LIKE ? ) " ,
-                                        array( "%".$this->get_name_filter_selected()."%" ,
-                                              "%".$this->get_name_filter_selected()."%" )
-                                        );
-        }
-        return $model_obj;
-    }	
-    /**
-     * this will filter view by name
-     * Return obj
-    */
-    protected function set_filter_by_status($model_obj , & $wheres ){
-        $selected = $this->get_status_select_selected() ;
-        if(  $selected != "" && $selected != -100){
-            $wheres [ $this->get_status_select_name()  ] = $selected  ;
-            return $model_obj->where('status' , '=' , $selected);
-        }
-        return $model_obj;
-    }
 }
 /**
  *  Advanced Admin_sarung_event class
  *  Below is main class of this file
 */
-abstract class Admin_sarung_support extends Admin_sarung_support_user implements Admin_sarung_crud{
+abstract class Admin_sarung_support extends Admin_sarung_support_root implements Admin_sarung_crud{
 	/*
 		This list of object will be executed during transaction
 	*/
@@ -307,10 +164,19 @@ abstract class Admin_sarung_support extends Admin_sarung_support_user implements
 	}
 	protected function get_obj_save_db(){ return $this->objs_save_db ; }
 	protected function get_obj_dele_db(){ return $this->objs_dele_db ; }
+	
+
+	protected function set_pdo_exception($val) {$this->input['pdo_exception'] = $val;}
+	protected function get_pdo_exception() { return $this->input['pdo_exception'] ;}
+	
+	protected function set_error_message($val) {$this->input['error_message'] = $val;}
+	protected function get_error_message() { return $this->input['error_message'] ;}
+	
 	/**
 	 **/	
     public function __construct(){
         parent::__construct();
+		$this->set_error_message('');
     }
 	/**
 	 **/
@@ -321,10 +187,7 @@ abstract class Admin_sarung_support extends Admin_sarung_support_user implements
 	/**
 	 **/	
     protected function set_default_value(){
-        //! special
-        $this->set_foto_folder($this->base_url()."/foto");
-		$this->set_status_select_name('sta_fil');
-        $this->set_name_filter_name('nam_fil');
+		parent::set_default_value();
 	}
 	/**
 	 **/
@@ -336,7 +199,7 @@ abstract class Admin_sarung_support extends Admin_sarung_support_user implements
     public function postEventdel(){
 		$this->set_purpose( self::DELE);
 		$id = Input::get('id');
-        if($id >= 0 ){
+        if($id > 0 ){
 			$data = Input::all();
 			return $this->will_dele_to_db($data);
         }
@@ -362,9 +225,7 @@ abstract class Admin_sarung_support extends Admin_sarung_support_user implements
 			return $this->postEventdelsucceded();
 		}
         else{
-            $messages   = array("Gagal menghapus");
-            $message    =   sprintf('<span class="label label-danger">%1$s</span>' , $this->make_message( $messages ));
-            return $this->getEventdel($id , $message);    
+			return $this->postEventdelfailed();
         }
 	}
 	/**
@@ -374,6 +235,16 @@ abstract class Admin_sarung_support extends Admin_sarung_support_user implements
 	protected function Sarung_db_about_dele($data , $values = array() ){
 		return $this->get_model_obj()->find( $data ['id'] );
 	}	
+	/**
+	 *	failed to delete item
+	 *	return $this->getEventdel;
+	**/
+	protected function postEventdelfailed($values = array()){
+		$id = $this->get_value('id') ;		
+	    $messages   = array("Gagal menghapus");
+        $message    =   sprintf('<span class="label label-danger">%1$s</span>' , $this->make_message( $messages ));
+        return $this->getEventdel($id , $message);    		
+	}
 	/**
 	 *
 	 **/
@@ -454,9 +325,9 @@ abstract class Admin_sarung_support extends Admin_sarung_support_user implements
         return $this->index();
     }
     /**
-     *  After_Submit , We overrid because we have select which will change according to other result
-     *  return getEventAdd or will_insert_to_db
-    **/
+     **  After_Submit , We overrid because we have select which will change according to other result
+     **  return getEventAdd or will_insert_to_db
+    ***/
 	public function postEventadd(){
 		$this->set_purpose( self::ADDI);
 		$data = Input::all();
@@ -473,26 +344,26 @@ abstract class Admin_sarung_support extends Admin_sarung_support_user implements
         }
 	}
 	/**
-	 *	default function to interact with db , include add, edit , and delete
-	 *	return none , you can override then 
-	**/		
+	 **	default function to interact with db , include add, edit , and delete
+	 **	return none , you can override then 
+	***/		
     protected function Sarung_db_about($data , $edit = false , $values = array()){		return "";	}
 	/**
-	 *	function to get column which will insert into db
-	 *	return @ Sarung_db_about
+	 **	function to get column which will insert into db
+	 **	return @ Sarung_db_about
 	**/	
 	protected function Sarung_db_about_add($data , $edit = false , $values = array() ){
 		return $this->Sarung_db_about( $data  , $edit , $values );
 	}
 	/**
-	 *	function to get column which will edit db
-	 *	return @ Sarung_db_about
+	 **	function to get column which will edit db
+	 **	return @ Sarung_db_about
 	**/	
 	protected function Sarung_db_about_edit($data , $values = array() ){
 		return $this->Sarung_db_about( $data  , self::EDIT , $values );
 	}
 	/**
-	 * return html
+	 ** return html
 	**/
 	protected function will_edit_to_db($data){
 		$event = $this->Sarung_db_about_edit($data);
@@ -539,7 +410,7 @@ abstract class Admin_sarung_support extends Admin_sarung_support_user implements
 	*/
 	protected final function will_change_to_db(){
 	    DB::beginTransaction();
-		$status = false; 
+		$status = false;
 		try {
 			//! for saving
 			foreach( $this->get_obj_save_db() as $obj){
@@ -558,9 +429,8 @@ abstract class Admin_sarung_support extends Admin_sarung_support_user implements
 			$status = true;
 		    // all good
 		} catch (\Exception $e) {
-		        Log::info('-------------------------------------------------');
-				Log::info($e);
-		        Log::info('-------------------------------------------------');
+			$this->set_pdo_exception($e);
+			$this->set_error_message($e->getMessage()) ;
 		    DB::rollback();
 		}
 		return $status;
@@ -596,3 +466,5 @@ abstract class Admin_sarung_support extends Admin_sarung_support_user implements
 	}
 
 }
+
+

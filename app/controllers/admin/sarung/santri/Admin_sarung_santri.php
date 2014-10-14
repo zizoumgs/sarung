@@ -1,8 +1,9 @@
 <?php
 /**
  *     this class is for santri
+ *     add , delete edit , No table view is in here
 */
-abstract class Admin_support_santri extends Admin_sarung_support{
+abstract class Admin_support_santri extends Admin_sarung_support_user{
     public function __construct(){
         parent::__construct();
     }
@@ -48,12 +49,7 @@ abstract class Admin_support_santri extends Admin_sarung_support{
     protected function set_id_filter_name($val){ $this->input ['id_filter'] = $val ; }
     protected function get_id_filter_name(){ return $this->input ['id_filter'] ;}
     protected function get_id_filter_selected(){ return $this->get_value( $this->get_id_filter_name() ); }
-    
-    //
-    protected function set_session_select_name($val){ $this->input ['session_select'] = $val ; }
-    protected function get_session_select_name(){ return $this->input ['session_select'] ;}
-    
-    
+
     /**
      * this will filter view by id
      * Return obj
@@ -83,23 +79,6 @@ abstract class Admin_support_santri extends Admin_sarung_support{
         return $model_obj->getstatussantri(1);
     }
 
-    /**
-     *  get session 
-    */
-    protected function get_session_select(){
-        $hasil = array();
-        $session = new Session_Model();
-        $sessions = $session->orderby('nama' , 'DESC')->get();
-        foreach($sessions as $item){
-            $hasil [] = $item->nama ;
-        }
-        $default = array( "class" => "selectpicker col-md-12",
-                         "name" => $this->get_session_select_name() ,
-                         'id'   => $this->get_session_select_name() , 
-                         'selected' => '12-13',
-						 );
-        return $this->get_select( $hasil , $default);
-    }
 }
 
 /**
@@ -321,22 +300,11 @@ class Admin_sarung_santri_add extends Admin_support_santri {
     private function set_js_for_this_add(){
          $js = sprintf('<script>
             function select_handle(id , first_name , second_name){
-                //var url= "%1$s";
                 $("#id_user").val(id);
                 $("#first_name").val(first_name);
                 $("#second_name").val(second_name);
-                return;
-                $.ajax({
-                    url:url             ,
-                    data: {"sort": id } ,
-                    type: "GET"         ,
-                    success:function(result){
-                        $("#panel-body-ku").html( result );
-                    }
-                });
-                //  end of ajax                
             }
-         ' , $this->get_url_add_ajax());         
+         ');
          $js.= "</script>";
          $this->set_js($js);
     }
@@ -475,7 +443,8 @@ class Admin_sarung_santri_edit extends Admin_sarung_santri_add {
     */
     protected function get_user_data_edit($model , $col_array = array( "col-md-2" , "col-md-10 x-small-font" )){
         $date = new DateTime($model->awal);
-        $nis = $date->format("y").str_pad($model->nis,$model->perkiraansantri,"0");
+        $nis = $date->format("y").str_pad($model->nis,$model->perkiraansantri,"0", STR_PAD_LEFT);
+		
         $nis   = sprintf('<span><span class="glyphicon glyphicon-user"></span> Nis: %1$s</span>' , $nis);
         $nama = sprintf('<span><span class="glyphicon glyphicon-user"></span> Nama: %1$s %2$s</span>  %3$s<br>' ,
                         $model->first_name ,

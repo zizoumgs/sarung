@@ -16,7 +16,7 @@ abstract class  Admin_sarung_urls extends Admin_root {
 	protected function get_url_admin_desa		()	{ 		return sprintf('%1$s/sarung_admin/desa' 	, $this->base_url());}
 	protected function get_url_admin_user		()	{ 		return sprintf('%1$s/sarung_admin/user' 	, $this->base_url());}
 	protected function get_url_admin_santri		()	{ 		return sprintf('%1$s/sarung_admin/santri	' , $this->base_url());}
-	
+	protected function get_url_admin_class		()	{ 		return sprintf('%1$s/sarung_admin/class		' , $this->base_url());}
 	protected function get_url_admin_sarung		()   { 		return helper_get_url_admin_sarung();}
 	
 }
@@ -122,7 +122,8 @@ class Admin_sarung extends Admin_sarung_urls{
 			array('Wali'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_wali() ) ) ,
 			array('Ujian'		,'<span class="glyphicon glyphicon-glass"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_ujian() ) ) , 
 			array('User'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_user() ) ),
-			array('Santri'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_santri() ) )
+			array('Santri'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_santri() ) ),
+			array('Class'		,'<span class="glyphicon glyphicon-inbox"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_class() ) )
         );
 		$address = $this->get_side_of_address();
         $list_menu .= sprintf('<li>%1$s</li>', $address) ;

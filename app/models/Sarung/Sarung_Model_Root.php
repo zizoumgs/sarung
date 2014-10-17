@@ -8,4 +8,14 @@ class Sarung_Model_Root extends Eloquent{
 	protected function get_db(){
 		return "fusarung";
 	}
+	/**
+	*	will check and return valid value
+	*	return -1 if null , id number otherwise
+	**/
+	protected function check_and_get_id($obj){
+		if( $obj->first()){
+			return $obj->first()->id;
+		}
+		return -1;
+	}
 }

@@ -30,12 +30,12 @@ class Kalender_Model extends Sarung_Model_Root{
 	 *	return id
 	*/
     public function scopeGet_id($query , $session , $event){
-		$session_ = new Session_Model();
-		$idSession = $session_->where('nama' , '=' , $session )->firstOrfail();
-		$event_   = new Event_Model();
-		$idEvent = $event_->where('nama' , '=' , $event )->firstOrfail();
-		//return $idEvent;
-		return $query->where('idsession' , '=' , $idSession->id)->where('idevent' ,'=' , $idEvent->id);
+  		$session_ = new Session_Model();
+	   	$idSession = $session_->where('nama' , '=' , $session )->first();
+      $event_   = new Event_Model();
+		  $idEvent = $event_->where('nama' , '=' , $event )->first();
+		  //return $idEvent;
+		  return $query->where('idsession' , '=' , $idSession->id)->where('idevent' ,'=' , $idEvent->id);
     }    
 
 }

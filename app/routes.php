@@ -79,8 +79,9 @@ Route::controller('sarung_admin/kabupaten'              , 'Admin_sarung_kabupate
 Route::controller('sarung_admin/kecamatan'              , 'Admin_sarung_kecamatan');
 Route::controller('sarung_admin/desa'                   , 'Admin_sarung_desa');
 Route::controller('sarung_admin/user'                   , 'Admin_sarung_user_cud');
-Route::controller('sarung_admin/santri'                   , 'Admin_sarung_santri_cud');
-Route::controller('sarung_admin/class'                   , 'Admin_sarung_class');
+Route::controller('sarung_admin/santri'                 , 'Admin_sarung_santri_cud');
+Route::controller('sarung_admin/class'                  , 'Admin_sarung_class');
+Route::controller('sarung_admin/ujis'                   , 'Admin_sarung_ujis');
 // for uploading
 Route::any('/upload_santri',
 				array('uses'=>'Admin_sarung_user_cud@set_upload','as' => 'set_upload')

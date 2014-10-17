@@ -48,7 +48,7 @@ abstract class Admin_sarung_support_root extends Admin_sarung{
 	 *	return array
 	 *	will be called in add , edit function 
 	*/
-    protected final function get_rules($with_id = false){
+    protected function get_rules($with_id = false){
         $rules = $this->get_inputs_rules();
         if($with_id)
             $rules ['id'] = "required|numeric" ; 
@@ -100,11 +100,80 @@ abstract class Admin_sarung_support_root extends Admin_sarung{
     protected function set_session_select_name($val){ $this->input ['session_select'] = $val ; }
     protected function get_session_select_name(){ return $this->input ['session_select'] ;}
     /**
+     *  get kelas
+     *  return select
+    **/
+	protected function get_select_kelas( $attributes , $additional_item = array()){
+        $default = array( "class" => "selectpicker",
+                         "name" => '',
+                         'id'   => '' , 
+                         'selected' => '',
+						 );
+		//! transfer to default array
+		$default = $this->array_combine($default , $attributes);
+        $hasil = array();
+        $sessions = Kelas_Model::orderby('nama' , 'ASC')->get();
+        foreach($sessions as $item){
+            $hasil [] = $item->nama ;
+        }		
+		//@ additioanl item
+        foreach($additional_item as $item){            $hasil [] = $item ;        }		
+        return $this->get_select( $hasil , $default);		
+	}
+	protected function get_kelas_select( $attributes , $additional_item = array( )){
+		return $this->get_select_kelas( $attributes , $additional_item);
+	}
+    /**
+     *  get pelajaran
+     *  return select
+    **/
+	protected function get_pelajaran_select( $attributes ,   $additional_item = array()){
+        $default = array( "class" => "selectpicker",
+                         "name" => '',
+                         'id'   => '' , 
+                         'selected' => '',
+						 );
+		//! transfer to default array
+		$default = $this->array_combine($default , $attributes);
+        $hasil = array();
+        $sessions = new Ujian_Model();
+        foreach($sessions->get_names_of_pelajaran() as $item){
+            $hasil [] = $item->name ;
+        }
+		//@ additioanl item
+        foreach($additional_item as $item){            $hasil [] = $item ;        }		
+        return $this->get_select( $hasil , $default);		
+	}
+    /**
+     *  get event
+     *  return select
+    **/
+	protected function get_event_ujian_select( $attributes , $additional_item = array() ){
+        $default = array( "class" => "selectpicker",
+                         "name" => '',
+                         'id'   => '' , 
+                         'selected' => '',
+						 );
+		//! transfer to default array
+		$default = $this->array_combine($default , $attributes);
+        $hasil = array();
+        $sessions = new Ujian_Model();
+        foreach($sessions->get_names_of_ujian() as $item){
+            $hasil [] = $item->name ;
+        }
+		//@ additioanl item
+        foreach($additional_item as $item){
+            $hasil [] = $item ;
+        }
+
+        return $this->get_select( $hasil , $default);		
+	}	
+    /**
      *  get session
      *  return select
     */
-    protected function get_session_select( $attributes = array()){
-        $default = array( "class" => "selectpicker col-md-12",
+    protected function get_session_select( $attributes = array() , $additional_item = array()){
+        $default = array( "class" => "selectpicker",
                          "name" => $this->get_session_select_name() ,
                          'id'   => $this->get_session_select_name() , 
                          'selected' => '',
@@ -118,6 +187,11 @@ abstract class Admin_sarung_support_root extends Admin_sarung{
         foreach($sessions as $item){
             $hasil [] = $item->nama ;
         }
+		//@ additioanl item
+        foreach($additional_item as $item){
+            $hasil [] = $item ;
+        }
+		
         return $this->get_select( $hasil , $default);
     }
     /**
@@ -171,17 +245,18 @@ abstract class Admin_sarung_support extends Admin_sarung_support_root implements
 	
 	protected function set_error_message($val) {$this->input['error_message'] = $val;}
 	protected function get_error_message() { return $this->input['error_message'] ;}
-	
 	/**
-	 **/	
+	 *	$param 
+	 **/
     public function __construct(){
         parent::__construct();
 		$this->set_error_message('');
     }
 	/**
+	 *	
 	 **/
-    public function getIndex(){
-		$this->set_purpose( self::VIEW);
+    public function getIndex( ){
+		$this->set_purpose(self::VIEW);
 		return parent::getIndex();
 	}
 	/**
@@ -305,6 +380,7 @@ abstract class Admin_sarung_support extends Admin_sarung_support_root implements
 			$messages = $validator->messages();
 			$message = sprintf('<span class="label label-danger">%1$s</span>' ,
 							   $this->make_message( $messages->all() ));
+			$this->set_error_message($message);
 			return $this->getEventedit( $id , $data , $message);
 		}
         else{

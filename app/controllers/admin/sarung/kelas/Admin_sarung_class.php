@@ -5,30 +5,6 @@
  *		parent of class is Admin_sarung_support in Admin_sarung_support.php
 **/
 class Admin_sarung_class_support extends Admin_sarung_support{
-    /**
-     *  navigation
-    */
-    public function get_common_navigation($aktif = 0 ){
-        $array = array ( "btn-default" , "btn-default" , "btn-default" , "btn-default" );
-        $array [$aktif ]= " btn-info ";
-        $hasil = sprintf('
-            <div class="navbar-form navbar-right" role="search">
-                <a href="%1$s" class="btn  btn-sm %5$s">Add</a>
-                <a href="%2$s" class="btn  btn-sm %6$s">Edit</a>
-                <a href="%3$s" class="btn  btn-sm %7$s">Delete</a>
-				<a href="%4$s" class="btn  btn-sm %8$s">View</a>
-            </div>',
-            $this->get_url_this_add() ,
-            $this->get_url_this_edit(),
-            $this->get_url_this_dele(),
-			$this->get_url_this_view(),
-            $array [0] ,
-            $array [1] ,
-            $array [2] ,
-			$array [3]
-        );
-        return $hasil ;
-    }	
 	public function __construct(){
 		parent::__construct();
 	}
@@ -44,7 +20,7 @@ class Admin_sarung_class_support extends Admin_sarung_support{
 	}
 	protected function get_text_on_top($aktif){
         $href 	= 	sprintf('<a href="%1$s" class="btn btn-primary btn-xs" >Add</a>' , $this->get_url_this_add() );
-        $aba 	= 	sprintf('<span class="glyphicon glyphicon-inbox"></span> Class Table  %1$s',$this->get_common_navigation());
+        $aba 	= 	sprintf('<span class="glyphicon glyphicon-inbox"></span> Class Table');
 		if($this->get_error_message() != "")
 			$aba .= sprintf('
 							<div style="clear:both;"></div>
@@ -82,22 +58,6 @@ class Admin_sarung_class_support extends Admin_sarung_support{
 			</div>' , $label , $input);
 		return $result;
 	}	
-
-	protected function get_select_kelas( $attributes){
-        $default = array( "class" => "selectpicker col-md-12",
-                         "name" => '',
-                         'id'   => '' , 
-                         'selected' => '',
-						 );
-		//! transfer to default array
-		$default = $this->array_combine($default , $attributes);
-        $hasil = array();
-        $sessions = Kelas_Model::orderby('nama' , 'ASC')->get();
-        foreach($sessions as $item){
-            $hasil [] = $item->nama ;
-        }
-        return $this->get_select( $hasil , $default);		
-	}
 	/**
 	 *	make two array to one
 	 *	return array
@@ -252,7 +212,7 @@ class Admin_sarung_class extends Admin_sarung_class_support{
 	 *	return button html
 	*/
 	private function get_delete_button($val , $idSantri){
-		return sprintf('<button class="btn btn-default btn-xs mar-rig-lit" onclick="%3$s(%4$s,\'%5$s\',\'%6$s\')"><b>%1$s</b><br>%2$s</button>',
+		return sprintf('<button title="Click to delete" class="btn btn-default btn-xs mar-rig-lit" onclick="%3$s(%4$s,\'%5$s\',\'%6$s\')"><b>%1$s</b><br>%2$s</button>',
 			 $val->kelas_name , $val->session_name , $this->helper->js_func_name_to_del() ,
 			 $val->id ,
 			 $val->idkelas ,

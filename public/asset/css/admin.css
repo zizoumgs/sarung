@@ -124,3 +124,37 @@ article.col-md-10{
 .mar-rig-lit{
 	margin-right:3px;
 }
+
+.like-table {
+	padding:5px 0px;
+}
+.like-table div{
+	padding:0px 5px;
+}
+.like-table-header{
+	padding:10px;
+	background: #F5F5F5;
+}
+.like-table:nth-child(even) , .like-table-header{
+	background: #F5F5F5;
+    border-top:1px solid #d1d1d1;
+	border-bottom:1px solid #d1d1d1;
+}
+.like-table-pagination {
+	margin-bottom:5px;
+}
+.my-thumbnail{
+    padding: 4px 4px; /*It is up to you to use this*/
+    border:1px solid #d1d1d1;
+    border-radius: 3px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);	
+}
+.inline >span{
+	display:block;
+}
+.circle {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%; 
+  /* width and height can be anything, as long as they're equal */
+}

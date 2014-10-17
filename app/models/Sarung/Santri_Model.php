@@ -34,15 +34,6 @@ class Santri_Model extends Sarung_Model_Root{
 					 "session.awal"			,	"session.perkiraansantri"
 					 
 			);
-			
-		$sql = sprintf('select  *
-					   from santri san, session ses , admind adm , desa des , kecamatan kec
-				where san.idsession = ses.id and san.idadmind= adm.id and
-				des.idkecamatan = kec.id and adm.iddesa = des.id
-				order by san.updated_at DESC','fusarung');
-		$sel = DB::connection( 'fusarung' )->select(DB::raw($sql));
-		return $sel;
-		return json_decode($sel, true);
 	}
     /**
      *  get max += 1

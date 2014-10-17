@@ -32,21 +32,6 @@ abstract class Admin_root extends root {
 	protected function get_view() {return $this->view;}
 	protected final function set_min_power($val){ $this->values ['min_power']  = $val ;}
 	protected final function get_min_power() { return $this->values ['min_power'];}
-    protected function get_current_page( $name = "page"){
-        $page = Input::get($name) ; 
-        if( $page > 0)
-            return ($page-1)* $this->get_total_jump();  
-        return 0;  
-    }	
-	/* Call this everythime you have succeded to delete item*/
-	protected function delete_db_admin_root($nama_table , $id_table){
-		$user = new SaveId();
-		$user->namatable = $nama_table;
-		$user->idtable = $id_table;
-		return $user;
-		//$user->save();
-
-	}
 	/**
 	 *	This class should be used when you want id to your table
 	 *	return integer id from selected table
@@ -63,16 +48,41 @@ abstract class Admin_root extends root {
 		}
 		return $id;
 	}
-	
-	//! return object , you should do $obj->save inside transaction , see Admin_sarung_event on add Section
+	/**
+	 ** 	return object , you should do $obj->save inside transaction , see Admin_sarung_event on add Section
+	***/
 	protected function del_item_from_save_id( $table_name , $id_table){
    		$saveId = new SaveId();
         return $saveId->where('namatable' , '=' , $table_name)->where('idtable' ,'=' , $id_table )->first();
 	}
-	//! return object , you should do $obj->save inside transaction , see Admin_sarung_event on add Section
+	/**
+	 * return object , you should do $obj->save inside transaction , see Admin_sarung_event on add Section
+	**/
 	protected function del_item_from_save_nis($session_name){
    		$saveId = new SaveId();
         return $saveId->where('namatable' , '=' , $table_name)->where('idtable' ,'=' , $id_table )->first();
 	}
+	/**
+	 *	Call this everythime you have succeded to delete item
+	 *	return obj
+	*/
+	protected function delete_db_admin_root($nama_table , $id_table){
+		$user = new SaveId();
+		$user->namatable = $nama_table;
+		$user->idtable = $id_table;
+		return $user;
+		//$user->save();
+
+	}
+	/**
+	 *	debreced
+	 *	i will remove this
+	*/
+    protected function get_current_page( $name = "page"){
+        $page = Input::get($name) ; 
+        if( $page > 0)
+            return ($page-1)* $this->get_total_jump();  
+        return 0;  
+    }
 
 }

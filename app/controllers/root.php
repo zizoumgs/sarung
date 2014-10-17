@@ -75,12 +75,14 @@ abstract class root extends Controller {
 			<script type="text/javascript" src="%1$s" ></script>
             <script type="text/javascript" src="%2$s" ></script>
             <script type="text/javascript" src="%3$s" ></script>
-            %4$s
-			%5$s
+			<script type="text/javascript" src="%4$s" ></script>
+            %5$s
+			%6$s
 			' ,
 			URL::to('/').'/asset/js/jquery-1.11.min.js'		,
 			URL::to('/').'/asset/js/jquery-ui.js'			,
 			URL::to('/').'/asset/bootstrap/js/bootstrap.js' ,
+			URL::to('/').'/asset/js/sarung.js' 	,
 			$this->js ,
 			$this->get_additional_js()
 			);

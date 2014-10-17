@@ -162,4 +162,10 @@ function helper_is_array_empty($array){
 	// array_filter() function's default behavior will remove all values from array which are equal to null, 0, '' or false
 	return array_filter( $array );
 }
-
+/*
+function helper_get_pagenation_link( $pagenation , $array = array() ){
+	if( count( $array) > 0  )
+		return $pagenation->appends( $array )->links();
+    return $pagenation->links ( );
+}
+*/

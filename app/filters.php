@@ -88,3 +88,14 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+/**
+-----------------------------------------------------------------------
+Handling 404 Errors
+http://laravel.com/docs/4.2/errors
+-----------------------------------------------------------------------
+*/
+App::missing(function($exception)
+{
+    return Response::view('missing', array(), 404);
+});
+

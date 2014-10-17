@@ -186,6 +186,15 @@ function get_group_for_hor_form($label , $input){
 	return $result;
 }
 /**
+ *  function usualy used for filtering result
+ *  return only input html
+*/
+function get_form_group($input){
+	return sprintf('<div class="form-group ">
+		   %1$s
+   </div>' , $input );
+}
+/**
  *	add fake get
  *	remember this is global variabel
 */

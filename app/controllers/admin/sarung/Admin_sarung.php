@@ -208,7 +208,7 @@ class Admin_sarung extends Admin_sarung_side_root{
                 <div class="collapse navbar-collapse">
 	                <ul class="nav navbar-nav navbar-right">
                         <li class="active"><a href="#">Home</a></li>
-                        <li><a href="%4$s" rel="nofollow" target="_blank">Visit Site</a></li>
+                        <li><a href="%4$s" rel="nofollow">Visit Site</a></li>
                         <li><a href="#" rel="nofollow">Back up Database</a></li>
                         <li><a href="#" rel="nofollow">%2$s | %3$s</a></li>
 		                <li><a href="%1$s" rel="nofollow"><span class="glyphicon glyphicon-log-in"> </span> Log out</a></li>
@@ -219,7 +219,7 @@ class Admin_sarung extends Admin_sarung_side_root{
 		$this->base_url()."/logout" ,
 		$this->get_user_power() ,
 		$this->get_user_name_group(),
-		$this->get_url_admin_sarung()
+		url("/")
 		);
 		return $hasil;
     }

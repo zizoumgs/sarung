@@ -40,19 +40,17 @@ $user->save();
 
 //Route::get('home', 'HomeController');
 //Route::controller('home', 'HomeController');
-Route::get('logout', function()
-{
-    Auth::logout();
-    return Redirect::to('login');
-});
+//! default
 
+//! login
+/*
 Route::post('login', 'login@index');
 Route::get('login', 'login@index');
-
-Route::get('admin_uang'     , 'Admin_uang@index');
-Route::get('admin_uang/outcome'     , 'Admin_outcome@index');
+*/
 //! uang
 Route::controller('uang'      , 'uang');
+Route::get('admin_uang'     , 'Admin_uang@index');
+Route::get('admin_uang/outcome'     , 'Admin_outcome@index');
 
 //! admin_uang
 //Route::controller('admin_uang/income_cud'      , 'Admin_uang_controller');
@@ -82,6 +80,7 @@ Route::controller('sarung_admin/user'                   , 'Admin_sarung_user_cud
 Route::controller('sarung_admin/santri'                 , 'Admin_sarung_santri_cud');
 Route::controller('sarung_admin/class'                  , 'Admin_sarung_class');
 Route::controller('sarung_admin/ujis'                   , 'Admin_sarung_ujis');
+//! i will remove this
 // for uploading
 Route::any('/upload_santri',
 				array('uses'=>'Admin_sarung_user_cud@set_upload','as' => 'set_upload')
@@ -101,6 +100,7 @@ Route::controller('update'                 , 'first_update');
 //Route::controller('/'                 , 'sarung_controller');
 Route::controller('sarung_admin'      , 'Sarung_admin_controller');
 
+Route::controller('/'     , 'login');
 
 /* for uploading*/
 //Route::put('eventupload', array('as' => 'admin.upload', 'uses' => 'App\Controllers\Admin\ImageController@postUpload'));

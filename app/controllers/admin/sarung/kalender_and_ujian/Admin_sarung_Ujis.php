@@ -45,44 +45,6 @@ class Admin_sarung_ujis_support extends Admin_sarung_support{
 					   </div>' , $input );
 	}
 	/**
-	 *	for kelas name
-	*/
-	protected function set_kelas_select_name($val){
-		$this->input ['filter_sessi_'] = $val;
-	}
-	protected function get_kelas_select_name(){
-		return $this->input ['filter_sessi_'];
-	}
-	
-	/**
-	 *	for filter name
-	*/
-	protected function set_name_filter_name($val){
-		$this->input ['filter_session'] = $val;
-	}
-	protected function get_name_filter_name(){
-		return $this->input ['filter_session'];
-	}
-	/**
-	 *	for pelajaran name
-	*/
-	protected function set_pelajaran_select_name($val){
-		$this->input ['filter_pelajaran'] = $val;
-	}
-	protected function get_pelajaran_select_name(){
-		return $this->input ['filter_pelajaran'];
-	}
-	/**
-	 *	for event name
-	*/
-	protected function set_event_select_name($val){
-		$this->input ['filter_event'] = $val;
-	}
-	protected function get_event_select_name(){
-		return $this->input ['filter_event'];
-	}
-	
-	/**
 	 *	form group for horizontal form
 	 *	return html 
 	**/
@@ -107,72 +69,11 @@ class Admin_sarung_ujis_support extends Admin_sarung_support{
 		return $modified_array;
 	}	
 
+
+
 }
-
 /**
- *	this class only help add kelas class
-*/
-/*
-class Admin_sarung_ujis_helper{
-	private $input = array();
-	//! session in inser form
-	public function set_ins_name_session($val){ $this->input ['insert_session'] = $val ;}
-	public function get_ins_name_session(){return $this->input ['insert_session'] ;}
-	
-	public function set_ins_name_id($val) { $this->input ['insert_id'] = $val ; }
-	public function get_ins_name_id() { return $this->input ['insert_id']; }
-	
-	public function set_ins_name_first($val) { $this->input ['insert_first'] = $val ; }
-	public function get_ins_name_first() { return $this->input ['insert_first']; }
-	
-	public function set_ins_name_second($val) { $this->input ['insert_second'] = $val ; }
-	public function get_ins_name_second() { return $this->input ['insert_second']; }
-	
-	public function set_ins_name_kelas($val) { $this->input ['insert_kelas'] = $val ; }
-	public function get_ins_name_kelas() { return $this->input ['insert_kelas']; }
-	
-	public function set_ins_name_catatan($val) { $this->input ['insert_catatan'] = $val ; }
-	public function get_ins_name_catatan() { return $this->input ['insert_catatan']; }
-
-	public function set_ins_name_form($val) { $this->input ['insert_form'] = $val ; }
-	public function get_ins_name_form() { return $this->input ['insert_form']; }
-
-	public function set_ins_name_submit($val) { $this->input ['insert_submit'] = $val ; }
-	public function get_ins_name_submit() { return $this->input ['insert_submit']; }
-	
-	public function set_del_name_form($val) { $this->input ['del_form'] = $val ; }
-	public function get_del_name_form() { return $this->input ['del_form']; }
-
-	public function set_del_name_id($val) { $this->input ['del_id_f_'] = $val ; }
-	public function get_del_name_id() { return $this->input ['del_id_f_']; }
-	
-	public function set_del_name_idkelas($val) { $this->input ['del_name_f_'] = $val ; }
-	public function get_del_name_idkelas() { return $this->input ['del_name_f_']; }
-	
-	public function set_del_name_idsantri($val) { $this->input ['del_idsantri_f_'] = $val ; }
-	public function get_del_name_idsantri() { return $this->input ['del_idsantri_f_']; }
-
-	public function js_func_name_to_del(){
-		return  " delete_kelas ";
-	}
-	public function __construct(){
-		$this->set_ins_name_first('first_name');
-		$this->set_ins_name_second('second');
-		$this->set_ins_name_id('id_santri_ins');
-		$this->set_ins_name_kelas('kelas_ins');
-		$this->set_ins_name_session('session_ins');
-		$this->set_ins_name_catatan('catatan_ins');
-		$this->set_ins_name_form('insert_form');
-		$this->set_ins_name_submit('submit');
-		$this->set_del_name_form('dele_form_add');
-		$this->set_del_name_idkelas('dele_kelas_name');
-		$this->set_del_name_idsantri('dele_santri_name');
-		$this->set_del_name_id('id');
-	}
-}
-*/
-/**
- **	this class will be used for ajax
+ **	this class will be used for ajax	: it supports only view
  **	and focus on updating
 ***/
 class Admin_sarung_ujis_ajax_helper{
@@ -609,7 +510,7 @@ class Admin_sarung_ujis_ajax_helper{
 	}
 }
 /**
- *	this is class to help main function delete job easy
+ *	this is class to help main class to delete easy : just support view
 */
 class Admin_sarung_ujis_helper_delete{
 	protected $input ;
@@ -774,26 +675,65 @@ class Admin_sarung_ujis_helper_delete{
 	}
 }
 /**
- *	main class function for this file
- *	this class focus on view , edit and delete
-**/
-class Admin_sarung_ujis_view extends Admin_sarung_ujis_support{
-	private $helper , $helper_ajax , $helper_delete;
-	public function __construct(){		parent::__construct();	}
+ *	this class will be filter result table , and it will be used by view class only (not add)
+*/
+class Admin_sarung_ujis_helper_filter{
+	private $input ;
 	/**
-	 *	url to ajax request
-	 **/
-	private function set_url_this_ajax($val){
-		$this->input ['ajax_url'] = $val;
+	 *	for session name
+	*/
+	public function set_session_select_name($val){
+		$this->input ['filter_session_'] = $val;
 	}
-	private function get_url_this_ajax(){
-		return $this->input['ajax_url'];
+	public function get_session_select_name(){
+		return $this->input ['filter_session_'];
 	}
+	/**
+	 *	for kelas name
+	*/
+	public function set_kelas_select_name($val){
+		$this->input ['filter_sessi_'] = $val;
+	}
+	public function get_kelas_select_name(){
+		return $this->input ['filter_sessi_'];
+	}
+	/**
+	 *	for filter name
+	*/
+	public function set_name_filter_name($val){
+		$this->input ['filter_session'] = $val;
+	}
+	public function get_name_filter_name(){
+		return $this->input ['filter_session'];
+	}
+	/**
+	 *	for pelajaran name
+	*/
+	public function set_pelajaran_select_name($val){
+		$this->input ['filter_pelajaran'] = $val;
+	}
+	public function get_pelajaran_select_name(){
+		return $this->input ['filter_pelajaran'];
+	}
+	/**
+	 *	for event name
+	*/
+	public function set_event_select_name($val){
+		$this->input ['filter_event'] = $val;
+	}
+	public function get_event_select_name(){
+		return $this->input ['filter_event'];
+	}
+	private function get_value($name){
+		return Input::get($name);
+	}
+	public function set_url($val){		$this->input ['url_this_'] = $val;	}
+	public function get_url(){			return $this->input ['url_this_'] ;	}
 	/**
 	 *	filter result by session`s name
 	 *	return additonal string
 	 **/
-	private function set_get_filter_by_session( & $where  , & $where_to_filter ,  $where_query ){
+	public function set_get_filter_by_session( & $where  , & $where_to_filter ,  $where_query ){
 		$selected_session = $this->get_value( $this->get_session_select_name() );
 		if($selected_session != "" && $selected_session !="All" ){
 			$where [$this->get_session_select_name()] = $selected_session ;
@@ -801,12 +741,12 @@ class Admin_sarung_ujis_view extends Admin_sarung_ujis_support{
 			$where_query .= " and ses.nama = ? ";
 		}
 		return $where_query;
-	}
+	}	
 	/**
 	 *	filter result by pelajaran`s name
 	 *	return additonal string
 	 **/
-	private function set_get_filter_by_pelajaran( & $where ,  & $where_to_filter ,  $where_query  ){
+	public function set_get_filter_by_pelajaran( & $where ,  & $where_to_filter ,  $where_query  ){
 		$selected_session = $this->get_value( $this->get_pelajaran_select_name() );
 		if($selected_session != "" && $selected_session !="All"){
 			$where [$this->get_pelajaran_select_name()] = $selected_session ;
@@ -819,7 +759,7 @@ class Admin_sarung_ujis_view extends Admin_sarung_ujis_support{
 	 *	filter result by kelas`s name
 	 *	return additonal string
 	 **/
-	private function set_get_filter_by_kelas( & $where , & $where_to_filter , $where_query  ){
+	public function set_get_filter_by_kelas( & $where , & $where_to_filter , $where_query  ){
 		$selected_session = $this->get_value( $this->get_kelas_select_name() );
 		if($selected_session != "" && $selected_session !="All"){			
 			$where [$this->get_kelas_select_name()] = $selected_session ;
@@ -832,7 +772,7 @@ class Admin_sarung_ujis_view extends Admin_sarung_ujis_support{
 	 *	filter result by event`s name
 	 *	return additonal string
 	 **/
-	private function set_get_filter_by_event( & $where , & $where_to_filter ,  $where_query   ){
+	public function set_get_filter_by_event( & $where , & $where_to_filter ,  $where_query   ){
 		$selected_session = $this->get_value( $this->get_event_select_name() );
 		if($selected_session != "" && $selected_session !="All"){
 			$where [$this->get_event_select_name()] = $selected_session ;
@@ -841,11 +781,12 @@ class Admin_sarung_ujis_view extends Admin_sarung_ujis_support{
 		}
 		return $where_query;				
 	}	
+
 	/**
 	 *	filter result by name`s name
 	 *	return obj 
 	 **/
-	private function set_get_filter_by_name( & $where , & $where_to_filter ,  $where_query ){
+	public  function set_get_filter_by_name( & $where , & $where_to_filter ,  $where_query ){
 		$selected = $this->get_value( $this->get_name_filter_name() );
 		if($selected != "" ){
 			$where [ $this->get_name_filter_name()] = $selected;
@@ -854,6 +795,83 @@ class Admin_sarung_ujis_view extends Admin_sarung_ujis_support{
 			$where_query .= " and (first_name LIKE ? or second_name LIKE ?) ";
 		}
 		return $where_query;
+	}
+	/**
+	 *	filter result by name`s name
+	 *	return obj 
+	 **/
+	public function set_default_value(){
+		$this->set_session_select_name('select_filter_name_session');
+		$this->set_name_filter_name('select_filter');
+		$this->set_kelas_select_name('kelas_filter');
+		$this->set_pelajaran_select_name('pelajaran_filter');
+		$this->set_event_select_name('event_filter');		
+	}
+	/**
+	 *	form to filter
+	 *	return form html
+	**/
+	public function get_form_filter_for_view($params_form =array(), $addition_hidden_value = array() ){
+		//! prepare
+		$params_default = array(
+			'url'		=> 	$this->get_url()									,
+			'method'	=>	'get'												,
+			'class' 	=>	'form-inline form-filter navbar-form navbar-left'	,
+			'role' 		=> 'form'
+		);
+		foreach($params_form as $key => $val ){
+			$params_default [$key] = $val ;
+		}
+		$new_params_form = $params_default;        
+		//@ kelas
+		$tmp = array( 'class' => 'selectpicker col-md-12' , 'name' => $this->get_kelas_select_name() ,'selected' => $this->get_value($this->get_kelas_select_name()));
+        $kelas = FUNC\get_kelas_select( $tmp , array("All") );
+		$kelas = FUNC\get_form_group( $kelas );
+		//@ pelajaran
+		$tmp = array( 'class' => 'selectpicker col-md-12' ,'name'=>$this->get_pelajaran_select_name(),'selected' => $this->get_value($this->get_pelajaran_select_name()));
+        $pelajaran = FUNC\get_pelajaran_select( $tmp , array("All"));
+		$pelajaran = FUNC\get_form_group( $pelajaran );
+		//@ session
+		$tmp = array( 'class' => 'selectpicker col-md-12' ,'selected' => $this->get_value($this->get_session_select_name()));
+        $sessions = FUNC\get_session_select( $tmp , array("All") );
+		$sessions = FUNC\get_form_group( $sessions );
+		//@ event
+		$tmp = array( 'class' => 'selectpicker col-md-12' , 'name' => $this->get_event_select_name()  ,'selected' => $this->get_value($this->get_event_select_name()));		
+        $event = FUNC\get_event_ujian_select( $tmp , array("All") );
+		$event = FUNC\get_form_group( $event );
+		
+		//@
+		$tmp  = Form::text( $this->get_name_filter_name()  , '', array( 'class' => 'form-control input-sm' ,
+                                                                       'placeholder' => 'Name' ,
+                                                                       'Value' =>  $this->get_value($this->get_name_filter_name() ) ));
+		$name_filter = FUNC\get_form_group( $tmp );		
+		//@ form 
+   		$hasil  = Form::open( $new_params_form) ;
+            $hasil .= $name_filter . $sessions.$kelas.$pelajaran.$event;
+    		$hasil .= '<div class="form-group">';
+        		$hasil .= Form::submit('Filter' , array( 'class' => 'btn btn-primary btn-sm' ) );
+    		$hasil .= '</div>';
+        $hasil .= Form::close();
+		return $hasil;
+	}
+
+}
+/**
+ *	main class function for this file
+ *	this class focus on view , edit and delete
+**/
+class Admin_sarung_ujis_view extends Admin_sarung_ujis_support{
+	private $helper_ajax , $helper_delete;
+	private $filter ;
+	public function __construct(){		parent::__construct();	}
+	/**
+	 *	url to ajax request
+	 **/
+	private function set_url_this_ajax($val){
+		$this->input ['ajax_url'] = $val;
+	}
+	private function get_url_this_ajax(){
+		return $this->input['ajax_url'];
 	}
 	/**
 	 *	get button for delete
@@ -975,21 +993,25 @@ class Admin_sarung_ujis_view extends Admin_sarung_ujis_support{
 		$this->set_js($js);
 	}
 	/**
+	 *	init class filter for filtering result
+	*/
+	private function init_filter(){
+		$this->filter = new Admin_sarung_ujis_helper_filter();
+		$this->filter->set_default_value();
+		$this->filter->set_url( $this->get_url_this_view());
+	}
+	/**
 	 *	function that should be set for this class
 	*/
-	protected function set_default_values_for_view(){		
-		$this->set_session_select_name('select_filter_name_session');
-		$this->set_name_filter_name('select_filter');
-		$this->set_kelas_select_name('kelas_filter');
-		$this->set_pelajaran_select_name('pelajaran_filter');
-		$this->set_event_select_name('event_filter');
-
-		$this->set_url_this_ajax($this->get_url_admin_sarung()."/ujis/change");		
-//		$this->helper = new Admin_sarung_class_helper();
+	protected function set_default_values_for_view(){
+		$this->set_url_this_ajax($this->get_url_admin_sarung()."/ujis/change");
+		
 		//@ for updating
 		$this->init_dialog_edit();
 		//@ for deleting
 		$this->init_dialog_delete();
+		//@ filter
+		$this->init_filter();
 	}
 	/**
 	 *	function to handle ajax request	,	will change ujian
@@ -1011,51 +1033,6 @@ class Admin_sarung_ujis_view extends Admin_sarung_ujis_support{
 		$this->set_default_values_for_view();
 	}
 	
-	/**
-	 *	form to filter
-	 *	return form html
-	**/
-	private function get_form_filter_for_view($params_form =array(), $addition_hidden_value = array() ){
-		//! prepare
-		$params_default = array(
-			'url'		=> 	$this->get_url_this_add()							,
-			'method'	=>	'get'												,
-			'class' 	=>	'form-inline form-filter navbar-form navbar-left'	,
-			'role' 		=> 'form'
-		);
-		$new_params_form = $this->array_combine( $params_default , $params_form);
-        $this->use_select();
-		//@ kelas
-		$tmp = array( 'class' => 'selectpicker col-md-12' , 'name' => $this->get_kelas_select_name() ,'selected' => $this->get_value($this->get_kelas_select_name()));
-        $kelas = $this->get_kelas_select( $tmp , array("All") );
-		$kelas = $this->get_form_group( $kelas );
-		//@ pelajaran
-		$tmp = array( 'class' => 'selectpicker col-md-12' ,'name'=>$this->get_pelajaran_select_name(),'selected' => $this->get_value($this->get_pelajaran_select_name()));
-        $pelajaran = $this->get_pelajaran_select( $tmp , array("All"));
-		$pelajaran = $this->get_form_group( $pelajaran );
-		//@ session
-		$tmp = array( 'class' => 'selectpicker col-md-12' ,'selected' => $this->get_value($this->get_session_select_name()));
-        $sessions = $this->get_session_select( $tmp , array("All") );
-		$sessions = $this->get_form_group( $sessions );
-		//@ event
-		$tmp = array( 'class' => 'selectpicker col-md-12' , 'name' => $this->get_event_select_name()  ,'selected' => $this->get_value($this->get_event_select_name()));		
-        $event = $this->get_event_ujian_select( $tmp , array("All") );
-		$event = $this->get_form_group( $event );
-		
-		//@
-		$tmp  = Form::text( $this->get_name_filter_name()  , '', array( 'class' => 'form-control input-sm' ,
-                                                                       'placeholder' => 'Name' ,
-                                                                       'Value' =>  $this->get_value($this->get_name_filter_name() ) ));
-		$name_filter = $this->get_form_group( $tmp );		
-		//@ form 
-   		$hasil  = Form::open( $new_params_form) ;
-            $hasil .= $name_filter . $sessions.$kelas.$pelajaran.$event;
-    		$hasil .= '<div class="form-group">';
-        		$hasil .= Form::submit('Filter' , array( 'class' => 'btn btn-primary btn-sm' ) );
-    		$hasil .= '</div>';
-        $hasil .= Form::close();
-		return $hasil;
-	}
 	/**	remember this is global variabel */
 	private function add_fake_get($key , $val){		FUNC\add_fake_get($key , $val);	}
 	/**
@@ -1134,16 +1111,17 @@ class Admin_sarung_ujis_view extends Admin_sarung_ujis_support{
 		parent::getIndex();
 		//!
 		$this->set_default_values_for_view();
-		//!
-        $form = $this->get_form_filter_for_view(   );
+		//! init form for filter
+		$this->use_select();
+        $form = $this->filter->get_form_filter_for_view(   );
         $wheres = $where_filter = array();
 		$where_query = "" ;
 		//@ filter by session
-		$where_query = $this->set_get_filter_by_session		($wheres , $where_filter	, $where_query );
-		$where_query = $this->set_get_filter_by_pelajaran	($wheres , $where_filter	, $where_query 	);
-		$where_query = $this->set_get_filter_by_kelas		($wheres , $where_filter	, $where_query 	);
-		$where_query = $this->set_get_filter_by_event		($wheres , $where_filter	, $where_query 	);
-		$where_query = $this->set_get_filter_by_name		($wheres , $where_filter	, $where_query 	);
+		$where_query = $this->filter->set_get_filter_by_session		($wheres , $where_filter	, $where_query );
+		$where_query = $this->filter->set_get_filter_by_pelajaran	($wheres , $where_filter	, $where_query 	);
+		$where_query = $this->filter->set_get_filter_by_kelas		($wheres , $where_filter	, $where_query 	);
+		$where_query = $this->filter->set_get_filter_by_event		($wheres , $where_filter	, $where_query 	);
+		$where_query = $this->filter->set_get_filter_by_name		($wheres , $where_filter	, $where_query 	);
         //@ model without limit
         $events = $this->get_model_obj();
         $events = $events->get_raw_query( $where_filter , $where_query);

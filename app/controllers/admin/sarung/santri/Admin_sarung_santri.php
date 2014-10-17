@@ -1,7 +1,8 @@
 <?php
 /**
- *     this class is for santri
- *     add , delete edit , No table view is in here
+ *		this class should be a parent for santri
+ *		since santri must use user/admind table to show data but in other place it use santri table to insert, edit or delete
+ *     	add , delete edit , No table view is in here
 */
 abstract class Admin_support_santri extends Admin_sarung_support_user{
     public function __construct(){
@@ -49,7 +50,6 @@ abstract class Admin_support_santri extends Admin_sarung_support_user{
     protected function set_id_filter_name($val){ $this->input ['id_filter'] = $val ; }
     protected function get_id_filter_name(){ return $this->input ['id_filter'] ;}
     protected function get_id_filter_selected(){ return $this->get_value( $this->get_id_filter_name() ); }
-
     /**
      * this will filter view by id
      * Return obj
@@ -79,7 +79,27 @@ abstract class Admin_support_santri extends Admin_sarung_support_user{
         return $model_obj->getstatussantri(1);
     }
 
+	/**
+	 *	@override , will use user/admind table again
+	 *	 onsucceded delete
+	 *	 return @ index 
+	*/
+	protected function postEventdelsucceded($parameter = array()){
+		$this->set_model_obj( new User_Model());		
+		$messages = array(" Sukses Menghapus ");
+		$message = sprintf('<span class="label label-info">%1$s</span>' , $this->make_message( $messages ));
+        return $this->getIndex();
+	}
+	protected function postEventaddsucceded( $parameter = array()){
+		// @param  string  $path
+		//$this->set_model_obj( new User_Model());
+		$messages = array(" Sukses Menambah");
+		$message = sprintf('<span class="label label-info">%1$s</span>' ,$this->make_message( $messages ));
+		return $this->getEventadd($message);            		
+	}
+
 }
+
 
 /**
  *  class for addition 
@@ -112,7 +132,7 @@ class Admin_sarung_santri_add extends Admin_support_santri {
         $this->set_url_add_ajax( $this->get_url_admin_sarung()."/santri/eventaddform" ); 
         $this->set_url_this_view($this->get_url_admin_sarung()."/santri");
         //!
-        $this->set_model_obj(new User_Model() );
+        
     }    
     /**
      *  This is must be function you should make if you make subclass from this class 
@@ -145,9 +165,11 @@ class Admin_sarung_santri_add extends Admin_support_santri {
     }
 	/**
 	*   this function for add
+	*   will use User_Model
 	**/
     public function getEventadd($messages=""){
 		parent::getIndex();
+		$this->set_model_obj(new User_Model() );
         $this->set_id_filter_name("id_fil");
         //!
         $text_on_top = '<span class="glyphicon glyphicon-user"></span> User Table <small>You are in see user which is not yet inserted to santri</small>';        
@@ -156,11 +178,11 @@ class Admin_sarung_santri_add extends Admin_support_santri {
         //!
         $form = $this->get_form_filter( $this->get_url_this_add()  );
         $wheres = array();
-        $events  = $this->set_filter_by_user( $this->get_model_obj() );        
-        $events = $this->set_filter_by_status( $events , $wheres);
-        $events = $this->set_filter_for_add( $events);
-        $events = $this->set_filter_by_id( $events , $wheres);
-        $events = $this->set_filter_by_name( $events , $wheres);        
+        $events  = $this->set_filter_by_user	( $this->get_model_obj() 	);        
+        $events = $this->set_filter_by_status	( $events , $wheres			);
+        $events = $this->set_filter_for_add		( $events					);
+        $events = $this->set_filter_by_id		( $events , $wheres);
+        $events = $this->set_filter_by_name		( $events , $wheres);        
         /*Setting order*/
         $events = $this->get_obj_of_ordering($events , $wheres);
         //$form = $this->get_form_filter( $this->get_url_this_view()  );        
@@ -173,7 +195,8 @@ class Admin_sarung_santri_add extends Admin_support_santri {
         //!
 		$hasil = sprintf(
 			'
-			<h1 class="title">%1$s</h1>			
+			<h1 class="title">%1$s</h1>
+			%5$s
             <div class="table_div">
                 %2$s
                 %3$s
@@ -181,7 +204,8 @@ class Admin_sarung_santri_add extends Admin_support_santri {
 			 	$this->get_text_on_top()            ,
    				$information                        ,
                 $body                              ,
-			 	$this->get_pagination_link($events  , $wheres)
+			 	$this->get_pagination_link($events  , $wheres) ,
+				$this->get_error_message()
 			);        
         $this->set_content(  $hasil );
         
@@ -651,7 +675,8 @@ class Admin_sarung_santri_edit extends Admin_sarung_santri_add {
         $santri = new Santri_Model();
         $santri = $santri->find($data ['id']);
         $old_id_session =   $santri->idsession;
-        $old_id_nis     =   $santri->nis;  
+        $old_id_nis     =   $santri->nis;
+		$nis			=	$santri->nis;
         //! hardest think , change nis and session
         if($old_id_session != $there->id){
             //! insert old nis

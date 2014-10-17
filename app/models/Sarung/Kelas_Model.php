@@ -66,7 +66,12 @@ class Kelas_Model extends Sarung_Model_Root{
         return $query->where( 'nama', '=', $namakelas)->first();
     }
     public function scopeGetid($query , $namakelas){
-        return $query->where( 'nama', '=', $namakelas);
+    	$obj = $query->where( 'nama', '=', $namakelas);
+		return $this->check_and_get_id( $obj);
+    }
+    public function scopeGet_id_by_name($query , $namakelas){
+    	$obj = $query->where( 'nama', '=', $namakelas);
+		return $this->check_and_get_id( $obj);
     }
 
 }
@@ -124,6 +129,14 @@ class Class_Model extends Sarung_Model_Root{
 		$kelas = DB::connection($this->get_db())->select( DB::raw( $sql ) 	 , array( $idkelas , $idsantri)  );
 		return (object)$kelas;
     }
+    /**
+    ** this function should be called everytime you wanna delete  item from kelasisi`s table
+    ** return 
+    **/
+    public function scopeGetobjbysessionnkelassantri( $query, $idkelas , $idsession , $idsantri){
+    	return $query->where('idsession' ,'=' , $idsession)->where('idkelas','=' , $idkelas )->where('idsantri','=',$idsantri);
+    }
+
 
 }
 class Kelas_Detail_Model extends Sarung_Model_Root{

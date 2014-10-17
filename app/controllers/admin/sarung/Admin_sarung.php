@@ -1,5 +1,12 @@
 <?php
 abstract class  Admin_sarung_urls extends Admin_root {
+	/**
+	 *	return none
+	 *	Will call @set_default_value()
+	*/
+    public function __construct(){
+        parent::__construct();
+	}
 	protected function get_url_admin_event     ()   { 		return sprintf('%1$s/sarung_admin/event' , $this->base_url());}
 	protected function get_url_admin_session   ()	{ 		return sprintf('%1$s/sarung_admin/session' , $this->base_url());}
 	protected function get_url_admin_kalender  () 	{ 		return sprintf('%1$s/sarung_admin/kalender' , $this->base_url());}
@@ -17,92 +24,21 @@ abstract class  Admin_sarung_urls extends Admin_root {
 	protected function get_url_admin_user		()	{ 		return sprintf('%1$s/sarung_admin/user' 	, $this->base_url());}
 	protected function get_url_admin_santri		()	{ 		return sprintf('%1$s/sarung_admin/santri	' , $this->base_url());}
 	protected function get_url_admin_class		()	{ 		return sprintf('%1$s/sarung_admin/class		' , $this->base_url());}
+	protected function get_url_admin_ujis		()	{ 		return sprintf('%1$s/sarung_admin/ujis		' , $this->base_url());}
 	protected function get_url_admin_sarung		()   { 		return helper_get_url_admin_sarung();}
 	
 }
-class Admin_sarung extends Admin_sarung_urls{
-	protected function set_id($val) {$this->values['id'] = $val;}
-	protected function get_id(){ return $this->values['id'];}
-	/*will be usen upon deleting */
-	protected function set_table_name($val){$this->values ['table_name'] = $val ;}
-	protected function get_table_name(){ return $this->values ['table_name'] ;}
-	//! message make , as you can see that message is array
-	public function make_message($messages){
-		$message_outputs  = "";
-		foreach( $messages as $message):	
-			$message_outputs .= $message ;
-		endforeach;
-		return $message;
-	}
+/**
+ *	class for side
+*/
+abstract class  Admin_sarung_side_root extends Admin_sarung_urls{
 	/**
 	 *	return none
 	 *	Will call @set_default_value()
 	*/
     public function __construct(){
         parent::__construct();
-		$this->set_default_value();
-    }
-	/**
-	 *	Usually it is used inside table view html
-	 *	return add and edit html link
-	*/
-    protected function get_edit_delete_row($additional = ""){
-        $edi = sprintf('<a href="%1$s/%2$s" class="btn btn-primary btn-xs" >Edit</a>'    , $this->get_url_this_edit() , $additional );
-        $del = sprintf('<a href="%1$s/%2$s" class="btn btn-danger btn-xs">Delete</a>'      , $this->get_url_this_dele() , $additional );
-        return $edi."  ".$del;
-    }
-	/**
-	 *	Setting all needed values
-	 *	return none
-	*/
-    protected function set_default_value(){
-        $this->set_view('sarung/admin/index');
-        $this->set_min_power( 100 );
-		$this->set_title('Admin Sarung Fatihul Ulum');
-		$this->set_body_attribute( " class='admin admin_sarung_body' " );
-    }
-    /*All of */
-    public function getIndex(){
-		$this->set_default_value();
-		$content = "<h1>Assalamu alaikum Admin</h1>";
-		$this->set_content($content);        
-        return $this->index();
-    }
-	/**
-	 *	return html div on top side of admin panel
-	 *	
-	*/
-	protected function get_header(){
-		$hasil = sprintf('
-		<nav class="navbar navbar-inverse top-header" role="navigation">
-            <div class="container-fluid">
-	            <div class="navbar-header">
-	                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-	                    <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">Sarung | <small>Admin Sarung</small> </a>
-                </div>
-                <div class="collapse navbar-collapse">
-	                <ul class="nav navbar-nav navbar-right">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="%4$s" rel="nofollow" target="_blank">Visit Site</a></li>
-                        <li><a href="#" rel="nofollow">Back up Database</a></li>
-                        <li><a href="#" rel="nofollow">%2$s | %3$s</a></li>
-		                <li><a href="%1$s" rel="nofollow"><span class="glyphicon glyphicon-log-in"> </span> Log out</a></li>
-                    </ul>
-                </div>
-			</div>
-		</nav>',
-		URL::to('/')."/logout" ,
-		$this->get_user_power() ,
-		$this->get_user_name_group(),
-		$this->get_url_admin_sarung()
-		);
-		return $hasil;
-    }
+	}
 	/**
 	 *	return all side html , will be used by all subclass admin sarung
 	*/
@@ -123,7 +59,8 @@ class Admin_sarung extends Admin_sarung_urls{
 			array('Ujian'		,'<span class="glyphicon glyphicon-glass"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_ujian() ) ) , 
 			array('User'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_user() ) ),
 			array('Santri'		,'<span class="glyphicon glyphicon-user"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_santri() ) ),
-			array('Class'		,'<span class="glyphicon glyphicon-inbox"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_class() ) )
+			array('Class'		,'<span class="glyphicon glyphicon-inbox"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_class() ) )	,
+			array('Ujian Santri','<span class="glyphicon glyphicon-pencil"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_ujis() ) )
         );
 		$address = $this->get_side_of_address();
         $list_menu .= sprintf('<li>%1$s</li>', $address) ;
@@ -162,10 +99,130 @@ class Admin_sarung extends Admin_sarung_urls{
 		);
 		return $menu;
 	}
+}
+/**
+ *
+**/
+class Admin_sarung extends Admin_sarung_side_root{
+	protected function set_id($val) {$this->values['id'] = $val;}
+	protected function get_id(){ return $this->values['id'];}
 	/**
+	***	will be used upon deleting
+	***/
+	protected function set_table_name($val){$this->values ['table_name'] = $val ;}
+	protected function get_table_name(){ return $this->values ['table_name'] ;}
+    /*
+    *   set object of database
+    *   this will get table of database
+    */
+    protected function set_model_obj($val){ $this->values ['model_obj_adm_sar'] = $val ;}
+    /**
+	 *	this will get table of database
+	 *   return object
+     **/
+    protected function get_model_obj(){        return $this->values ['model_obj_adm_sar'] ;    }	
+    /**
+     *  return max id for particular table
+    **/
+    protected function get_max_id(){         return $this->get_model_obj()->max('id');    }	
+	/**
+	 *	return value from get or post
+	*/
+	protected function get_value($name){		return Input::get( $name );	}	
+	/**
+	 *	automatic call in contructor after calling set_defaul_value
 	 *	return bool
 	*/
-    protected function check_power_admin(){        return true;    }
+	protected function check_power_admin(){
+		if( $this->get_user_power() < $this->get_min_power()){
+			Auth::logout();
+			return Redirect::to('/login');			
+		}
+	}
+	/**
+	 * message make , as you can see that message is array
+	 * i seldom use this
+	 */ 
+	public function make_message($messages){
+		$message_outputs  = "";
+		foreach( $messages as $message):	
+			$message_outputs .= $message ;
+		endforeach;
+		return $message;
+	}
+	/**
+	 *	Will call @set_default_value() and check_power_admind()
+	 *	return none
+	*/
+    public function __construct(){
+        parent::__construct();
+		$this->set_default_value();
+		$this->beforeFilter(function(){
+			return $this->check_power_admin();
+		});
+    }
+	/**
+	 *	Usually it is used inside table view html
+	 *	return add and edit html link
+	*/
+    protected function get_edit_delete_row($additional = ""){
+        $edi = sprintf('<a href="%1$s/%2$s" class="btn btn-primary btn-xs" >Edit</a>'    , $this->get_url_this_edit() , $additional );
+        $del = sprintf('<a href="%1$s/%2$s" class="btn btn-danger btn-xs">Delete</a>'      , $this->get_url_this_dele() , $additional );
+        return $edi."  ".$del;
+    }
+	/**
+	 *	execute automatically by constructor
+	 *	return none
+	*/
+    protected function set_default_value(){
+        $this->set_view('sarung/admin/index');
+        $this->set_min_power( 100 );
+		$this->set_title('Admin Sarung Fatihul Ulum');
+		$this->set_body_attribute( " class='admin admin_sarung_body' " );
+    }
+    /**
+	 *	return index() 
+	**/
+    public function getIndex(){
+		$content = "<h1>Assalamu alaikum Admin</h1>";
+		$this->set_content($content);        
+        return $this->index();
+    }
+	/**
+	 *	return html div on top side of admin panel
+	 *	
+	*/
+	protected function get_header(){
+		$hasil = sprintf('
+		<nav class="navbar navbar-inverse top-header" role="navigation">
+            <div class="container-fluid">
+	            <div class="navbar-header">
+	                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+	                    <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Sarung | <small>Admin Sarung</small> </a>
+                </div>
+                <div class="collapse navbar-collapse">
+	                <ul class="nav navbar-nav navbar-right">
+                        <li class="active"><a href="#">Home</a></li>
+                        <li><a href="%4$s" rel="nofollow" target="_blank">Visit Site</a></li>
+                        <li><a href="#" rel="nofollow">Back up Database</a></li>
+                        <li><a href="#" rel="nofollow">%2$s | %3$s</a></li>
+		                <li><a href="%1$s" rel="nofollow"><span class="glyphicon glyphicon-log-in"> </span> Log out</a></li>
+                    </ul>
+                </div>
+			</div>
+		</nav>',
+		$this->base_url()."/logout" ,
+		$this->get_user_power() ,
+		$this->get_user_name_group(),
+		$this->get_url_admin_sarung()
+		);
+		return $hasil;
+    }
 	/**
 	 *	return additonal css string
 	*/
@@ -175,7 +232,7 @@ class Admin_sarung extends Admin_sarung_urls{
 		<!-- additional css -->
 		<link href="%1$s" rel="stylesheet" type="text/css"/>
 		',
-		URL::to('/').'/asset/css/admin.css'
+		$this->base_url().'/asset/css/admin.css'
 		);
 	}
 	/**
@@ -204,12 +261,6 @@ class Admin_sarung extends Admin_sarung_urls{
         }
 		return $ori_array;
 	}
-	/**
-	 *	return value inside text
-	*/
-	protected function get_value($name){
-		return Input::get( $name );
-	}
 	/*
 		return form-group class which will be containter for input html
 	*/
@@ -222,21 +273,5 @@ class Admin_sarung extends Admin_sarung_urls{
             </div>
         </div>' , $label , $input);
     }
-    /*
-    *   set object of database
-    *   this will get table of database
-    */
-    protected function set_model_obj($val){ $this->values ['model_obj_adm_sar'] = $val ;}
-    /*
-    *   return object
-    *   this will get table of database
-    */
-    protected function get_model_obj(){        return $this->values ['model_obj_adm_sar'] ;    }	
-    /**
-     *  return max id for particular table
-    **/
-    protected function get_max_id(){
-        return $this->get_model_obj()->max('id');
-    }	
 }
 

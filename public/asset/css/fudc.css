@@ -1,3 +1,6 @@
+/*@import url('reset.css');*/
+@import url('normalize.css');
+
 @font-face {
     font-family: 'BebasNeueRegular';
     src: url('fonts/BebasNeue-webfont.eot');
@@ -20,11 +23,15 @@ body {
 	font-family: serif ,sans-serif !important;
 	color: #555a4a;
 	font-size:1.7em;
-	background:#EFE6D7;
-	/*background:#FAFAFA;*/
+	
+	/*
+		background:#EFE6D7;
+		background:#FAFAFA;
+	*/
 }
 .navbar-default{
 	background:#8F1F29	!important;
+	border:none;
 	border-bottom: 1px solid #78BFE5;
 	color:white;
 }
@@ -38,7 +45,26 @@ h1,h2,h3,h4,h5,h6,#main , div{
 #main {
 	margin-top:15px;
 }
+.green{
+	color:#00FF00;
+}
+.red{
+	color:red;
+}
+.gold{
+	color:#FFD700;
+}
 
+.blue{
+	color: #87cefa;
+}
+
+.white{
+	color:white;
+}
+.very_small{
+	font-size:0.7em;
+}
 /*
 label  , .item{
 	font-size:0.6em;
@@ -77,6 +103,12 @@ table{
 	margin:5px 0px;
 }
 */
+.login-area{
+	background:white;
+	border-radius:10px;
+	padding:10px;
+	 box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
 /*Login*/
 body.login_body {
 	padding-top: 40px;

@@ -20,7 +20,8 @@ class Santri_Model extends Sarung_Model_Root{
     	return $this->hasMany('Class_Model' , 'idsantri');
     }
 	/**
-	*/
+	 *
+	**/
 	public static function get_santri_raw(){
 			return DB::connection('fusarung')->table('santri')        
             ->leftJoin('session'		, 	'santri.idsession'	, 	'=',	'session.id')
@@ -67,7 +68,6 @@ class Santri_Model extends Sarung_Model_Root{
 		$max = $this->where('idsession' , '=' , $there->id )->max('nis');
 		return $max + 1 ;
     }    
-
 }
 class Save_Nis_Model extends Sarung_Model_Root{
     //! we are no need to use table created_at and update_at for this table

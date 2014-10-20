@@ -247,7 +247,15 @@ abstract class root extends Controller {
 	//! about auth
 	protected function get_user_id(){ return Auth::id() ; }
 	protected function get_user_name() { return Auth::user()->email;}
-	protected function get_user_power() {return Auth::user()->admindgroup->power;}
+	/**
+	 *	take user power
+	 *	return user power or 0;
+	*/
+	protected function get_user_power() {
+		if(Auth::user())
+			return	Auth::user()->admindgroup->power;
+		return 0;
+	}
 	protected function get_user_name_group() {return Auth::user()->admindgroup->nama;}
 	/**
 	 *	get url_admind uang

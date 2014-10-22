@@ -133,11 +133,7 @@ class first_update extends Controller{
     	//! add column to santri col , you have to update it after moving data to admind`s table
     	$santri = 'santri';
     	$this->add_column($santri , 'idadmind'  , ' int(11) NOT NULL DEFAULT 1 ,		
-    		ADD CONSTRAINT fk_admind FOREIGN KEY (idadmind) REFERENCES admind (id) ON DELETE NO ACTION ON UPDATE CASCADE' );
-		
-		//! new
-        $sql = sprintf('ALTER TABLE santri ADD CONSTRAINT constr_ID UNIQUE (idadmind)');
-        $this->exe_non_query( $sql ) ;		
+    		ADD CONSTRAINT fk_admind FOREIGN KEY (idadmind) REFERENCES admind (id) ON DELETE NO ACTION ON UPDATE CASCADE' );		
     }
     /**
      *  remove some of santri`s cols
@@ -169,7 +165,6 @@ class first_update extends Controller{
     		'idsuratout',
     		'idkelasakhir',
     		'idkelasawal',
-    		'keluar',
     		'idreason',
     		'idayah',
     		'idibu',
@@ -272,6 +267,17 @@ class first_update extends Controller{
     */    
     public function __construct(){
     }
+	public function first_update(){
+    	$this->prepare_tables();
+        $this->create_super_admind();
+        echo "Done<br>Next is to Insert into admind table and the update santri table<br>";
+        $this->moving_data();
+        echo "Done<br>Next is to remove unused santri columns<br>";
+        $this->remove_unused_santri_cols();        
+ 		//! new
+        $sql = sprintf('ALTER TABLE santri ADD CONSTRAINT constr_ID UNIQUE (idadmind)');
+        $this->exe_non_query( $sql ) ;		
+	}
     /**
      *  default view during running this application
      *  return none
@@ -280,12 +286,163 @@ class first_update extends Controller{
         set_time_limit(1600);
         $this->set_db('fusarung');
     	echo "Prepare both santri and admin tables<br>";
-    	$this->prepare_tables();
-        $this->create_super_admind();
-        echo "Done<br>Next is to Insert into admind table and the update santri table<br>";
-        $this->moving_data();
-        echo "Done<br>Next is to remove unused santri columns<br>";
-        $this->remove_unused_santri_cols();        
+		$this->first_update();
+		$this->second_update();
+		
+		echo "Done";
     }
-    
+	/**
+	 *	Give updates_at and created_at sarung
+	 *	return none;
+	*/
+    public function second_update(){
+		//@
+		//
+	    DB::beginTransaction();
+		$status = false;
+		try {
+			
+			$this->remove_surat();
+			$this->remove_wali();
+			$this->remove_pekerjaan();
+			$this->remove_sekolah();
+			$this->remove_table("perihal");	
+			$array = array("kabupaten","kalender","kecamatan","kelasisi","kelasisireason","kelasroot",'login',"negara",
+						   "pelajaran","propinsi","ujian","ujianpetugas","ujianruang","ujiansantri","session","desa","event","kelas",'kelasdetail','pesan',
+						   );
+			foreach($array as $table){
+				$this->change_common_edit_add($table);
+			}
+			//@
+			$array = array("jadwalpelajaran","job","jurusan","petugas","santri","saveid","savenis","ujianaddon","kalender_note");
+			foreach($array as $table){
+				$this->change_common($table);
+			}
+			$this->remove_iuran();
+			$this->update_kelas_isi();
+			$this->remove_table("perihaltype");			
+			$this->update_ujian_santri();
+			$this->move_jurusan_from_kel_detail_to_kelas();
+			$this->del_column('kelas','LEVEL');
+			$this->change_column_name( "santri" , "idSession" , "idsession"  ,"INT");
+			$this->update_ujian();
+			DB::commit();
+		}
+		catch (\Exception $e) {
+			echo $e->getMessage();
+			DB::rollback();
+		}
+	}
+	private function update_ujian(){
+		$this->del_column('ujian','idsession');
+	}
+	/**
+	 *	this will move jurusan from kelas detail table to kelas table
+	*/
+	private function move_jurusan_from_kel_detail_to_kelas(){
+		//@ add idjurusan column to kelas first , as well as constrain
+    	$this->add_column('kelas' , 'idjurusan'  , ' int(11) NOT NULL DEFAULT 1 , 
+    		ADD CONSTRAINT fk_jurusan FOREIGN KEY (idjurusan) REFERENCES jurusan (id) ON DELETE NO ACTION ON UPDATE CASCADE' );
+		//@ get all idjurusan from kelas detail
+		$kelas_detail = new Kelas_Detail_Model();
+		//@ loop
+		foreach($kelas_detail->get() as $item){
+			//@ update idjurusan from kelas
+			$kelas = new Kelas_Model();
+			$kelas = $kelas->find($item->idkelas);
+			$kelas->idjurusan = $item->idjurusan;
+			$kelas->save();			
+		}
+		//@ done
+	}
+	private function remove_wali(){
+    	$names = array('wali_ibfk_1' , 'wali_ibfk_2','wali_ibfk_3','wali_ibfk_4');
+    	foreach ($names as $name) {
+    		$this->del_constraint( "wali" , $name);
+    	}
+		$this->remove_table("wali");
+	}
+	/**
+	 *
+	**/
+	private function update_kelas_isi(){
+    	$names = array('kelasisi_ibfk_3');
+    	foreach ($names as $name) {
+    		$this->del_constraint( "kelasisi" , $name);
+    	}
+		$this->remove_table("kelasisireason");
+		$names = array('startlevel','level' ,'idreason','idkelaslama');
+    	foreach ($names as $name) {
+			$this->del_column('kelasisi',$name);
+    	}		
+	}
+	/**
+	 *
+	**/
+	private function update_ujian_santri(){
+		$names = array('kalinilai');
+    	foreach ($names as $name) {
+			$this->del_column('ujiansantri',$name);
+    	}				
+	}
+	private function remove_surat(){
+    	$names = array('suratout_ibfk_1' , 'suratout_ibfk_2','suratout_ibfk_3');
+    	foreach ($names as $name) {
+    		$this->del_constraint( "suratout" , $name);
+    	}
+    	$names = array('petugasaddon_ibfk_4');
+    	foreach ($names as $name) {
+    		$this->del_constraint( "petugasaddon" , $name);
+    	}		
+		$this->remove_table("suratout");
+		$this->remove_table("suratin");
+		$this->remove_table("sifat");
+		
+	}
+	private function remove_sekolah(){
+    	$names = array('petugas_ibfk_5');
+    	foreach ($names as $name) {
+    		$this->del_constraint( "petugas" , $name);
+    	}		
+		$this->remove_table("sekolah");		
+	}
+	private function change_desa(){
+		//@ desa
+		$this->change_column_name( "desa" , "waktu" , "created_at"  ,"DATETIME");
+		$this->add_column("desa" , 'updated_at'  , ' DATETIME DEFAULT \'2014-01-01\' ' );		
+	}
+	private function change_event(){
+		$table = "event";
+		$this->change_column_name( $table , "waktu" , "created_at"  ,"DATETIME");
+		$this->add_column($table , 'updated_at'  , ' DATETIME DEFAULT \'2014-01-01\' ' );		
+	}
+	
+	private function change_common($table){
+		$this->add_column($table , 'updated_at'  , ' DATETIME DEFAULT \'2014-01-01\' ' );		
+		$this->add_column($table , 'created_at'  , ' DATETIME DEFAULT \'2014-01-01\' ' );		
+	}
+	private function change_common_edit_add($table){
+		$this->change_column_name( $table , "waktu" , "created_at"  ,"DATETIME");
+		$this->add_column($table , 'updated_at'  , ' DATETIME DEFAULT \'2014-01-01\' ' );		
+	}
+	private function remove_pekerjaan(){
+		$this->remove_table("pekerjaan");		
+	}
+	
+	private function remove_iuran(){
+    	//! remove constrain first
+    	$names = array('iuranjumlah_ibfk_1' , 'iuranjumlah_ibfk_2','iuranjumlah_ibfk_3','iuranjumlah_ibfk_4');
+    	foreach ($names as $name) {
+    		$this->del_constraint( "iuranjumlah" , $name);
+    	}
+    	$names = array('iuranbayar_ibfk_2' , 'iuranbayar_ibfk_1');
+    	foreach ($names as $name) {
+    		$this->del_constraint( "iuranbayar" , $name);
+    	}
+		$this->remove_table("iuranjumlah");
+		$this->remove_table("iuranbayar");
+		$this->remove_table("iuranjenis");
+		$this->remove_table("iuranlist");
+		$this->remove_table("totalbayarsantri");
+	}
 }

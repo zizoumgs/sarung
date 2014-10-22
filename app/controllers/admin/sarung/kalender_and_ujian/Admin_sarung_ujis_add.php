@@ -180,9 +180,9 @@ class Admin_sarung_ujis_add_helper{
 			//! for showing dialog
             function select_handle(idsantri , first_name , second_name , id){
 				$("#%1$s").modal({keyboard: true});
-                $("#%2$s").val(idsantri);				
+                $("#%2$s").val(idsantri);
                 $("#%3$s").val(first_name +" "+ second_name);
-				$("#%4$s").val(id);
+				$("#%4$s_not_hidden").val(id);
             }
 			',
             $this->get_dialog_table_name()  ,
@@ -197,12 +197,14 @@ class Admin_sarung_ujis_add_helper{
 		<script>
 		%1$s
 		$(function() {			
+            $("#%4$s").focus();
 			$( "#%2$s"  ).click(function () {
                 $("#%3$s").submit();
 			});
 		})
 		</script>
-		',$click_function , $this->get_dialog_button_name(), $this->get_form_name() 
+		',$click_function , $this->get_dialog_button_name(), $this->get_form_name() ,
+        $this->get_id_ujian_name()
 		);
 		return $js;
 	}
@@ -215,7 +217,7 @@ class Admin_sarung_ujis_add_helper{
 		//@ id table
         $this->set_url_submit($url);
 		$name = $this->get_id_ujian_name();
-		$id_table	=	Form::text($name, '' , array('id' => $name , 'class' => 'form-control' ,'ReadOnly'=>'' ));
+		$id_table	=	Form::text($name."_not_hidden", '' , array('id' => $name."_not_hidden" , 'class' => 'form-control' ,'ReadOnly'=>'' ));
 		$id_table  	= 	$this->get_group_for_hor_form("Id Ujian",$id_table);		
 		//@ id santri
 		$name = $this->get_id_santri_name();
@@ -282,6 +284,9 @@ class Admin_sarung_ujis_add_helper{
 
 
 }
+/**
+ *  main class of this documentation
+*/
 class Admin_sarung_ujis extends Admin_sarung_ujis_view{
 	private $helper_add ;
 	public function __construct(){
@@ -293,12 +298,12 @@ class Admin_sarung_ujis extends Admin_sarung_ujis_view{
 	 */
 	private function get_user_data_ujian_add($model){
 		$hasil = "";
-		$hasil .= $this->get_button($model->kalender->event->nama		, 'Event');
-		$hasil .= $this->get_button($model->kalender->session->nama 	, 'Session');
-		$hasil .= $this->get_button($model->pelajaran->nama	 			, 'Pelajaran');		
-		$hasil .= $this->get_button($model->kelas->nama 			    , 'Kelas');
-		$hasil .= $this->get_button($model->kalinilai	    			,'Kelipatan');
-		$hasil .= $this->get_button($model->pelaksanaan 				,'Pelaksanaan');		
+		$hasil .= $this->get_button($model->kalender->event->nama		,   'Event');
+		$hasil .= $this->get_button($model->kalender->session->nama 	,   'Session');
+		$hasil .= $this->get_button($model->pelajaran->nama	 			,   'Pelajaran');		
+		$hasil .= $this->get_button($model->kelas->nama 			    ,   'Kelas');
+		$hasil .= $this->get_button($model->kalinilai	    			,   'Kelipatan');
+		$hasil .= $this->get_button($model->pelaksanaan 				,   'Pelaksanaan');		
 		return $hasil;
 	}
 	/**
@@ -319,7 +324,7 @@ class Admin_sarung_ujis extends Admin_sarung_ujis_view{
         $nis = $date->format("y").str_pad($model->nis,$model->perkiraansantri,"0", STR_PAD_LEFT);
         $nis   = sprintf('<span><span class="glyphicon glyphicon-certificate"></span> Nis: %1$s</span>' , $nis);
         $nama = sprintf('<span><span class="glyphicon glyphicon-user"></span> Nama: %1$s %2$s</span>  %3$s' ,
-                        $model->first_name 	,
+                        $model->first_name 	    ,
                         $model->second_name 	,
                         $nis);
         $foto  			= sprintf('<img src="%1$s" class="small-img my-thumbnail">', $this->get_foto_file( $model ) );
@@ -375,7 +380,7 @@ class Admin_sarung_ujis extends Admin_sarung_ujis_view{
         $name = $this->helper_add->get_id_ujian_name();
         $find_id_field = sprintf('
 							<div class="input-group ">
-								<input name="%1$s" type="text" class="form-control input-sm" title="Type Id Here"
+								<input name="%1$s" id="%1$s" type="text" class="form-control input-sm" title="Type Id Ujian Here Here"
                                 placeholder="Type Id Ujian Here" Value="%2$s" >
 								<span class="input-group-btn"  >
 									<button type="submit" class="btn btn-success btn-sm" >
@@ -409,14 +414,19 @@ class Admin_sarung_ujis extends Admin_sarung_ujis_view{
 		//@ filter page
 		$from = $this->get_value('page');
 		if( $from == "" ){
-			$from = 0 ;
+			$from = 1 ;
 		}
+        $this->helper_add->set_hidden_value('page',$from);        
+        $from--;
+        $from *= 10;
         
         //@ get ujian model
         $tmp = $this->helper_add->get_id_ujian_name();
         $id_ujian = $this->get_value( $tmp );
         $ujian = Ujian_Model::find($id_ujian);
-        //@ hidden value 
+        //@ hidden value
+        $wheres [$tmp]  = $id_ujian;
+        $this->helper_add->set_hidden_value($tmp,$id_ujian);
         $this->helper_add->set_hidden_value($tmp,$id_ujian);
 		//@ course/pelajaran
         if( $ujian )
@@ -467,8 +477,8 @@ class Admin_sarung_ujis extends Admin_sarung_ujis_view{
             $hasil = sprintf('
             <br>
             <div class="alert alert-info" role="alert">
-                It seems there are no result : please insert proper id on find id field
-                <a href="#" class="alert-link">Test</a>
+                It seems there are no result : please insert proper id on find id field  , and make sure there are santri in that class. You will not see anythings
+                 if you didn`t insert any santri in the class
             </div>
             ');
         }

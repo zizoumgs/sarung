@@ -6,6 +6,7 @@
 interface Admin_sarung_crud {
 	const VIEW = 0;
 	const ADDI = 1;
+	const ADD 	= 1;
 	const EDIT = 2;
 	const DELE = 3;
 	/*this function for form to delete */

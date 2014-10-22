@@ -307,7 +307,7 @@ abstract class klasement extends login_main{
         if($session_name != "" && $session_name != "All"){
             $where_text .= " and pel.nama = ? ";
             $where_values [] = $session_name;
-            $this->where_next_prev [$this->get_pelajaran_selected()] = $session_name; 
+            $this->where_next_prev [$this->get_pelajaran_name()] = $session_name; 
         }
         return $where_text;
     }
@@ -677,8 +677,8 @@ class login extends klasement {
 			$menu_log = sprintf('<li><a href="%1$s">Login</a></li>',$url);
 		}
 		else{			
-			if($this->get_user_power()>10){
-				$menu_log .= sprintf('<li><a href="%1$s" rel="no">Dashbord</a></li>' , $this->get_url_admind());
+			if($this->get_user_power()>=10){
+				$menu_log .= sprintf('<li><a href="%1$s" rel="no">Dashboard</a></li>' , $this->get_url_admind());
 			}
 			$menu_log .= sprintf('<li><a href="%1$s" >LogOut</a></li>' , $this->get_url_logout());
 		}

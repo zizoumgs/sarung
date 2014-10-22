@@ -1174,7 +1174,12 @@ class Admin_sarung_user_cud extends Admin_sarung_user_cud_input {
         $event->jenis           =   $data [$this->get_gender_name()] ;
         $event->email           =   $data [$this->get_email_name()];
         $event->status          =   $this->get_status( $data [$this->get_status_select_name()] , 1);
-        
+        //@ ability to change password , just for admind who has 1000 power
+        if($this->get_purpose() == parent::EDIT){
+            if($this->get_user_power() >= 1000){
+                $event->password = Hash::make($data [$this->get_password_over_name()]);   
+            }
+        }
         return $event;
     }
     /**

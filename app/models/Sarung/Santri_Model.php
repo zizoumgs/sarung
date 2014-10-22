@@ -31,7 +31,7 @@ class Santri_Model extends Sarung_Model_Root{
 					 "session.nama as nama " , "santri.created_at" 	, "santri.updated_at",
 					 "admind.status"		, 	"admind.id as id_user"	,	"admind.foto" 	,
 					 "admind.lahir as ttl"	,	"admind.jenis"			,	"admind.email"	,
-					 "santri.nis"			,	'santri.catatan'		,
+					 "santri.nis"			,	'santri.catatan'		,	"santri.keluar"	,
 					 "session.awal"			,	"session.perkiraansantri"
 					 
 			);

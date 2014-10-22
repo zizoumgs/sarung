@@ -139,6 +139,9 @@ class Class_Model extends Sarung_Model_Root{
 
 
 }
+/**
+ *	i will remove this table , since wali santri can be putten in kelasisi
+*/
 class Kelas_Detail_Model extends Sarung_Model_Root{
 	/**
 	 *	This table used for class detail , like wali kelas additional bills , etc

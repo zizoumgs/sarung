@@ -11,6 +11,30 @@ class Ujian_Model extends Sarung_Model_Root{
     public function Kelas(){
         return $this->belongsTo('Kelas_Model' ,'idkelas');
     }
+	public function scopeSessionname($query , $name){
+		$session = Session_Model::get_id_by_name($name);
+		return $query->whereHas('kalender',function($q) use( $session) {
+			$q->where('idsession', '=', $session);
+		});
+		//return 	$query->where('idsession' , '=' , $session);
+	}
+	public function scopeKelasname($query , $name){
+		return $query->whereHas('kelas',function($q) use( $name) {
+			$q->where('nama', '=', $name);
+		});
+		//return 	$query->where('idsession' , '=' , $session);
+	}
+	public function scopePelajaranname($query , $name){
+		return $query->whereHas('pelajaran',function($q) use( $name) {
+			$q->where('nama', '=', $name);
+		});
+	}
+	public function scopeEventname($query , $name){
+		$id = Event_Model::get_id_by_name($name);
+		return $query->whereHas('kalender',function($q) use( $id) {
+			$q->where('idevent', '=', $id);
+		});
+	}
 	/**
 	 *	get all name of event which is exist in ujian
 	 *	return obj
@@ -39,6 +63,9 @@ class Ujian_Model extends Sarung_Model_Root{
 		return (object)$kelas;	
 	}
 }
+/**
+ *	Class for ujian model
+*/
 class Ujis_Model extends Sarung_Model_Root{
 	protected $table = 'ujiansantri';
 	
@@ -125,13 +152,16 @@ class Ujis_Model extends Sarung_Model_Root{
 			JOIN kelasisi keli  			ON san.id  	= 	keli.idsantri ,
 			kelas kel, session ses 
 			where 
-			ses.id = keli.idsession 
+			ses.id = keli.idsession
+			and kel.id = keli.idkelas
 			and keli.idkelas = ?
 			and ses.id = ?
-			and san.id NOT IN (select ujis.idsantri from ujiansantri ujis where ujis.idujian = ?)
-			and kel.id = keli.idkelas
+			and san.id NOT IN (select ujis_b.idsantri from ujiansantri ujis_b where ujis_b.idujian = ?)
+			group by keli.idsantri
+			%2$s
+			
 
-		' , $model_ujian->id);
+		' , $model_ujian->id , $limit);
 		$kelas = DB::connection($this->get_db())->select( DB::raw( $sql ) , $array  );
 		return $kelas;
 	}	

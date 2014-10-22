@@ -423,6 +423,9 @@ class Admin_sarung_santri_add extends Admin_support_santri {
  *  class for edit santri
 */
 class Admin_sarung_santri_edit extends Admin_sarung_santri_add {
+    private function set_berhenti_name($val){ $this->input ['berhenti_name'] = $val; }
+    private function get_berhenti_name(){ return $this->input ['berhenti_name'] ;}
+	
     private function set_id_add_name($val){ $this->input ['id_add_name'] = $val; }
     private function get_id_add_name(){ return $this->input ['id_add_name'] ;}
     private function set_url_add_ajax($val){ $this->input ['url_add_name'] = $val; }
@@ -445,6 +448,7 @@ class Admin_sarung_santri_edit extends Admin_sarung_santri_add {
     **/    
     protected function set_default_value_for_this(){
         $this->set_model_obj(new Santri_Model() );
+		$this->set_berhenti_name("berhenti_session");
         $this->set_session_select_name('session_name');
     }
     /**
@@ -526,7 +530,8 @@ class Admin_sarung_santri_edit extends Admin_sarung_santri_add {
         $body = sprintf('<div class="row">%1$s %2$s</div>' , $table , $form_edit);
 		$hasil = sprintf(
 			'
-			<h1 class="title">%1$s</h1>			
+			<h1 class="title">%1$s</h1>
+			%5$s
             <div class="table_div">
                 %2$s
                 %3$s
@@ -534,7 +539,8 @@ class Admin_sarung_santri_edit extends Admin_sarung_santri_add {
 			 	$this->get_text_on_top()            ,
    				$information                        ,
                 $body                               ,                
-			 	$this->get_pagination_link($events  , $wheres)
+			 	$this->get_pagination_link($events  , $wheres) ,
+				$this->get_error_message()
 			);
         $this->set_content(  $hasil );        
         $this->set_js_for_this_edit_n_delete();
@@ -550,9 +556,9 @@ class Admin_sarung_santri_edit extends Admin_sarung_santri_add {
         foreach($model as $obj){
             //print_r($obj);
             $row .= sprintf('<tr id="row_%1$s">', $count);
-                $row .= sprintf('<td><button class="btn btn-primary btn-xs" onclick="select_handle(%1$s,\'%2$s\',\'%3$s\',\'%4$s\',\'%5$s\')">select<br>%1$s</button>
+                $row .= sprintf('<td><button class="btn btn-primary btn-xs" onclick="select_handle(%1$s,\'%2$s\',\'%3$s\',\'%4$s\',\'%5$s\',\'%6$s\')">select<br>%1$s</button>
                                 </td>' ,
-                                $obj->id , $obj->first_name , $obj->second_name, $obj->nama , $obj->catatan);
+                                $obj->id , $obj->first_name , $obj->second_name, $obj->nama , $obj->catatan , $obj->keluar);
                 $row .= sprintf('<td>%1$s</td>' , $this->get_user_status_edit($obj));
                 $row .= sprintf('<td>%1$s</td>' , $this->get_user_data_edit($obj , array( "col-md-3" , "col-md-9 x-small-font" )) );
             $row .= "</tr>";
@@ -596,6 +602,11 @@ class Admin_sarung_santri_edit extends Admin_sarung_santri_add {
             $tmp = Form::text('second name', '', array('class' => 'form-control' ,'placeholder' => "Second_Name" , 'id' => 'second_name' ,
                                                         'disabled'=>'disabled'));
             $form .= sprintf('<div class="form-group">%1$s</div>',$tmp);
+            //! session berhenti
+            $tmp = Form::text($this->get_berhenti_name(), '', array('class' => 'form-control' ,'placeholder' => "Tahun berhenti" ,
+							'id' => $this->get_berhenti_name() , 'title'=> 'Kosongkan atau tulis 0000-00-00 Jika belum berhenti'));
+            $form .= sprintf('<div class="form-group">%1$s</div>',$tmp);
+			
             //! catatan
             $tmp = sprintf('<textarea class="form-control" rows="3" placeholder = "Catatan" name="catatan" id = "catatan" ></textarea>' );
             $form .= sprintf('<div class="form-group">%1$s</div>',$tmp);
@@ -623,20 +634,21 @@ class Admin_sarung_santri_edit extends Admin_sarung_santri_add {
     */
     protected function set_js_for_this_edit_n_delete(){
          $js = sprintf('<script>
-            function select_handle(id , first_name , second_name , session , catatan){
+            function select_handle(id , first_name , second_name , session , catatan , keluar){
+				if(keluar == "0000-00-00" ){
+					keluar="Aktif";
+				}
                 //var url= "%1$s";
                 $("#id_user").val(id);
                 $("#first_name").val(first_name);
                 $("#second_name").val(second_name);
                 $("#catatan").val(catatan);
                 $("#id").val(id);
-                //var valu = $("#%1$s option:selected").val();
-                
                 $("#%1$s").selectpicker("refresh");
-                //$("#%1$s").selectpicker("hide");
                 $("#%1$s").selectpicker("val", session );
+				$("#%2$s").val(keluar );
             }
-         ' , $this->get_session_select_name());         
+         ' , $this->get_session_select_name(), $this->get_berhenti_name());
          $js.= "</script>";
          $this->set_js($js);
     }
@@ -677,6 +689,7 @@ class Admin_sarung_santri_edit extends Admin_sarung_santri_add {
         $old_id_session =   $santri->idsession;
         $old_id_nis     =   $santri->nis;
 		$nis			=	$santri->nis;
+		$idadmind		=	$santri->idadmind;
         //! hardest think , change nis and session
         if($old_id_session != $there->id){
             //! insert old nis
@@ -691,7 +704,19 @@ class Admin_sarung_santri_edit extends Admin_sarung_santri_add {
         $santri->idsession      =   $there->id      ;
         $santri->nis            =   $nis;
         $santri->catatan        =   $data ['catatan'];
-        
+		//# berhenti		
+		$berhenti				=	$data[$this->get_berhenti_name()];
+        if( $berhenti =="Aktif")
+			$berhenti = "0000-00-00";
+		else{
+			$user = new User_Model();
+			$user = $user->find( $idadmind);
+			if($user){
+				$user->status = 2;
+				$this->add_obj_save_db($user);
+			}
+		}
+		$santri->keluar = $berhenti;
         return $santri;
 	}    
 }

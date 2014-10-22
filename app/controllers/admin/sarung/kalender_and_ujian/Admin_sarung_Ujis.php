@@ -287,7 +287,7 @@ class Admin_sarung_ujis_ajax_helper{
 			}); // end of ajax
 			event.preventDefault(); // disable normal form submit behavior
 			return false; // prevent further bubbling of event        
-        }					   
+        }
 		',$this->get_url_santri() , /*$this->get_id_santri_name()*/$this->get_form_name(), $this->get_name_santri_name()
 		);
 		$click_function .= sprintf('
@@ -832,7 +832,8 @@ class Admin_sarung_ujis_helper_filter{
         $pelajaran = FUNC\get_pelajaran_select( $tmp , array("All"));
 		$pelajaran = FUNC\get_form_group( $pelajaran );
 		//@ session
-		$tmp = array( 'class' => 'selectpicker col-md-12' ,'selected' => $this->get_value($this->get_session_select_name()));
+		$tmp = array( 'name' => $this->get_session_select_name(), 'id' => $this->get_session_select_name(),
+					 'class' => 'selectpicker col-md-12' ,'selected' => $this->get_value($this->get_session_select_name()));
         $sessions = FUNC\get_session_select( $tmp , array("All") );
 		$sessions = FUNC\get_form_group( $sessions );
 		//@ event

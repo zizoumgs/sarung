@@ -304,10 +304,10 @@ abstract class klasement extends login_main{
     */
     private function get_pelajaran_filter( $where_text , & $where_values){
         $session_name   = $this->get_pelajaran_selected();
+        $this->where_next_prev [$this->get_pelajaran_name()] = $session_name;             
         if($session_name != "" && $session_name != "All"){
+			$where_values [] = $session_name;
             $where_text .= " and pel.nama = ? ";
-            $where_values [] = $session_name;
-            $this->where_next_prev [$this->get_pelajaran_name()] = $session_name; 
         }
         return $where_text;
     }

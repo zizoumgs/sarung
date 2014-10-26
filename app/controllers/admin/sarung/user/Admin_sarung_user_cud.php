@@ -296,7 +296,10 @@ class Admin_sarung_user_cud_folder extends Admin_sarung_user_cud_support{
         $activated  =sprintf('$("#list-file").attr("class", "tab-pane  active")');
         $activated .=sprintf('$("#home").attr("class", "tab-pane")');
 
-        $amigo = $this->base_url()."/upload_santri" ;
+        $ajax_set_up = sprintf('
+            $.ajaxSetup({
+                    headers:{   "X-CSRF-Token": $("meta[name=\'_token\']").attr("content") }
+            });' );
         $js .= sprintf(
         '
         <script src="%1$s/js/jquery.ui.widget.js"></script>
@@ -308,6 +311,7 @@ class Admin_sarung_user_cud_folder extends Admin_sarung_user_cud_support{
                 var dir_url  = $("#%4$s").text();
                 var dir_path = $("#%5$s").text();
                 var url = "%3$s";
+
                 $("#%2$s").fileupload({
                     url: url,
                     formData: { "%4$s": dir_url , "%5$s": dir_path , "test":"test_mydata"},
@@ -315,14 +319,9 @@ class Admin_sarung_user_cud_folder extends Admin_sarung_user_cud_support{
                     maxFileSize: 500000, // 0.5 MB
                     progressall: function (e, data) {
                     },
-                    /*
-                    add: function (e, data) {
-                        $.getJSON("%3$s_test", function (result) {
-                            data.formData = result; // e.g. {id: 123}
-                            data.submit();
-                        });
-                    },
-                    */
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(jqXHR.responseText);
+                    },                    
                     start: function (e, data) {
                         $("#%6$s a:last").tab("show") // Select last tab
                     },
@@ -333,6 +332,7 @@ class Admin_sarung_user_cud_folder extends Admin_sarung_user_cud_support{
                         //$("#list-file").html( data.result );
                     }
                 }).prop("disabled", !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : "disabled");
+                %7$s
             });
         </script>',
         helper_get_url_blueimp(),
@@ -340,7 +340,7 @@ class Admin_sarung_user_cud_folder extends Admin_sarung_user_cud_support{
         $this->get_upload_route() ,
         $this->get_des_dir_path_name() ,
         $this->get_des_dir_url_name()  ,
-        $this->get_tab_name()
+        $this->get_tab_name()           , $ajax_set_up
         );
         $this->set_js( $js);
     }
@@ -348,20 +348,20 @@ class Admin_sarung_user_cud_folder extends Admin_sarung_user_cud_support{
      *  to upload by ajax
      *  return none
     **/
-    public function set_upload(){
+    public function anyStartupload(){
         $this->init_dialog_with_ajax();
-        if (Request::ajax()){
+        //if (Request::ajax()){
             $this->set_des_dir_path( $this->get_value($this->get_des_dir_path_name()) );
             $this->set_des_dir_url ( $this->get_value($this->get_des_dir_url_name()) );
             //Log::info ($this->get_value($this->get_des_dir_url_name()));
-    		$option = array(
-    			'upload_dir' => $this->get_des_dir_path()."/", 
-    			'upload_url' => $this->get_des_dir_url()."/"
-    		);
-    		$upload_handler = new UploadHandler($option , false);
+            $option = array(
+                'upload_dir' => $this->get_des_dir_path()."/", 
+                'upload_url' => $this->get_des_dir_url()."/"
+            );
+            $upload_handler = new UploadHandler($option , false);
             $upload_handler->set_filter( $this , "set_upload_succeded" , array() );
             $upload_handler->initialize();
-        }
+        //}
     }
     /**
      *  have succeded to upload
@@ -392,7 +392,8 @@ class Admin_sarung_user_cud_folder extends Admin_sarung_user_cud_support{
                 event.preventDefault(); // disable normal form submit behavior
                 return false; // prevent further bubbling of event        
         }' , $name_of_foto , $this->get_dialog_upload_name());
-        $js = sprintf('<script>
+        $js = sprintf('
+            <script>
             %2$s
             function delete_handle(obj){
                 var url = "%1$s";
@@ -408,8 +409,7 @@ class Admin_sarung_user_cud_folder extends Admin_sarung_user_cud_support{
                 event.preventDefault(); // disable normal form submit behavior
                 return false; // prevent further bubbling of event        
             }
-            ', $this->get_del_img_route(),
-            $select_handle);
+            ', $this->get_del_img_route(),$select_handle );
         $js.= "</script>";
         $this->set_js($js);
     }
@@ -472,7 +472,6 @@ class Admin_sarung_user_cud_folder extends Admin_sarung_user_cud_support{
         else{
             echo "Not Sukses to delete file";
         }
-
     }
     /**
      *  Default value
@@ -484,7 +483,8 @@ class Admin_sarung_user_cud_folder extends Admin_sarung_user_cud_support{
         $this->set_css_for_this();
         $this->set_des_dir_path_name('des_path_name');
         $this->set_des_dir_url_name('des_url_name');
-        $this->set_upload_route( $this->base_url()."/upload_santri" );
+        //$this->set_upload_route( $this->base_url()."/upload_santri" );
+        $this->set_upload_route( $this->get_url_admin_sarung()."/user/startupload" );
         $this->set_del_img_route( $this->base_url()."/delete_img" );
         $this->set_del_img_btn_name('delete_img_btn');
     }
@@ -534,6 +534,7 @@ class Admin_sarung_user_cud_folder extends Admin_sarung_user_cud_support{
 	*/
     protected function init_dialog_with_ajax(){
         $this->set_default_value_for_this();
+        $this->set_del_img_btn_name("Dal_kutuk_kadal");
     }
 }
 /**
@@ -1186,8 +1187,8 @@ class Admin_sarung_user_cud extends Admin_sarung_user_cud_input {
      *  to upload by ajax
      *  return none
     */
-    public function set_upload(){
-        parent::set_upload();
+    public function anyStartupload(){
+        parent::anyStartupload();
     }
 	/**
      *  @override

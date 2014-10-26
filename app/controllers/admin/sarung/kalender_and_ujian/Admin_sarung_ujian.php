@@ -66,8 +66,8 @@ class Admin_sarung_ujian_filter{
 	 **/
 	public function set_get_filter_by_session( & $where  , $model){
 		$selected_session = $this->get_value( $this->get_session_select_name() );
-		if($selected_session != "" && $selected_session !="All" ){
-			$where [$this->get_session_select_name()] = $selected_session ;
+		$where [$this->get_session_select_name()] = $selected_session ;
+		if($selected_session != "" && $selected_session !="All" ){			
 			return $model->sessionname($selected_session);
 		}
 		return $model;
@@ -78,8 +78,8 @@ class Admin_sarung_ujian_filter{
 	 **/
 	public function set_get_filter_by_pelajaran( & $where ,  $model ){
 		$selected_session = $this->get_value( $this->get_pelajaran_select_name() );
+		$where [$this->get_pelajaran_select_name()] = $selected_session ;
 		if($selected_session != "" && $selected_session !="All"){			
-			$where [$this->get_pelajaran_select_name()] = $selected_session ;
 			return $model->pelajaranname($selected_session);
 		}
 		return $model;				
@@ -89,9 +89,9 @@ class Admin_sarung_ujian_filter{
 	 *	return new or old model
 	 **/
 	public function set_get_filter_by_kelas( & $where , $model  ){
-		$selected_session = $this->get_value( $this->get_kelas_select_name() );
-		if($selected_session != "" && $selected_session !="All"){			
-			$where [$this->get_kelas_select_name()] = $selected_session ;
+		$selected_session = $this->get_value( $this->get_kelas_select_name() );		
+		$where [$this->get_kelas_select_name()] = $selected_session ;
+		if($selected_session != "" && $selected_session !="All"){
 			return $model->kelasname($selected_session);
 		}
 		return $model;				
@@ -102,9 +102,9 @@ class Admin_sarung_ujian_filter{
 	 **/
 	public function set_get_filter_by_event( & $where , $model  ){
 		$selected_session = $this->get_value( $this->get_event_select_name() );
-		if($selected_session != "" && $selected_session !="All"){			
-			$where [$this->get_event_select_name()] = $selected_session ;
-			return $model->kelasname($selected_session);
+		$where [$this->get_event_select_name()] = $selected_session ;
+		if($selected_session != "" && $selected_session !="All"){						
+			return $model->eventname($selected_session);
 		}
 		return $model;				
 	}	
@@ -112,11 +112,11 @@ class Admin_sarung_ujian_filter{
 	 *	filter result by name`s name
 	 *	return obj 
 	 **/
-	public function set_default_value($name = "filter_test"){
-		$this->set_session_select_name('select_filter_name_session' . $name);
-		$this->set_kelas_select_name('kelas_filter' . $name);
-		$this->set_pelajaran_select_name('pelajaran_filter' . $name);
-		$this->set_event_select_name('event_filter' . $name);
+	public function set_default_value($name = "_fil_"){
+		$this->set_session_select_name('session' . $name);
+		$this->set_kelas_select_name('kelas' . $name);
+		$this->set_pelajaran_select_name('mapel' . $name);
+		$this->set_event_select_name('event' . $name);
 	}
 	/**
 	 *	form to filter

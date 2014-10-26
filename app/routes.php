@@ -36,15 +36,6 @@ Route::controller('sarung_admin/santri'                 , 'Admin_sarung_santri_c
 Route::controller('sarung_admin/class'                  , 'Admin_sarung_class');
 Route::controller('sarung_admin/ujis'                   , 'Admin_sarung_ujis');
 //! i will remove this
-// for uploading
-Route::any('/upload_santri',
-				array('uses'=>'Admin_sarung_user_cud@set_upload','as' => 'set_upload')
-			);
-// for uploading
-Route::any('/upload_santri__succeded',
-				array('uses'=>'Admin_sarung_user_cud@set_upload__succeded','as' => 'set_upload__succeded')
-			);
-
 Route::any('/delete_img',
 				array('uses'=>'Admin_sarung_user_cud@getDelete_img','as' => 'delete_img')
 			);

@@ -298,12 +298,12 @@ class Admin_sarung_ujis extends Admin_sarung_ujis_view{
 	 */
 	private function get_user_data_ujian_add($model){
 		$hasil = "";
-		$hasil .= $this->get_button($model->kalender->event->nama		,   'Event');
-		$hasil .= $this->get_button($model->kalender->session->nama 	,   'Session');
-		$hasil .= $this->get_button($model->pelajaran->nama	 			,   'Pelajaran');		
-		$hasil .= $this->get_button($model->kelas->nama 			    ,   'Kelas');
-		$hasil .= $this->get_button($model->kalinilai	    			,   'Kelipatan');
-		$hasil .= $this->get_button($model->pelaksanaan 				,   'Pelaksanaan');		
+		$hasil .= $this->get_button($model->kalender->event->nama		, 'Event');
+		$hasil .= $this->get_button($model->kalender->session->nama 	, 'Session');
+		$hasil .= $this->get_button($model->pelajaran->nama	 			, 'Pelajaran');		
+		$hasil .= $this->get_button($model->kelas->nama 			    , 'Kelas');
+		$hasil .= $this->get_button($model->kalinilai	    			,'Kelipatan');
+		$hasil .= $this->get_button($model->pelaksanaan 				,'Pelaksanaan');		
 		return $hasil;
 	}
 	/**
@@ -324,7 +324,7 @@ class Admin_sarung_ujis extends Admin_sarung_ujis_view{
         $nis = $date->format("y").str_pad($model->nis,$model->perkiraansantri,"0", STR_PAD_LEFT);
         $nis   = sprintf('<span><span class="glyphicon glyphicon-certificate"></span> Nis: %1$s</span>' , $nis);
         $nama = sprintf('<span><span class="glyphicon glyphicon-user"></span> Nama: %1$s %2$s</span>  %3$s' ,
-                        $model->first_name 	    ,
+                        $model->first_name 	,
                         $model->second_name 	,
                         $nis);
         $foto  			= sprintf('<img src="%1$s" class="small-img my-thumbnail">', $this->get_foto_file( $model ) );

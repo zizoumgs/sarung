@@ -287,7 +287,7 @@ class Admin_sarung_ujis_ajax_helper{
 			}); // end of ajax
 			event.preventDefault(); // disable normal form submit behavior
 			return false; // prevent further bubbling of event        
-        }
+        }					   
 		',$this->get_url_santri() , /*$this->get_id_santri_name()*/$this->get_form_name(), $this->get_name_santri_name()
 		);
 		$click_function .= sprintf('

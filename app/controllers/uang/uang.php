@@ -25,8 +25,8 @@ class uang extends root {
         return View::make('uang/index' , $data);        
     }
     public function getIndex(){
-        $outcome = Outcome::sum('jumlah');
-        $income  = Income::sum('jumlah');
+        $outcome = Outcome_Model::sum('jumlah');
+        $income  = Income_Model::sum('jumlah');
         $side = '
         <div class="thumbnai">
             <ul class="list-group">

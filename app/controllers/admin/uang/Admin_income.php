@@ -1,41 +1,76 @@
 <?php
 /**
-*	To use Model ,
-*	Subclass
-*	$alias = array( "id" , "divisi_name" , "divisisub_name" , 'jumlah' , 'tanggal' );
-*	$obj = new Income_model( $alias );
-*	$obj->set_base_query( $this->get_base_query( $alias ) );		
-*	$obj->set_limit( $this->get_current_page() , $this->get_total_jump() );
-*	$obj->set_wheres( $wheres);
 **/
-class Admin_income extends Admin_uang{
+class Admin_income_support extends Admin_uang{
+	/**
+	 *	contructor
+	**/
+	public function __construct( $default ){
+		parent::__construct($default);
+	}
+	//! usefull for redirect 
+	protected function get_parent_url(){ return parent::get_admin_url()."/income";}
+	protected function get_edit_income_url(){ return sprintf('%1$s/income_cud/edit' , $this->get_admin_url() );	}
+	protected function get_add_income_url(){ return sprintf('%1$s/income_cud/add'   , $this->get_admin_url() );	}
+	protected function get_del_income_url(){ return sprintf('%1$s/income_cud/del'   , $this->get_admin_url() );	}
+	/* Will be used by select on its children*/
+	protected function get_model_divisi_sub( $text_where , $value_where){
+		$obj = new Models_uang( ) ;
+		$obj -> set_base_query_outcome();
+		$obj -> set_where_raw( $text_where , array($value_where) );
+		$obj -> set_group(' group by second.nama ');
+		$obj -> set_order(' order by second.nama ASC ');
+		return $obj->get_model();		
+	}
+	/**
+	 *	return new or old model 
+	**/
+	public function set_get_filter_divisi($model , & $where ){
+		$div 		= $this->get_selected_division();
+		$where [ $this->get_name_division() ] = $div;
+		if( $div != "" &&  $div != "All" ){			
+			$model = $model->divisiname($div);
+		}
+		return $model;
+	}
+	/**
+	 *	return new or old model 
+	**/
+	public function set_get_filter_divisi_sub($model , & $where ){
+		$div_sub 	= $this->get_selected_division_sub( array('onchange' => "this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value)") ) ;
+		$where [ $this->get_name_division_sub() ] = $div_sub;
+		if( $div_sub != "" &&  $div_sub != "All" ){
+			$model = $model->divisisubname($div_sub);
+		}
+		return $model;
+	}
+	/**
+	 *	get object model
+	*/
+	protected function get_model_obj(){
+		return new Income_Model();
+	}
+	/**
+	 *	get object model by id , useful for deleting , editing
+	*/
+	protected function get_model_obj_find($id){
+		$income = new Income_Model();
+		return $income->find($id);
+	}	
+}
+class Admin_income extends Admin_income_support{
     public function __construct( $default = array('min_power' => 1000 )  ){
         parent::__construct($default);
    		$this->set_title('Admin Uang-Income Fatihul Ulum');
     }
 	//! index , this is default methode which will be called by index
     protected function get_content(){
-		$form = $this->get_form();
-		$div_sub 	= $this->get_selected_division_sub( array('onchange' => "this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value)") ) ;
-		$div 		= $this->get_selected_division();
+		$form = $this->get_form();		
 		$wheres = array ();
-		$additional_data_for_pagenation  = array() ;
-		if( $div != "" &&  $div != "All" ){
-			$additional_data_for_pagenation  [ $this->get_name_division() ] = $div ; 
-			$wheres [] = array( 'text' => ' and third.nama = ?'  , 'val' =>   $div );
-		}
-		if( $div_sub != "" &&  $div_sub != "All" ){
-			$additional_data_for_pagenation  [ $this->get_name_division_sub() ] = $div_sub ; 
-			$wheres [] = array( 'text' => ' and second.nama = ?'  , 'val' =>   $div_sub );
-		}
-		
-		$obj = new Models_uang();
-		$obj->set_base_query_income();
-		$obj->set_limit( $this->get_current_page() , $this->get_total_jump() );
-		$obj->set_order(' order by updated_at DESC ');
-		$obj->set_wheres( $wheres);
-		
-		$posts = $obj->get_model();
+		$obj 	= 	$this->get_model_obj();
+		$obj 	= 	$this->set_get_filter_divisi($obj , $wheres);
+		$obj 	= 	$this->set_get_filter_divisi_sub($obj , $wheres);
+		$posts 	= 	$obj->orderBy( "updated_at"  , "DESC")->paginate(10);
 		$isi = "";
 		foreach ( $posts as $post) {
 			$isi .= sprintf('
@@ -52,9 +87,9 @@ class Admin_income extends Admin_uang{
 				</tr>
 				',
 				$this->get_edit_income_url(),
-				$post->income_id ,
-				$post->divisi_name,
-				$post->divisisub_name,
+				$post->id ,
+				$post->divisisub->divisi->nama,
+				$post->divisisub->nama,
 				$this->get_rupiah_root($post->jumlah) ,
 				$post->tanggal,
 				$post->updated_at,
@@ -64,7 +99,7 @@ class Admin_income extends Admin_uang{
 		}
 		$panel_heading = sprintf('<div class="panel-heading"><span class="badge pull-right">%1$s</span>Menunjukkan Semua Table Income
 								 <a href="%2$s" class="btn btn-default btn-sm">Add</a></div>' ,
-								 $obj->get_total_row() ,
+								 $posts->getTotal() ,
 								 $this->get_add_income_url() );
 		$hasil = sprintf(
 			'
@@ -86,13 +121,16 @@ class Admin_income extends Admin_uang{
 			<div class="panel-footer">%2$s</div>
 		</div>			
 			', $isi , 
-			 	$obj->get_pagenation_link( $additional_data_for_pagenation ),
+			 	$posts->appends( $wheres )->links(),
 			 	$this->get_title(),
 				$form ,
 				$panel_heading
 			);
 		return $hasil ;		
     }
+	/**
+	 *	filter
+	*/
 	protected function get_form($methode = ''){
 		$divisi = $this->get_select_divisi( );
 		$divisi_sub = $this->get_select_divisi_sub(  );
@@ -106,6 +144,9 @@ class Admin_income extends Admin_uang{
 		$hasil .= Form::close();
 		return $hasil;
 	}
+	/**
+	 *	css additional
+	*/
 	protected function get_additional_css(){
 		return sprintf(
 		'
@@ -132,18 +173,4 @@ class Admin_income extends Admin_uang{
 		return $js;
     }
 
-	//! usefull for redirect 
-	protected function get_parent_url(){ return parent::get_admin_url()."/income";}
-	protected function get_edit_income_url(){ return sprintf('%1$s/income_cud/edit' , $this->get_admin_url() );	}
-	protected function get_add_income_url(){ return sprintf('%1$s/income_cud/add'   , $this->get_admin_url() );	}
-	protected function get_del_income_url(){ return sprintf('%1$s/income_cud/del'   , $this->get_admin_url() );	}
-	/* Will be used by select on its children*/
-	protected function get_model_divisi_sub( $text_where , $value_where){
-		$obj = new Models_uang( ) ;
-		$obj -> set_base_query_outcome();
-		$obj -> set_where_raw( $text_where , array($value_where) );
-		$obj -> set_group(' group by second.nama ');
-		$obj -> set_order(' order by second.nama ASC ');
-		return $obj->get_model();		
-	}
 }

@@ -1,32 +1,50 @@
 <?php
-class Admin_outcome extends Admin_uang{
+class Admin_outcome_support extends Admin_uang{
+	/**
+	 *	contructor
+	**/
+	public function __construct( $default ){
+		parent::__construct($default);
+	}
+	/**
+	 *	return new or old model 
+	**/
+	public function set_get_filter_divisi($model , & $where ){
+		$div 		= $this->get_selected_division();
+		$where [ $this->get_name_division() ] = $div;
+		if( $div != "" &&  $div != "All" ){			
+			$model = $model->divisiname($div);
+		}
+		return $model;
+	}
+	/**
+	 *	return new or old model 
+	**/
+	public function set_get_filter_divisi_sub($model , & $where ){
+		$div_sub 	= $this->get_selected_division_sub( array('onchange' => "this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value)") ) ;
+		$where [ $this->get_name_division_sub() ] = $div_sub;
+		if( $div_sub != "" &&  $div_sub != "All" ){
+			$model = $model->divisisubname($div_sub);
+		}
+		return $model;
+	}
+}
+class Admin_outcome extends Admin_outcome_support{
     public function __construct( $default = array('min_power' => 1000 ) ){
         parent::__construct( $default ) ;
    		$this->set_title('Admin Uang-Outcome Fatihul Ulum');
+    }	
 
-    }
+	/**
+	 *	get content 
+	*/
     protected function get_content(){
-		$form = $this->get_form();
-		$div_sub 	= $this->get_selected_division_sub( array('onchange' => "this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value)") ) ;
-		$div 		= $this->get_selected_division();
+		$form = $this->get_form();		
 		$wheres = array ();
-		$additional_data_for_pagenation  = array() ;
-		if( $div != "" &&  $div != "All" ){
-			$additional_data_for_pagenation  [ $this->get_name_division() ] = $div ; 
-			$wheres [] = array( 'text' => ' and third.nama = ?'  , 'val' =>   $div );
-		}
-		if( $div_sub != "" &&  $div_sub != "All" ){
-			$additional_data_for_pagenation  [ $this->get_name_division_sub() ] = $div_sub ; 
-			$wheres [] = array( 'text' => ' and second.nama = ?'  , 'val' =>   $div_sub );
-		}
-		
-		$obj = new Models_uang();
-		$obj->set_base_query_outcome();
-		$obj->set_limit( $this->get_current_page() , $this->get_total_jump() );
-		$obj->set_order(' order by updated_at DESC ');
-		$obj->set_wheres( $wheres);
-		
-		$posts = $obj->get_model();
+		$obj 	= 	new Outcome_Model();
+		$obj 	= 	$this->set_get_filter_divisi($obj , $wheres);
+		$obj 	= 	$this->set_get_filter_divisi_sub($obj , $wheres);
+		$posts 	= 	$obj->orderBy( "updated_at"  , "DESC")->paginate(10);
 		$isi = "";
 		foreach ( $posts as $post) {
 			$isi .= sprintf('
@@ -43,9 +61,9 @@ class Admin_outcome extends Admin_uang{
 				</tr>
 				',
 				$this->get_edit_income_url(),
-				$post->income_id ,
-				$post->divisi_name,
-				$post->divisisub_name,
+				$post->id ,
+				$post->divisisub->divisi->nama,
+				$post->divisisub->nama,
 				$this->get_rupiah_root($post->jumlah) ,
 				$post->tanggal,
 				$post->updated_at,
@@ -55,7 +73,7 @@ class Admin_outcome extends Admin_uang{
 		}
 		$panel_heading = sprintf('<div class="panel-heading"><span class="badge pull-right">%1$s</span>Menunjukkan Semua Table Outcome
 								 <a href="%2$s" class="btn btn-default btn-sm">Add</a></div>' ,
-								 $obj->get_total_row() ,
+								 $posts->getTotal() ,
 								 $this->get_add_income_url() );
 		$hasil = sprintf(
 			'
@@ -76,8 +94,8 @@ class Admin_outcome extends Admin_uang{
 			</table>
 			<div class="panel-footer">%2$s</div>
 		</div>			
-			', $isi , 
-			 	$obj->get_pagenation_link( $additional_data_for_pagenation ),
+			', $isi ,
+				$posts->appends( $wheres )->links(),
 			 	$this->get_title(),
 				$form ,
 				$panel_heading

@@ -195,6 +195,44 @@ class Admin_uang extends Admin_root{
 			$message_outputs .= $message ;
 		endforeach;
 		return $message;
-	}	
+	}
+	/**
+	 *	get divisi obj
+	*/
+	protected function get_obj_divisi(){
+		return new Divisi_Model();
+	}
+	/**
+	 *	get divisi obj by name
+	*/
+	protected function get_obj_divisi_byname($name){
+		$divisi   	= Divisi_Model::where('nama' , '=' , $name , 'and' )->firstOrFail();
+		return $divisi;
+	}
+	/**
+	 *	get divisisub obj by name
+	*/
+	protected function get_obj_divisisub_byname($divisi_name , $divisisub_name){
+		$divisi = $this->get_obj_divisi_byname($divisi_name);
+		$divisisub	= Divisisub_Model::where('nama' , '=' , $divisisub_name , 'and' )
+			->where('iddivisi' , '=' , $divisi->id)->firstOrFail();
+		return $divisisub;
+	}
+	/**
+	 *	get max id
+	*/
+	protected function get_max_id($obj){
+		$id = $obj->max('id');
+		return $id;
+	}
+	/**
+	 *	override send_email
+	*/
+	protected function send_email($pesan , $view = 'emails/info' ){
+		return;
+		//@ delay job we need queue job
+		$data = array('nama'=>"Syafii" , 'message_contain' => $pesan );
+		parent::send_email($data , $view);
+	}
 }
 

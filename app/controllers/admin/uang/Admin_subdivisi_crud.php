@@ -1,5 +1,5 @@
 <?php
-/*Cut = Create Update and delete*/
+/*Cud = Create Update and delete*/
 class Admin_subdivisi_crud extends Admin_uang{
 	private $value ; 
 	private $selected_divisi = "";
@@ -39,7 +39,10 @@ class Admin_subdivisi_crud extends Admin_uang{
 		$form .= Form::close();
 		$form .="<br>" ;
 		return $form;		
-	}	
+	}
+	/**
+	 * 
+	**/ 	
     public function __construct( $default = array('min_power' => 1000 ) ){
         parent::__construct($default);
    		$this->set_title('Admin Subdivisi Crud');
@@ -49,6 +52,9 @@ class Admin_subdivisi_crud extends Admin_uang{
 							 'message_on_top'	=> '' 
 							 );
     }
+	/**
+	 * methode to add 
+	**/ 
 	public function getAdd($id = 0 , $nama = ""  , $message = "" ){
 		$this->set_id($id);
 		$this->set_divisi($nama);
@@ -59,7 +65,9 @@ class Admin_subdivisi_crud extends Admin_uang{
 		$form  = $this->get_form( $this->get_add_subdivisi_url() );
 		return $this->index_( $form );
 	}
-	//! insert into database from add
+	/**
+	 * insert into database from add
+	**/ 
 	public function postAdd(){
 		$data = Input::all();
 		$rules = array( 'divisisub' => 'required' );
@@ -118,6 +126,9 @@ class Admin_subdivisi_crud extends Admin_uang{
 			//return Redirect::to( $this->get_parent_url());
 		}			
 	}
+	/**
+	 * methode to edit
+	**/ 
 	public function getEdit($id , $nama = "" , $message = ''  ){
 		$this->set_id($id);
 		//! get table
@@ -129,6 +140,9 @@ class Admin_subdivisi_crud extends Admin_uang{
 		$form = $this->get_form( $this->get_edit_subdivisi_url());
 		return $this->index_( $form );
 	}
+	/**
+	 * methode to editing database
+	**/ 
 	public function postEdit(){
 		$data = Input::all();
 		$rules = array( 'divisisub' => 'required' );
@@ -173,6 +187,9 @@ class Admin_subdivisi_crud extends Admin_uang{
 			//return Redirect::to( $this->get_parent_url());
 		}	
 	}
+	/**
+	 * methode to delete
+	**/ 
 	public function getDel($id , $nama = ""  , $message = "" ){
 		$this->set_id($id);
 		//! get table
@@ -184,6 +201,9 @@ class Admin_subdivisi_crud extends Admin_uang{
 		$form = $this->get_form( $this->get_del_subdivisi_url() );
 		return $this->index_( $form );
 	}
+	/**
+	 * methode to deleting 
+	**/ 
 	public function postDel(){
 		$id = Input::get('id');
 		if($id == ""){
@@ -217,6 +237,9 @@ class Admin_subdivisi_crud extends Admin_uang{
 		return $this->getAdd($id , $div ,  $message);
 	}
 	
+	/**
+	 * methode to add 
+	**/ 
 	protected function get_select_divisi( $array = array() , $items = array()  ){
 		$form = sprintf('
 			<div class="form-group">
@@ -228,6 +251,9 @@ class Admin_subdivisi_crud extends Admin_uang{
 			parent::get_select_divisi( $array ));
 		return $form ; 		
 	}
+	/**
+	 * methode to add 
+	**/ 
 	protected function get_form_subdivisi(){
 		$form = sprintf('
 			<div class="form-group">
@@ -240,21 +266,19 @@ class Admin_subdivisi_crud extends Admin_uang{
 		return $form ; 
 	}
 
+	/**
+	 * default methode : table
+	**/ 
 	public function getIndex( $params = array ()){
 		$div 		= $this->selected_divisi = Input::get('divisi');
-		$form = $this->get_form_table();
-		$wheres = array ();
-		$divisi_sub = new DivisiSub();
-		$posts ;
-		if( $div != "" &&  $div != "All" ){
-			$this->selected_divisi = $div;
-			$wheres  = array( 'nama' , '=' , $div );
-			$divisi = Divisi::where('nama','=',$div)->first();
-			$posts = $divisi_sub->where('iddivisi','=', $divisi->id )->orderBy('updated_at', 'desc')->paginate(10);
+		$form 		= $this->get_form_table();
+		$wheres 	= array ();
+		$divisi_sub = new Divisisub_Model();
+		$wheres ['divisi']  = $div;
+		if( $div 	!= "" &&  $div != "All" ){
+			$divisi_sub = $divisi_sub->divisiname($div);
 		}
-		else{
-			$posts = $divisi_sub->orderBy('updated_at', 'desc')->paginate(10);					
-		}
+		$posts = $divisi_sub->orderBy('updated_at', 'desc')->paginate(10);
 		
 		$isi = "";
 		foreach ( $posts as $post) {
@@ -279,7 +303,7 @@ class Admin_subdivisi_crud extends Admin_uang{
 		}
 		$panel_heading = sprintf('<div class="panel-heading"><span class="badge pull-right">%1$s</span>Menunjukkan Semua Table Subdivisi
 								 <a href="%2$s" class="btn btn-default btn-sm">Add</a></div>' ,
-								 $posts->count(),
+								 $posts->getTotal(),
 								 $this->get_add_subdivisi_url() );
 		$hasil = sprintf(
 			'
@@ -297,7 +321,7 @@ class Admin_subdivisi_crud extends Admin_uang{
 				%1$s				
 			</table>
 			<div class="panel-footer">%2$s</div>
-		</div>			
+		</div>
 			', 	$isi , 
 				$posts->appends( $wheres )->links(),
 			 	$this->get_title(),
@@ -306,6 +330,9 @@ class Admin_subdivisi_crud extends Admin_uang{
 			);
 		return $this->index_($hasil) ;				
 	}
+	/**
+	 *
+	**/
 	private function index_($form){
         $data = array(
         	'body_attr'    => $this->get_body_attribute() , 

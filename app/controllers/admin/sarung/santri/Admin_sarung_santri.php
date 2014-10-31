@@ -368,12 +368,12 @@ class Admin_sarung_santri_add extends Admin_support_santri {
         // change status
         $this->set_change_status_user( $id_user , 2);
         //! main database
-        $santri = new Santri_Model();
-        $santri->id             =   $data ['id']    ;
-        $santri->nis            =   $nis_number     ;
-        $santri->idsession      =   $there->id      ;
-        $santri->idadmind       =   $id_user        ;
-        $santri->catatan        =   $data ['catatan'];
+        $santri = new Santri_Model()					;
+        $santri->id             =   $data ['id']    	;
+        $santri->nis            =   $nis_number     	;
+        $santri->idsession      =   $there->id      	;
+        $santri->idadmind       =   $id_user        	;
+        $santri->catatan        =   $data ['catatan']	;
         return $santri;
 	}
     /**

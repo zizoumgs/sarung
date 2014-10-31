@@ -207,11 +207,14 @@ abstract class root extends Controller {
 		);
 	*/
 	protected function send_email( $data , $view = 'emails/info'){
-		Mail::send( $view, $data, function($message) {
-			//$message->to('zizoumgs@gmail.com' , 'Zizou Mgs Sakip ')->subject( 'Assalamu alaikum' );
-			$message->subject( 'Assalamu alaikum');
-			$message->to('zizoumgs@gmail.com' , 'Zizou Mgs Sakip ') ;
-		});		
+		Queue::push(function($job) use ($data , $view){
+			Mail::send( $view, $data, function($message) {
+				//$message->to('zizoumgs@gmail.com' , 'Zizou Mgs Sakip ')->subject( 'Assalamu alaikum' );
+				$message->subject( 'Assalamu alaikum');
+				$message->to('zizoumgs@gmail.com' , 'Zizou Mgs Sakip ') ;
+			});
+			$job->delete();
+		});
 	}
 	protected function get_rupiah_root( $angka){
 		return number_format($angka,0,',','.');

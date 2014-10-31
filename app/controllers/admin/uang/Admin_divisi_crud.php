@@ -1,5 +1,5 @@
 <?php
-/*Crut = Create Read Update and delete*/
+/*Crud = Create Read Update and delete*/
 class Admin_divisi_crud extends Admin_uang{
 	private $value ; 
 	private $selected_divisi = "";
@@ -10,7 +10,9 @@ class Admin_divisi_crud extends Admin_uang{
 	protected function get_divisi(){return $this->value ['divisi'] ; }
 	protected function set_message_on_top($val)  { $this->value['message_on_top'] = $val;}
 	protected function get_message_on_top(){return $this->value['message_on_top'] ; }
-	//! this is for adding , editing and deleting
+	/**
+	 * this is for adding , editing and deleting
+	**/ 
 	public function get_form( $url = ""	 ){
 		$id = $this->get_id();
 		$form  = $this->get_message_on_top() ; 
@@ -22,6 +24,9 @@ class Admin_divisi_crud extends Admin_uang{
 		$form .="<br>" ;
 		return $form;		
 	}	
+	/**
+	 * contructor
+	**/ 
     public function __construct( $default = array('min_power' => 1000 ) ){
         parent::__construct($default);
    		$this->set_title('Admin Subdivisi Crud');
@@ -30,6 +35,9 @@ class Admin_divisi_crud extends Admin_uang{
 							 'message_on_top'	=> '' 
 							 );
     }
+	/**
+	 * function to handle add
+	**/ 
 	public function getAdd($id = 0 , $nama = ""  , $message = "" ){
 		$this->set_id($id);
 		$on_top  = sprintf('<div class="thumbnail"><h2>Anda akan menambah Divisi </h2>%1$s</div>', $message);
@@ -37,7 +45,9 @@ class Admin_divisi_crud extends Admin_uang{
 		$form  = $this->get_form( $this->get_add_divisi_url() );
 		return $this->index_( $form );
 	}
-	//! insert into database from add
+	/**
+	 * function to handle inserting data into database
+	**/ 
 	public function postAdd(){
 		$data = Input::all();
 		$rules = array( 'divisi' => 'required' );
@@ -89,9 +99,11 @@ class Admin_divisi_crud extends Admin_uang{
 				$this->send_email($data);
 			}
 			return $this->getAdd($id , $div ,  $message);
-			//return Redirect::to( $this->get_parent_url());
-		}			
+		}
 	}
+	/**
+	 * function to handle edit
+	**/ 
 	public function getEdit($id , $nama = "" , $message = ''  ){
 		$this->set_id($id);
 		//! get table
@@ -102,6 +114,9 @@ class Admin_divisi_crud extends Admin_uang{
 		$form = $this->get_form( $this->get_edit_divisi_url());
 		return $this->index_( $form );
 	}
+	/**
+	 * function to handle editing database
+	**/ 
 	public function postEdit(){
 		$data = Input::all();
 		$rules = array( 'divisi' => 'required' );
@@ -143,6 +158,9 @@ class Admin_divisi_crud extends Admin_uang{
 			//return Redirect::to( $this->get_parent_url());
 		}	
 	}
+	/**
+	 * function to handle delete
+	**/ 
 	public function getDel($id , $nama = ""  , $message = "" ){
 		$this->set_id($id);
 		//! get table
@@ -153,6 +171,9 @@ class Admin_divisi_crud extends Admin_uang{
 		$form = $this->get_form( $this->get_del_divisi_url() );
 		return $this->index_( $form );
 	}
+	/**
+	 * function to handle deleting data from database
+	**/ 
 	public function postDel(){
 		$id = Input::get('id');
 		if($id == ""){
@@ -186,6 +207,9 @@ class Admin_divisi_crud extends Admin_uang{
 		return $this->getAdd($id , $div ,  $message);
 	}
 	
+	/**
+	 * return form html
+	**/ 	
 	protected function get_form_divisi(){
 		$form = sprintf('
 			<div class="form-group">
@@ -197,10 +221,12 @@ class Admin_divisi_crud extends Admin_uang{
 			);
 		return $form ; 
 	}
-
+	/**
+	 * Default view : it is view table
+	**/ 
 	public function getIndex( $params = array ()){
 		$wheres = array ();
-		$divisi_sub = new Divisi();
+		$divisi_sub = new Divisi_Model();
 		$posts ;
 		$posts = $divisi_sub->orderBy('updated_at', 'desc')->paginate(10);							
 		$isi = "";
@@ -248,6 +274,9 @@ class Admin_divisi_crud extends Admin_uang{
 			);
 		return $this->index_($hasil) ;				
 	}
+	/**
+	 * Default view : it is view table
+	**/ 
 	private function index_($form){
         $data = array(
         	'body_attr'    => $this->get_body_attribute() , 
@@ -261,6 +290,9 @@ class Admin_divisi_crud extends Admin_uang{
         );
         return View::make( $this->get_view() , $data);		
 	}	
+	/**
+	 * Additional css
+	**/ 
 	protected function get_additional_css(){
 		return sprintf(
 		'
@@ -270,7 +302,10 @@ class Admin_divisi_crud extends Admin_uang{
 		URL::to('/').'/asset/bootstrap/css/bootstrap-select.css' ,
 		parent::get_additional_css()
 		);
-	}	
+	}
+	/**
+	 * Additional js
+	**/ 	
     protected function get_additional_js(){
 		$js = sprintf('
 				%1$s
@@ -290,7 +325,5 @@ class Admin_divisi_crud extends Admin_uang{
 	public function get_edit_divisi_url() { return sprintf('%1$s/divisi_crud/edit' , $this->get_admin_url() ); }
 	public function get_del_divisi_url () { return sprintf('%1$s/divisi_crud/del' , $this->get_admin_url() ); }
 	//! override
-    protected function get_selected_division(){		return $this->selected_divisi;	}
-	
-	
+    protected function get_selected_division(){		return $this->selected_divisi;	}	
 }

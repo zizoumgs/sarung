@@ -580,13 +580,29 @@ class login extends klasement {
 	 *	return login or welcome
 	*/
     public function anyIndex( ){
+		//# side
+        $outcome = Outcome::sum('jumlah');
+        $income  = Income::sum('jumlah');
+        $side = '
+		<div class="col-md-3">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-info disable"><b>Budget Information</b></a></li>
+                <a href="#" class="list-group-item">Total Pengeluaran : <span class="pull-right">'.$this->get_rupiah_root($outcome).'</span></a>
+                <a href="#" class="list-group-item">Total Pemasukan :<span class="pull-right">'.$this->get_rupiah_root($income).'</span></a>
+                <a href="#" class="list-group-item">Uang Sekarang : <span class="pull-right">'.$this->get_rupiah_root($income-$outcome).'</span></a>                
+            </div>
+		</div>
+        ';
+		//! contents
 		$content = "";
 		$this->get_user_id();
 		$power = $this->get_user_power();
 		$content = sprintf('
+			
 			<hr>
 			<h1 class="page-header text-center bold-font">Salam kaum bersarung</h1>
 			<hr>
+			<div class="row"><div class="col-md-9">
 			<img class="thumbnail pull-left" src="%1$s" weight=150 height=150 style="margin:6px 15px 0px 0px">
 			<p style="text-align:justify">Sarung adalah sebuah applikasi yang dibuat untuk pondok pesantren Fatihul Ulum Manggisan Tanggul Jember
 			baik diniyah atau non diniyah(meskipun pada kenyataanya keduanya sama-sama diniyah).
@@ -597,7 +613,8 @@ class login extends klasement {
 			Harapan dari applikasi ini adalah guru dan pengurus bisa dengan mudah meng-akses siapa yang perlu bimbingan lebih banyak dan
 			dari sini guru bisa melihat kemampuan siswa dalam segala pelajaran dan bisa juga melihat tract record
 			nilai siswa atau nilai kelas secara umum. kami sudah lelah menjadi sekolah <b>antah berantah</b>.</p>
-		' , URL::to('/')."/asset/images/fatihulUlum1.gif");
+			</div>%2$s</div>
+		' , URL::to('/')."/asset/images/fatihulUlum1.gif" , $side);
         $data = array(
         	'body_attr'    => $this->get_body_attribute() , 
             'js'    => $this->get_js() ,
@@ -649,7 +666,8 @@ class login extends klasement {
 		' , helper_get_url_admin_uang() , helper_get_url_admin_sarung() , $this->get_url_admin_iman());
 		return $hasil ;
 	}
-    protected function get_side(){}
+    protected function get_side(){
+	}
     protected function get_footer(){}
     protected function get_additional_js(){}
 	protected function get_additional_css(){

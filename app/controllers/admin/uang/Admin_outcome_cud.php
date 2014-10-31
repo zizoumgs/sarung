@@ -1,5 +1,8 @@
 <?php
-/*Cut = Create Update and delete*/
+/***
+***	Cut = Create Update and delete
+***	this class is messy 
+****/
 class Admin_outcome_cud extends Admin_income{
 	private $value ; 
 	private $selected_divisi = "";
@@ -43,6 +46,9 @@ class Admin_outcome_cud extends Admin_income{
 							 'message_on_top'	=> '' 
 							 );
     }
+	/**
+	 *	array to send to view
+	*/
 	private function index_($form){
         $data = array(
         	'body_attr'    => $this->get_body_attribute() , 
@@ -56,6 +62,48 @@ class Admin_outcome_cud extends Admin_income{
         );
         return View::make( $this->get_view() , $data);		
 	}
+	/**
+	 *	try to save
+	 *	return obj
+	**/
+	public function prepare_to_save($obj , $data){
+		$obj->idsubdivisi = $data ['divisisub_id']	;
+		$obj->jumlah   = $data ['jumlah'] 	;
+		$obj->tanggal  = $data ['tanggal'] 	;
+		$obj->catatan  = $data ['catatan'] ;
+		return $obj;
+	}
+	/**
+	 *	get object model
+	*/
+	protected function get_model_obj(){
+		return new Outcome_Model();
+	}
+	/**
+	 *	get object model by id , useful for deleting , editing
+	*/
+	protected function get_model_obj_find($id){
+		$income = $this->get_model_obj();
+		return $income->find($id);
+	}	
+	/**
+	 *	get data from database then put into field
+	*/
+	public function put_to_field($id , $nama){
+		$post = $this->get_model_obj_find($id);			
+		$this->set_jumlah	($post->jumlah) ;
+		$this->set_tanggal	($post->tanggal);
+		$this->selected_divisi_sub = $post->divisisub->nama; 
+		if($nama == ""){
+			$this->selected_divisi = $post->divisisub->divisi->nama;
+		}
+		else{
+			$this->selected_divisi = $nama;				
+		}		
+	}	
+	/**
+	 *	add view
+	**/
 	public function getAdd($id = 0 , $nama = ""  , $message = "" ){
 		$this->set_id($id);
 		$this->set_divisi($nama);
@@ -65,7 +113,9 @@ class Admin_outcome_cud extends Admin_income{
 		$this->set_message_on_top( $on_top );
 		return $this->get_form( 'add');
 	}
-	//! insert into database from add
+	/**
+	 *	insert into database from add
+	**/	
 	public function postAdd(){
 		$data = Input::all();
 		$rules = array( 'jumlah' => 'required|numeric' );
@@ -82,36 +132,27 @@ class Admin_outcome_cud extends Admin_income{
 		//! insert_into database
 		else{
 			$id = 0 ;
-			$saveId = SaveId::NamaTable('outcome')->first();
-			$income = new Outcome ();
-			if ( $saveId ){
-				$id =  $saveId->idtable;
-				$data ['id'] = $id ;
-				$saveId = SaveId::find( $result->id);				
-			}
-			else{
-				$id = $income->max('id');
-				$id++;
-			}
-			$divisi   		= Divisi::where('nama' , '=' , $div , 'and' )->firstOrFail();
-			$divisisub 		= DivisiSub::where('nama' , '=' , $sub , 'and' )
-							->where('iddivisi' , '=' , $divisi->id)->firstOrFail();
-			$income->id = $id;
-			$income->idsubdivisi = $divisisub->id	;
-			$income->jumlah   = $data['jumlah']			;
-			$income->tanggal  = $data['tanggal']	;
-			$income->catatan  = "";
+			$saveId ;
+            $id = $this->get_id_from_save_id ( 'outcome' ,$this->get_max_id($this->get_model_obj()) );
+			//@
+			$divisisub				=	$this->get_obj_divisisub_byname($div , $sub);
+			$data ['divisisub_id'] 	=	$divisisub->id;
+			$data ['catatan']		=	'';
+			//@
+			$income = $this->get_model_obj();
+			$income->id 			= 	$id;
+			$income = $this->prepare_to_save($income , $data);			
 			
 			//! prepare
 			$messages = array("Gagal Memasukkan ");
 			$message = sprintf('<span class="label label-danger">%1$s</span>' ,
 							   $this->make_message( $messages ));			
-			$bool = false ; 
+			$bool = false ;
+			$saveId = $this->del_item_from_save_id('outcome' , $id);
 			DB::transaction(function()use ($income , $saveId , &$bool){
 				$income->save();
 				if($saveId)
-					$saveId->delete();
-				
+					$saveId->delete();			
 				$bool = true;				
 			});
 			if($bool){
@@ -126,25 +167,16 @@ class Admin_outcome_cud extends Admin_income{
 				$this->send_email($data);				
 			}
 			return $this->getAdd($id , $div ,  $message);
-			//return Redirect::to( $this->get_parent_url());
 		}			
 	}
+	
+	/**
+	 *	view for edit
+	**/
 	public function getEdit($id , $nama = "" , $message = ''  ){
 		$this->set_id($id);
 		$this->set_divisi($nama);
-		//! get table
-		$posts = $this->get_model_divisi_sub( ' and main.id = ? ' , $id) ;
-		foreach($posts as $post){
-			$this->set_jumlah($post->jumlah) ;
-			$this->set_tanggal( $post->tanggal);
-			if($nama == ""){
-				$this->selected_divisi = $post->divisi_name ;
-				$this->selected_divisi_sub = $post->divisisub_name; 
-			}
-			else{
-				$this->selected_divisi = $nama;				
-			}
-		}
+		$this->put_to_field($id, $nama);
 		$on_top  = sprintf('<div class="thumbnail"><h2>Anda akan mengedit Outcome dengan Id %1$s</h2>%2$s</div>', $id , $message);
 		$this->set_message_on_top( $on_top );
 		return $this->get_form( 'edit');
@@ -166,14 +198,13 @@ class Admin_outcome_cud extends Admin_income{
 		}
 		//! update database
 		else{
-			$divisi   	= Divisi::where('nama' , '=' , $div , 'and' )->firstOrFail();
-			$divisisub 		= DivisiSub::where('nama' , '=' , $sub , 'and' )
-							->where('iddivisi' , '=' , $divisi->id)->firstOrFail();
-			$income = Outcome::find($id);
-			$income->idsubdivisi = $divisisub->id	;
-			$income->jumlah   = $jumlah			;
-			$income->tanggal  = $tanggal		;
-			$income->catatan  = "";
+			//@
+			$divisisub				=	$this->get_obj_divisisub_byname($div,$sub);
+			$data ['divisisub_id'] 	=	$divisisub->id;
+			$data ['catatan']		=	'';
+			//@
+			$income = $this->get_model_obj_find( $id );
+			$income = $this->prepare_to_save($income , $data);
 			//! prepare
 			$messages = array("Gagal mengedit");
 			$message = sprintf('<span class="label label-danger">%1$s</span>' ,
@@ -203,18 +234,7 @@ class Admin_outcome_cud extends Admin_income{
 		$this->set_id($id);
 		$this->set_divisi($nama);
 		//! get table
-		$posts = $this->get_model_divisi_sub( ' and main.id = ? ' , $id);
-		foreach($posts as $post){
-			$this->set_jumlah($post->jumlah) ;
-			$this->set_tanggal( $post->tanggal);
-			if($nama == ""){
-				$this->selected_divisi = $post->divisi_name ;
-				$this->selected_divisi_sub = $post->divisisub_name; 
-			}
-			else{
-				$this->selected_divisi = $nama;				
-			}
-		}
+		$this->put_to_field($id, $nama);
 		$on_top  = sprintf('<div class="thumbnail"><h2>Anda akan menghapus Outcome dengan Id %1$s</h2>%2$s</div>', $id , $message);
 		$this->set_message_on_top( $on_top );
 		return $this->get_form( 'del');
@@ -223,7 +243,7 @@ class Admin_outcome_cud extends Admin_income{
 		$id = Input::get('id');
 		$data = array();
 		$messages = array();
-		$income = Outcome::find( $id );
+		$income = $this->get_model_obj_find($id);
 		$data ['id'] 		= $income->id ;
 		$data ['jumlah'] 	= $income->jumlah ;
 		$data ['tanggal'] 	= $income->tanggal;
@@ -231,12 +251,13 @@ class Admin_outcome_cud extends Admin_income{
 		$messages = array("Gagal menghapus");
 		$message = sprintf('<span class="label label-danger">%1$s</span>' ,
 						   $this->make_message( $messages ));		
-		$bool = false ; 
-		DB::transaction(function()use ($income , &$bool  ,$id){
+		$bool = false ;
+		$saveid = $this->delete_db_admin_root('outcome' , $id );
+		DB::transaction(function()use ($income , &$bool  ,$saveid){
 			$bool = true;
-			$income->delete();
-			$this->delete_db_admin_root('outcome' , $id );
-			
+			if($saveid)
+				$saveid->save();
+			$income->delete();			
 		});
 		if($bool){
 			$messages = array(" Sukses Menghapus");
@@ -250,8 +271,7 @@ class Admin_outcome_cud extends Admin_income{
 			$data = array('nama'=>"Syafii" , 'message_contain' => $pesan );
 			$this->send_email($data);				
 		}
-		$div = Input::get('divisi');
-		return $this->getdel($id , $div ,  $message);
+		return Redirect::to('admin_uang/outcome');
 	}
 	
 	protected function get_select_divisi( $array = array() , $items = array()  ){

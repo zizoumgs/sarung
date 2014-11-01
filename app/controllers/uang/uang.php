@@ -113,7 +113,7 @@ class uang_income extends uang_support{
 			$wheres [] = array( 'text' => ' and second.nama = ?'  , 'val' =>   $div_sub );
 		}
 		$obj = new Models_uang();
-		$obj->set_base_query_outcome();
+		$obj->set_base_query_income();
 		$obj->set_limit( $this->get_current_page() , $this->get_total_jump() );
 		$obj->set_order(' order by main.tanggal DESC ');
 		$obj->set_wheres( $wheres);        

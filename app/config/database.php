@@ -64,7 +64,7 @@ return array(
 		'fusarung' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'fusarung',
+			'database'  => 'mgscom_ngoos',
 			'username'  => 'root',
 			'password'  => '1',
 			'charset'   => 'utf8',

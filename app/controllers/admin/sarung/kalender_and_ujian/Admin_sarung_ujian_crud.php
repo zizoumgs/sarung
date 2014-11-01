@@ -84,7 +84,7 @@ class Admin_sarung_ujian_add extends Admin_sarung_ujian_support{
      *  url to catch post add submit
     */
     public final function postEventadd(){
-		$this->set_purpose(parent::ADD);
+		$this->set_purpose(parent::ADDI);
         //@ important
 		$this->init_dialog_add();
         //@
@@ -149,7 +149,7 @@ class Admin_sarung_ujian_add extends Admin_sarung_ujian_support{
 		$this->dialog->set_default_value("_add");
 		//! we will take input if not from add
 		$data = Input::all();
-		if($this->get_purpose() != parent::ADD){
+		if($this->get_purpose() != parent::ADDI){
 			$data = array();
 		}
 		$this->dialog->set_default_value_for_input( $data );

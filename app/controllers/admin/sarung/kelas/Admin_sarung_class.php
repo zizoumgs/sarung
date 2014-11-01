@@ -397,13 +397,12 @@ class Admin_sarung_class extends Admin_sarung_class_support{
         $row = "";
         $count = 0 ; 
         foreach($model as $obj){
-			//data-toggle="modal" data-target="#myModal"
-            //print_r($obj);
             $row .= sprintf('<tr id="row_%1$s">', $count);
                 $row .= sprintf('<td><button class="btn btn-primary btn-xs"		
-									onclick="select_handle(%1$s,\'%2$s\',\'%3$s\',\'%4$s\',\'%5$s\')">select<br>%1$s</button>
+									onclick="select_handle(%1$s,\'%2$s\',\'%3$s\',\'%4$s\',\'%5$s\')">select_<br>%1$s</button>
                                 </td>' ,
-                                $obj->id , $obj->first_name , $obj->second_name, $obj->nama , $obj->catatan);
+                                $obj->id , htmlentities(str_replace("'","\'",$obj->first_name)) ,
+								htmlentities(str_replace("'","\'",$obj->second_name)), $obj->nama , $obj->catatan);
                 //$row .= sprintf('<td>%1$s</td>' , $this->get_user_status_edit($obj));
                 $row .= sprintf('<td>%1$s</td>' , $this->get_user_data_add($obj , array( "col-md-2" , "col-md-10 x-small-font" )) );
 				$row .= sprintf('<td>%1$s</td>' , $this->get_user_data_kelas($obj) );

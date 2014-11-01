@@ -153,9 +153,9 @@ class Kecamatan_Model extends Alamat_Model{
 	 *	return list of kecamatan
 	**/
     public function scopeGet_kecamatans_of_kabupaten($query , $negara_name , $propinsi_name , $kabupaten_name){
-		$db = $this->get_db();
-		$results = DB::select( DB::raw("SELECT kec.id as id ,  kec.nama as nama
-									   FROM $db.kecamatan kec, $db.kabupaten kab , $db.propinsi pro , fusarung.negara neg
+		$db = $this->get_db_name();
+		$results = DB::connection( $this->connection)->select( DB::raw("SELECT kec.id as id ,  kec.nama as nama
+									   FROM $db.kecamatan kec, $db.kabupaten kab , $db.propinsi pro , $db.negara neg
 									   WHERE  neg.id = pro.idnegara
 									   and pro.id = kab.idpropinsi
 									   and kab.id = kec.idkabupaten
@@ -196,6 +196,7 @@ class Desa_Model extends Alamat_Model{
 	**/
     public function scopeGet_desas_of_kecamatan($query , $negara_name , $propinsi_name , $kabupaten_name,$kecamatan_name){
 		$db = $this->get_db();
+		$db = $this->get_db_name();		
 		$results = DB::select( DB::raw("SELECT des.id as id ,  des.nama as nama
 									   FROM $db.kecamatan kec, $db.kabupaten kab , $db.propinsi pro , $db.negara neg,
 									   $db.desa des 
@@ -217,6 +218,7 @@ class Desa_Model extends Alamat_Model{
 	**/
     public function get_first($negara_name , $propinsi_name , $kabupaten_name,$kecamatan_name , $desa_name){
 		$db = $this->get_db();
+		$db = $this->get_db_name();		
 		$results = DB::select( DB::raw("SELECT des.id as id ,  des.nama as nama
 									   FROM $db.kecamatan kec, $db.kabupaten kab , $db.propinsi pro , $db.negara neg,
 									   $db.desa des 

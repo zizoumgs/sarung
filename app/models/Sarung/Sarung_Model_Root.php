@@ -8,6 +8,9 @@ class Sarung_Model_Root extends Eloquent{
 	protected function get_db(){
 		return "fusarung";
 	}
+	protected function get_db_name(){
+		return "mgscom_ngoos";
+	}	
 	/**
 	*	will check and return valid value
 	*	return -1 if null , id number otherwise

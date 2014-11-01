@@ -595,7 +595,7 @@ class login extends klasement {
             'content' => $content     ,
             'side'  => $this->get_side()
                         )    ;		
-        return View::make('uang/index' , $data);		
+        return View::make('main' , $data);		
 	}
 	/**
 	 *	Default index for anything , post, get , etc

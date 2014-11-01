@@ -530,7 +530,6 @@ abstract class klasement extends login_main{
      *  Show table
     */
 	protected function show_klasement($content){
-
         $data = array(
         	'body_attr'    => $this->get_body_attribute() , 
             'js'    => $this->get_js() ,

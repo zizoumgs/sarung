@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-	@include('uang.includes.head')
+    @include('includes.head_main')
 <body>
 	{{ $header }}
 <div class="container">

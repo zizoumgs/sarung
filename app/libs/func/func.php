@@ -205,5 +205,33 @@ function add_fake_post($key , $val){
 	$_POST[$key] = $val;
 }
 
+/**
+ *  convert string to time
+ *  return time
+*/
+function get_time_from_string($string){
+	$time = strtotime($string);//"2013-09-01";
+    return $time; 
+}    
+/**
+ *  convert string to date
+ *  return date
+ */
+function get_date_from_string($string , $format = "Y-m-d"){
+    $time = strtotime($string);//"2013-09-01";
+    $date = date($format,$time);
+	return $date ; 
+}
+ /**
+  *  @  (dtime , string , string )
+  *  add month to date
+  *  return date
+*/
+function add_month_to_date( $time , $months = "+1", $format = " Y-m-d "){
+	//$date = mktime(0, 0, 0, date("n") + $months, 1);
+    $parameter = sprintf('%1$s months',$months);
+    return date($format, strtotime($parameter, $time));
+}
+
 
 

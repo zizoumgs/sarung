@@ -8,23 +8,56 @@ abstract class login_main extends root{
         parent::__construct();
     }
 	/**
+	 *	get header
+	 *	return html form
+	*/
+	protected function get_header(){
+		$menu_log = "";		
+		if( ! Auth::check() ) {
+			$url = url('sarung_admin');
+			$menu_log = sprintf('<li><a href="%1$s">Login</a></li>',$url);
+		}
+		else{			
+			if($this->get_user_power()>=10){
+				$menu_log .= sprintf('<li><a href="%1$s" rel="no">Dashboard</a></li>' , $this->get_url_admind());
+			}
+			$menu_log .= sprintf('<li><a href="%1$s" >LogOut</a></li>' , $this->get_url_logout());
+		}
+		$hasil = sprintf('
+		<div class="navbar navbar-default" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<div class="page-header ">
+						<h1>Fatihul Ulum Manggisan</h1>
+						<p class="lead bold-font"><span class="glyphicon glyphicon-flash"></span>Forgotten boarding school.</p>
+					</div> 			
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="%2$s">Home</a></li>
+						<li><a href="%3$s">Klasement</a></li>
+						<li>%4$s</li>
+						<li><a href="#">Contact</a></li>
+						%1$s
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div>
+		</div>						 
+		' , $menu_log , $this->get_url_home()  , $this->get_url_klasement() , uang::getMenu());
+		return $hasil;
+	}
+	/**
 	 *	To logout
 	*/
 	public function anyLogout(){
 	    Auth::logout();
 	    return Redirect::to( $this->get_url_home());		
-	}
-	protected function get_url_home(){
-		return url('/');
-	}
-	protected function get_url_logout(){
-		return url('logout');
-	}
-	protected function get_url_admind(){
-		return url('sarung_admin');
-	}
-	protected function get_url_login(){
-		return url('login');
 	}
 	/**
 	 *	get form login
@@ -150,13 +183,6 @@ abstract class klasement extends login_main{
     private function get_pelajaran_selected(){
         return Input::get( $this->get_pelajaran_name());
     }
-    /**
-     *  url for this class
-     *  return url
-    */
-	protected function get_url_klasement(){
-		return url('klasement');
-	}
 	public function __construct(){
 		parent::__construct();
 	}
@@ -206,10 +232,7 @@ abstract class klasement extends login_main{
 	*/
 	public function anyKlasement(){
         $this->set_default_value();
-		//@ force user to fill session in order to minimize result table
-//		if($this->get_session_selected() != "")
-			$table = $this->getTable();
-			
+			$table = $this->getTable();			
 		return $this->show_klasement($table);
 	}
 	/**
@@ -262,7 +285,7 @@ abstract class klasement extends login_main{
 	 *	return html form
 	*/
     private function get_filter(){
-        $this->use_select();
+        $this->use_select('.selectpicker',true);
         $attr = array('name' => $this->get_session_name() ,
                       'id' => $this->get_session_name() ,
                       "class" => "selectpicker col-md-12",
@@ -439,7 +462,7 @@ abstract class klasement extends login_main{
 					%1$s
 				</table>
 			</div>
-		',$result , $this->get_filter() , $this->get_next_previous_link( $this->where_next_prev));
+		',$result , $filter , $this->get_next_previous_link( $this->where_next_prev));
 		return $hasil ; 		
 	}
     /**
@@ -581,8 +604,8 @@ class login extends klasement {
 	*/
     public function anyIndex( ){
 		//# side
-        $outcome = Outcome::sum('jumlah');
-        $income  = Income::sum('jumlah');
+        $outcome = Outcome_Model::sum('jumlah');
+        $income  = Income_Model::sum('jumlah');
         $side = '
 		<div class="col-md-3">
             <div class="list-group">
@@ -670,63 +693,6 @@ class login extends klasement {
 	}
     protected function get_footer(){}
     protected function get_additional_js(){}
-	protected function get_additional_css(){
-		return sprintf('
-			   			<link href="%1$s/asset/css/fudc.css" rel="stylesheet" type="text/css"/>
-						<style>
-						.navbar-nav li a {
-							line-height: 125px;
-						}
-						.page-header {
-							border: none !important;
-							
-						}
-						</style>
-					   ' , $this->base_url() );
-	}
-	/**
-	 *	get header
-	 *	return html form
-	*/
-	protected function get_header(){
-		$menu_log = "";		
-		if( ! Auth::check() ) {
-			$url = url('sarung_admin');
-			$menu_log = sprintf('<li><a href="%1$s">Login</a></li>',$url);
-		}
-		else{			
-			if($this->get_user_power()>=10){
-				$menu_log .= sprintf('<li><a href="%1$s" rel="no">Dashboard</a></li>' , $this->get_url_admind());
-			}
-			$menu_log .= sprintf('<li><a href="%1$s" >LogOut</a></li>' , $this->get_url_logout());
-		}
-		$hasil = sprintf('
-		<div class="navbar navbar-default" role="navigation">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<div class="page-header ">
-						<h1>Fatihul Ulum Manggisan</h1>
-						<p class="lead bold-font"><span class="glyphicon glyphicon-flash"></span>Forgotten boarding school.</p>
-					</div> 			
-				</div>
-				<div class="navbar-collapse collapse menu2">
-					<ul class="nav navbar-nav navbar-right">
-						<li><a href="%2$s">Home</a></li>
-						<li><a href="%3$s">Klasement</a></li>
-						<li><a href="#">About</a></li>
-						<li><a href="#">Contact</a></li>
-						%1$s
-					</ul>
-				</div><!--/.nav-collapse -->
-			</div>			
-		</div>						 
-		' , $menu_log , $this->get_url_home()  , $this->get_url_klasement());
-		return $hasil;
-	}
+	protected function get_additional_css(){	}
+
 }

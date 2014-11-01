@@ -10,7 +10,7 @@ abstract class root extends Controller {
 	private $body_attribute = "";
 	
 	abstract public function index( $param = array() ) ; 
-	abstract protected function get_additional_css();
+	protected function get_additional_css(){}
 	
 	protected function get_additional_js(){}
 	public function __construct(){}
@@ -266,7 +266,7 @@ abstract class root extends Controller {
 	 *	And finally you should write it on Admin_sarung.php in order to make link on side of admin panel
 	*/
 	protected function get_url_admin_iman   	()   { 		return sprintf('%1$s/admin_iman' , $this->base_url());}
-	protected function get_url_uang				()	 {       return sprintf('%1$s/uang' , $this->base_url()); }
+	//protected function get_url_uang				()	 {       return sprintf('%1$s/uang' , $this->base_url()); }
 	/* Use this function to get pagination , you should use clas which is inheritanced by eloquent as an obj */
 	protected function get_pagination_link($obj , $wheres = array()){
 		return $obj->appends( $wheres )->links();
@@ -282,9 +282,12 @@ abstract class root extends Controller {
 			return floor($diff/86400);
 		return "Please Insert 0 as a first parameter";
 	}
-	/*
-		If you wanna use another select  which is not same with default select in html , you just call this function
-		@variable = js
-		return none
-	*/
+	/*		all static link	*/
+	public static function get_url_klasement(){		return url('klasement');	}
+	public static function get_url_home(){		return url('/');	}
+	public static  function get_url_logout(){		return url('logout');	}
+	public static  function get_url_admind(){		return url('sarung_admin');	}
+	public static  function get_url_login(){		return url('login');	}
+	public static  function get_url_uang	($add=""){		return url('uang'.$add);	}
+	
 }

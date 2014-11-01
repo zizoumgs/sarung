@@ -12,10 +12,6 @@
     font-style: normal;
 
 }
-.bold-font{
-	font-family: BebasNeueRegular;
-}
-
 body {
 	margin: 0px ;
 	padding: 0px ;
@@ -23,11 +19,6 @@ body {
 	font-family: serif ,sans-serif !important;
 	color: #555a4a;
 	font-size:1.7em;
-	
-	/*
-		background:#EFE6D7;
-		background:#FAFAFA;
-	*/
 }
 .navbar-default{
 	background:#8F1F29	!important;
@@ -38,6 +29,10 @@ body {
 .navbar-default li a{
 	color:white !important;
 }
+ul.nav li.dropdown:hover > ul.dropdown-menu {
+    display: block;    
+}
+
 /*Reset*/
 h1,h2,h3,h4,h5,h6,#main , div{
 	margin:0px ; padding:0px;
@@ -65,44 +60,21 @@ h1,h2,h3,h4,h5,h6,#main , div{
 .very_small{
 	font-size:0.7em;
 }
-/*
-label  , .item{
-	font-size:0.6em;
+.bold-font{
+	font-family: BebasNeueRegular;
 }
-.header_container{
-	background:#42A2CE !important;
+.title_post , .entry-title  , aside .widget-title , footer[role='contentinfo']{
+    font-family: BebasNeueRegular ;
 }
-.header_container .navbar{
-	background:#42A2CE !important;
-	border:none;
+.title_post , .widget-title{
+    background: url(../../asset/images/point-icon.png) left no-repeat;
+    border-bottom: 1px solid #C2BBAF;
+    font-weight: bold;
+    /*margin-top:30px !important;*/
+    margin-bottom:10px;
+    padding: 10px 4px 5px 30px;
 }
-.header_container .navbar a{
-	color:white !important;
-	font-size:;
-}
-.form-inline .select_form  {
-	margin-right:5px !important;	
-}
-article .title{
-	margin:0px;
-	padding:0px 0px 5px;
-	border-bottom:1px solid #DDDDDD;
-	font-size: 2em;
-}
-table td{
-	font-size: 1em;
-}
-table tr.header{
-	font-weight: bold;
-	font-size:1.2em;
-}
-table{
-	margin: 8px 3px 0px;
-}
-.pagination{
-	margin:5px 0px;
-}
-*/
+
 .login-area{
 	background:white;
 	border-radius:10px;

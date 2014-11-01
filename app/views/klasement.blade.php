@@ -1,7 +1,6 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
 	@include('uang.includes.head')
-<body {{ $body_attr }}>
+<body>
 	{{ $header }}
 <div class="container">
 	<div id="main" class="row">

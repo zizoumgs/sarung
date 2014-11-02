@@ -266,7 +266,7 @@ class Admin_sarung_ujian_edit extends Admin_sarung_ujian_add{
 	}
 }
 /**
- *	for edit
+ *	for delete
 */
 class Admin_sarung_ujian_dele extends Admin_sarung_ujian_edit{
 	public function __construct(){
@@ -304,7 +304,11 @@ class Admin_sarung_ujian_dele extends Admin_sarung_ujian_edit{
 	/**
 	 *	for editing
 	*/
-	public final function getEventdele($id , $values = array() , $message = ""){
+	public final function getEventdele($id = 0  , $values = array() , $message = ""){
 		return $this->getIndex();
 	}
+    public function getEventdel($id = 0, $message = ""){
+		$this->set_purpose( self::DELE);
+		return $this->getIndex();
+    }
 }

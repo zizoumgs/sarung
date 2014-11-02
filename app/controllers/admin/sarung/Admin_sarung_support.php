@@ -6,6 +6,7 @@
 interface Admin_sarung_crud {
 	const VIEW = 0;
 	const ADDI = 1;
+	const ADD  = 1;
 	const EDIT = 2;
 	const DELE = 3;
 	/*this function for form to delete */
@@ -99,6 +100,11 @@ abstract class Admin_sarung_support_root extends Admin_sarung{
     //
     protected function set_session_select_name($val){ $this->input ['session_select'] = $val ; }
     protected function get_session_select_name(){ return $this->input ['session_select'] ;}
+	/**
+	 *	This will be needed during sql transaction
+	**/
+	protected function set_database_name($val){ $this->input ['db_nam_sar_sup'] = $val ;}
+	protected function get_database_name(){return $this->input ['db_nam_sar_sup'];}
     /**
      *  get kelas
      *  return select
@@ -251,6 +257,7 @@ abstract class Admin_sarung_support extends Admin_sarung_support_root implements
     public function __construct(){
         parent::__construct();
 		$this->set_error_message('');
+		$this->set_database_name( Config::get('database.default') );		
     }
 	/**
 	 *	
@@ -485,7 +492,9 @@ abstract class Admin_sarung_support extends Admin_sarung_support_root implements
 	 *	return bool:	true if succeded , false otherwise
 	*/
 	protected final function will_change_to_db(){
-	    DB::beginTransaction();
+		$pdo = DB::connection( $this->get_database_name() )->getPdo();
+		$pdo->beginTransaction();
+		//DB::beginTransaction();
 		$status = false;
 		try {
 			//! for saving
@@ -500,14 +509,17 @@ abstract class Admin_sarung_support extends Admin_sarung_support_root implements
 					throw new Exception("There are non object");
 				}
 				$obj->delete();
-			}
-		    DB::commit();
+			}		    
+		    //DB::commit();
+			$pdo->commit();
 			$status = true;
 		    // all good
-		} catch (\Exception $e) {
+		}
+		catch (\Exception $e) {
 			$this->set_pdo_exception($e);
 			$this->set_error_message($e->getMessage()) ;
-		    DB::rollback();
+		    //DB::rollback();
+			$pdo->rollback();
 		}
 		return $status;
 	}

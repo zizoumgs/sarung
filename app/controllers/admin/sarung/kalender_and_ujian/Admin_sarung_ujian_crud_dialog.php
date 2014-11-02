@@ -3,6 +3,10 @@
  *	root of dialog
 */
 abstract class Admin_sarung_ujian_dialog{
+	//@ escape from single quote
+	protected function get_escape($val){
+		return htmlentities(str_replace("'","\'",$val));
+	}	
 	protected $input  , $default_value;
 	//@
 	public function set_form_name($val){ $this->input ['delete_test'] = $val ;}
@@ -349,7 +353,6 @@ class Admin_sarung_ujian_dialog_edit extends Admin_sarung_ujian_dialog_add {
 		$params = array( $this->get_id_ujian_name() => "" );
 		return parent::get_form($params);
 	}
-
 	/**
 	 *	this button is not same with dialog add button
 	 *	return button 
@@ -366,7 +369,7 @@ class Admin_sarung_ujian_dialog_edit extends Admin_sarung_ujian_dialog_add {
 							$model->kalinilai				,
 							$model->minnilai				,
 							$model->pelaksanaan				,
-							$model->catatan				
+							$this->get_escape($model->catatan)
 							);
 	}
 	/**
@@ -461,7 +464,7 @@ class Admin_sarung_ujian_dialog_delete extends Admin_sarung_ujian_dialog_add {
 							$model->kalinilai				,
 							$model->minnilai				,
 							$model->pelaksanaan				,
-							$model->catatan				
+							$this->get_escape($model->catatan)
 							);
 	}
 	/**

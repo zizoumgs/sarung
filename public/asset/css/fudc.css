@@ -20,17 +20,27 @@ body {
 	color: #555a4a;
 	font-size:1.7em;
 }
-.navbar-default{
+.navbar-default-top{
 	background:#8F1F29	!important;
 	border:none;
 	border-bottom: 1px solid #78BFE5;
 	color:white;
 }
-.navbar-default li a{
+.navbar-default-top li a{
 	color:white !important;
 }
 ul.nav li.dropdown:hover > ul.dropdown-menu {
     display: block;    
+}
+.img_fancy  {
+	margin: 3px 11px 1px 0;
+	/* Add fancy borders to all WordPress-added images but not things like badges and icons and the like */
+	border-radius: 7px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+	padding: 5px 5px;
+}
+.med-font{
+	font-size:0.9em;
 }
 
 /*Reset*/

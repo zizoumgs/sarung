@@ -24,7 +24,7 @@ abstract class login_main extends root{
 			$menu_log .= sprintf('<li><a href="%1$s" >LogOut</a></li>' , $this->get_url_logout());
 		}
 		$hasil = sprintf('
-		<div class="navbar navbar-default" role="navigation">
+		<div class="navbar navbar-default-top" role="navigation">
 			<div class="container">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">

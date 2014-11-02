@@ -9,29 +9,45 @@ abstract class uang_support extends login_main{
 		$this->set_title_on_top('');
 		$this->set_uang_side('');
     }
+    protected function get_limit_rows(){return 13;}
 	/*  Title on top */
 	protected function set_title_on_top($val){ $this->value ['title_on_top'] = $val ;}
 	protected function get_title_on_top(){ return $this->value ['title_on_top'];}
 	/* Uang side */
 	protected function set_uang_side($val){ $this->value ['uang_side'] = $val ;}
 	protected function get_uang_side(){ return $this->value ['uang_side'];}
-	
+    /* Infomration about row*/
+	protected function set_information_table($posts){
+        
+        $information = sprintf('<div class="navbar-text navbar-right img_fancy med-font">
+                                <span class="glyphicon glyphicon-info-sign "></span>%1$s</div>', FUNC\get_pagination_label_two($posts) );
+        
+        $this->value ['information_table'] = $information ;
+    }
+	protected function get_information_table(){ return $this->value ['information_table'];}
+    
 	/**
 	 *
 	**/
     protected function set_table_income_outcome( $posts , $form , $pagenation ){
 		$isi = "";
 		foreach ( $posts as $post) {
-			$isi .= sprintf( $this->get_row_html(5) ,
-                    $post->income_id , $post->divisi_name, $post->divisisub_name,
+			$isi .= sprintf( $this->get_row_html(4) ,
+                    $post->divisisub->divisi->nama, $post->divisisub->nama,
                     $this->get_rupiah_root($post->jumlah) , $post->tanggal
 				);
 		}
+        //@
+        $information = "";
+        $information = $form . $this->get_information_table();
+        //@ 
 		$table = sprintf('
 			<div class="col-md-9">
+                <nav class="navbar navbar-default_" role="navigation">
+                    %3$s
+                </nav>
 				<table class="table table-striped table-hover table-condensed" style="margin-bottom:5px">
 					<tr class ="header">
-						<td>Id</th>
 						<td>Divisi</th>
 						<td>Sub Divisi</th>
 						<td>Jumlah</th>
@@ -43,20 +59,19 @@ abstract class uang_support extends login_main{
 			<div class="col-md-3">
 				%2$s
 			</div>						 
-		',$isi, $this->get_uang_side());
+		',$isi, $this->get_uang_side() , $information);
 		$hasil = sprintf(
 			'
 			%3$s
-			%4$s
 			<div class="row" style="margin-bottom:0px">
 				%1$s
 			</div>
             <hr style="margin:0px 0px;">
 			%2$s', $table , 
 			 	$pagenation       ,
-			 	$this->get_title_on_top(),
-				$form 
+			 	$this->get_title_on_top()
 			);
+        
         $this->set_content($hasil);
         return $this->show();        
     }
@@ -84,6 +99,28 @@ abstract class uang_support extends login_main{
         ');
         $this->set_uang_side($side);
 	}
+    /**
+     * filter by divisi
+    **/
+    protected function set_get_filter_by_division($model , & $where){
+		$div 		= $this->get_selected_division();
+        $where [$this->get_name_division()] =  $div ; 
+		if( $div != "" &&  $div != "All" ){
+            $model = $model->divisiname($div);
+        }
+        return $model ; 
+    }
+    /**
+     * filter by divisisub
+    **/
+    protected function set_get_filter_by_divisionsub($model , & $where){
+		$div 		= $this->get_selected_division_sub();
+        $where [$this->get_name_division_sub()] =  $div ; 
+		if( $div != "" &&  $div != "All" ){
+            $model = $model->divisisubname($div);
+        }
+        return $model ; 
+    }
 }
 /**
  *	class for income
@@ -100,25 +137,13 @@ class uang_income extends uang_support{
         $this->set_income_side();
         $this->use_select();
 		$form = $this->get_form( $this->get_url()."/income" );
-		$div_sub 	= $this->get_selected_division_sub();
-		$div 		= $this->get_selected_division();
 		$wheres = array ();
-		$additional_data_for_pagenation  = array() ;
-		if( $div != "" &&  $div != "All" ){
-			$additional_data_for_pagenation  [ $this->get_name_division() ] = $div ; 
-			$wheres [] = array( 'text' => ' and third.nama = ?'  , 'val' =>   $div );
-		}
-		if( $div_sub != "" &&  $div_sub != "All" ){
-			$additional_data_for_pagenation  [ 'divisi_sub'] = $div_sub ; 
-			$wheres [] = array( 'text' => ' and second.nama = ?'  , 'val' =>   $div_sub );
-		}
-		$obj = new Models_uang();
-		$obj->set_base_query_income();
-		$obj->set_limit( $this->get_current_page() , $this->get_total_jump() );
-		$obj->set_order(' order by main.tanggal DESC ');
-		$obj->set_wheres( $wheres);        
-		$posts = $obj->get_model();
-        $pagination = $obj->get_pagenation_link( $additional_data_for_pagenation );        
+        $obj = new Income_Model();
+        $obj = $this->set_get_filter_by_division($obj,$wheres);
+        $obj = $this->set_get_filter_by_divisionsub($obj,$wheres);
+        $posts = $obj->orderby("tanggal")->paginate( $this->get_limit_rows() );        
+        $pagination = $posts->appends( $wheres )->links();
+        $this->set_information_table( $posts);
         return $this->set_table_income_outcome( $posts , $form , $pagination );
    }
     /**
@@ -223,25 +248,13 @@ class uang_outcome extends uang_income{
         $this->set_outcome_side();
         $this->use_select();
 		$form = $this->get_form( $this->get_url()."/outcome" );
-		$div_sub 	= $this->get_selected_division_sub();
-		$div 		= $this->get_selected_division();
 		$wheres = array ();
-		$additional_data_for_pagenation  = array() ;
-		if( $div != "" &&  $div != "All" ){
-			$additional_data_for_pagenation  [ $this->get_name_division() ] = $div ; 
-			$wheres [] = array( 'text' => ' and third.nama = ?'  , 'val' =>   $div );
-		}
-		if( $div_sub != "" &&  $div_sub != "All" ){
-			$additional_data_for_pagenation  [ 'divisi_sub'] = $div_sub ; 
-			$wheres [] = array( 'text' => ' and second.nama = ?'  , 'val' =>   $div_sub );
-		}
-		$obj = new Models_uang();
-		$obj->set_base_query_outcome();
-		$obj->set_limit( $this->get_current_page() , $this->get_total_jump() );
-		$obj->set_order(' order by main.tanggal DESC ');
-		$obj->set_wheres( $wheres);        
-		$posts = $obj->get_model();
-        $pagination = $obj->get_pagenation_link( $additional_data_for_pagenation );        
+        $obj = new Outcome_Model();
+        $obj = $this->set_get_filter_by_division($obj,$wheres);
+        $obj = $this->set_get_filter_by_divisionsub($obj,$wheres);
+        $posts = $obj->orderby("tanggal")->paginate( $this->get_limit_rows() );
+        $pagination = $posts->appends( $wheres )->links();
+        $this->set_information_table( $posts);
         return $this->set_table_income_outcome( $posts , $form , $pagination );
    }
     /**
@@ -331,10 +344,13 @@ class uang_outcome extends uang_income{
 */
 class uang extends uang_outcome {    
     /*Important*/
-    protected $value = array();
     private $name_division , $name_division_sub;
+    protected function get_selected_division(){        return Input::get( $this->name_division );    }
+    protected function get_selected_division_sub(){    return Input::get( $this->name_division_sub );  }
     protected function get_name_division(){ return $this->name_division ; }
     protected function get_name_division_sub(){ return $this->name_division_sub ; }
+    
+    protected $value = array();    
     public function index( $param = array()){}
     /**
      *  get menu for uang  
@@ -382,14 +398,10 @@ class uang extends uang_outcome {
         }
         $this->name_division = $default ['name'] ; 
         $default ['selected'] = $this->get_selected_division();
-        $posts = DB::select(DB::raw('
-            select divi.id as id , divi.nama as nama_div
-            from divisi divi 
-            order by nama_div')
-        );
+        $posts = Divisi_Model::orderby('nama')->get();
         $items = array("All");
         foreach ($posts as $post ) {
-            $items [$post->id] = $post->nama_div ; 
+            $items [$post->id] = $post->nama ; 
         }
         return $this->get_select( $items , $default) ;
     }
@@ -404,20 +416,13 @@ class uang extends uang_outcome {
         $this->name_division_sub = $default ['name'] ; 
         //! for selected item
         $default ['selected'] = $this->get_selected_division_sub();
-        $posts = DB::select(DB::raw('
-            select divis.id as id , divis.nama as nama_div 
-            from divisisub divis 
-            group by nama_div
-            order by divis.id DESC')
-        );
+        $posts = Divisisub_Model::get_sub_divisi_name( $this->get_selected_division() )->get();
         $items = array( '' => "All");
         foreach ($posts as $post ) {
-            $items [$post->id] = $post->nama_div ; 
+            $items [$post->id] = $post->nama; 
         }
         return $this->get_select( $items , $default) ;
     }
-    protected function get_selected_division(){        return Input::get( $this->name_division );    }
-    protected function get_selected_division_sub(){    return Input::get( $this->name_division_sub );  }
 	/**
 	 *
 	**/
@@ -431,7 +436,7 @@ class uang extends uang_outcome {
         }
 		$hasil ="";
 		//$hasil .= Form::open(array('method' => 'get' , 'action' => ''));
-   		$hasil .= Form::open(array('url' => $go_where , 'role' => 'form' ,'class' =>'form-inline')) ;
+   		$hasil .= Form::open(array('url' => $go_where , 'role' => 'form' ,'class' =>'form-inline navbar-form navbar-left')) ;
         $hasil .= $additional ;
 		$hasil .= '  <div class="form-group"><button type="submit" class="btn btn-primary btn-sm">Filter</button></div>';
 		$hasil .= Form::close();

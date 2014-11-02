@@ -172,6 +172,17 @@ function get_pagination_label( $obj , $text = ' Show %1$s of %2$s '  ){
 	return "";
 }
 /**
+ *	get pagination label 
+ *	return label and total count or empty if failur happened
+*/
+function get_pagination_label_two( $obj , $text = ' Show %1$s of %2$s '  ){
+	if($obj){
+		return sprintf($text  , $obj->getFrom() , $obj->getTotal());
+	}
+	return "";
+}
+
+/**
  *	form group for horizontal form
  *	return html 
 */

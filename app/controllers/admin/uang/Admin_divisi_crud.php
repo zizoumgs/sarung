@@ -107,7 +107,7 @@ class Admin_divisi_crud extends Admin_uang{
 	public function getEdit($id , $nama = "" , $message = ''  ){
 		$this->set_id($id);
 		//! get table
-		$post = Divisi::find($id);
+		$post = Divisi_Model::find($id);
 		$this->set_divisi( $post->nama );
 		$on_top  = sprintf('<div class="thumbnail"><h2>Anda akan mengedit Divisi dengan Id %1$s</h2>%2$s</div>', $id , $message);
 		$this->set_message_on_top( $on_top );

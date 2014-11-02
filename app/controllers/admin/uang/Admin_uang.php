@@ -31,14 +31,10 @@ class Admin_uang extends Admin_root{
         $this->name_division = $default ['name'] ; 
         $array ['selected'] = $this->get_selected_division();
 		if( count ($items) <= 0 ):
-        $posts = DB::select(DB::raw('
-            select divi.id as id , divi.nama as nama_div
-            from divisi divi 
-            order by nama_div')
-        );
-        $items = array("All");
+        $posts = Divisi_Model::orderby('nama')->get();
+		$items = array("All");
         foreach ($posts as $post ) {
-            $items [$post->id] = $post->nama_div ; 
+            $items [$post->id] = $post->nama ; 
         }
 		endif;
         return $this->get_select( $items , $array ) ;
@@ -53,15 +49,10 @@ class Admin_uang extends Admin_root{
 		$array ["selected"] = $this->get_selected_division_sub();
         //! for selected item
 		if( count ($items) <= 0 ):
-        $posts = DB::select(DB::raw('
-            select divis.id as id , divis.nama as nama_div 
-            from divisisub divis 
-            group by nama_div
-            order by divis.id DESC')
-        );
+        $posts = Divisisub_Model::orderby('nama')->get();
         $items = array( '' => "All");
         foreach ($posts as $post ) {
-            $items [$post->id] = $post->nama_div ; 
+            $items [$post->id] = $post->nama ; 
         }
 		endif;
         return $this->get_select( $items , $array) ;
@@ -233,6 +224,13 @@ class Admin_uang extends Admin_root{
 		//@ delay job we need queue job
 		$data = array('nama'=>"Syafii" , 'message_contain' => $pesan );
 		parent::send_email($data , $view);
+	}
+	/**
+	 *	get name of subdivisi from certain division
+	 **/
+	protected function get_sub_divisi_name($divisi_name){
+		return Divisisub_Model::get_sub_divisi_name($divisi_name);
+		//return Divisisub_Model::groupBy('nama')->divisiname($divisi_name);
 	}
 }
 

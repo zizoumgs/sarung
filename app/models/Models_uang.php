@@ -3,7 +3,9 @@
     All model from uang will be placed here
 */
 class Models_uang extends Root_model{
-	public function __construct(){}
+	public function __construct(){
+        $this->set_database_name("uang");
+    }
 	/*Manual Base Query*/
 	public function set_base_query($query){		$this->base_query = $query ;	}
 	/*Automatic Base Query , the alias header name will have 5 column*/

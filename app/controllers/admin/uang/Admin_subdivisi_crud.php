@@ -84,7 +84,7 @@ class Admin_subdivisi_crud extends Admin_uang{
 		else{
 			$id = 0 ;
 			$saveId = SaveId::NamaTable('subdivisi')->first();
-			$table = new DivisiSub ();
+			$table = new Divisisub_Model();
 			if ( $saveId ){
 				$id =  $saveId->idtable;
 				$data ['id'] = $id ;
@@ -94,7 +94,7 @@ class Admin_subdivisi_crud extends Admin_uang{
 				$id = $table->max('id');
 				$id++;
 			}
-			$obj_div   		= new Divisi();
+			$obj_div   		= new Divisi_Model();
 			$divisi = $obj_div->where('nama' , '=' , $div  )->firstOrFail();			
 			$table->id = $id;
 			$table->iddivisi = $divisi->id;

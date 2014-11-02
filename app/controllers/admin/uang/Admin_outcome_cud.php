@@ -290,10 +290,10 @@ class Admin_outcome_cud extends Admin_income{
 	protected function get_select_divisi_sub( $array = array() , $items = array()){
 		$data = $items;
 		if( $this->get_selected_division() != ""):
-		$results = $this->get_model_divisi_sub( " and third.nama = ? " , $this->get_selected_division() );
+		$results = $this->get_sub_divisi_name($this->get_selected_division())->get();
 		$data  = array();
 		foreach($results as $result){
-			$data [$result->income_id] = $result->divisisub_name ;
+			$data [$result->id] = $result->nama ;
 		}
 		endif;
 		$form = sprintf('

@@ -243,6 +243,10 @@ function add_month_to_date( $time , $months = "+1", $format = " Y-m-d "){
     $parameter = sprintf('%1$s months',$months);
     return date($format, strtotime($parameter, $time));
 }
+//@ escape from single quote
+function get_escape($val){
+	return htmlentities(str_replace("'","\'",$val));
+}	
 
 
 

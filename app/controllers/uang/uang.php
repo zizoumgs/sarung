@@ -141,7 +141,7 @@ class uang_income extends uang_support{
         $obj = new Income_Model();
         $obj = $this->set_get_filter_by_division($obj,$wheres);
         $obj = $this->set_get_filter_by_divisionsub($obj,$wheres);
-        $posts = $obj->orderby("tanggal")->paginate( $this->get_limit_rows() );        
+        $posts = $obj->orderby("tanggal","DESC")->paginate( $this->get_limit_rows() );        
         $pagination = $posts->appends( $wheres )->links();
         $this->set_information_table( $posts);
         return $this->set_table_income_outcome( $posts , $form , $pagination );
@@ -252,7 +252,7 @@ class uang_outcome extends uang_income{
         $obj = new Outcome_Model();
         $obj = $this->set_get_filter_by_division($obj,$wheres);
         $obj = $this->set_get_filter_by_divisionsub($obj,$wheres);
-        $posts = $obj->orderby("tanggal")->paginate( $this->get_limit_rows() );
+        $posts = $obj->orderby("tanggal","DESC")->paginate( $this->get_limit_rows() );
         $pagination = $posts->appends( $wheres )->links();
         $this->set_information_table( $posts);
         return $this->set_table_income_outcome( $posts , $form , $pagination );

@@ -171,12 +171,28 @@ class Kecamatan_Model extends Alamat_Model{
 	 *	return id
 	*/
     public function scopeGet_id($query , $negara_name , $propinsi_name , $kabupaten_name , $kecamatan_name){
-        $obj = $this->get_id_kabupaten( $negara_name , $propinsi_name , $kabupaten_name );
-		if ( count($obj->get()) == 1){
-			return $query->where('idkabupaten' , '=' , $obj->id)
-	        ->where('nama','=', $kecamatan_name)->first();			
+		$db = $this->get_db();
+		$db = $this->get_db_name();		
+		$results = DB::select( DB::raw("SELECT des.id as id_desa ,  des.nama as desa_name , kec.id as id , kec.id as id_kecamatan
+									   FROM $db.kecamatan kec, $db.kabupaten kab , $db.propinsi pro , $db.negara neg,
+									   $db.desa des 
+									   WHERE  neg.id = pro.idnegara
+									   and pro.id = kab.idpropinsi
+									   and kab.id = kec.idkabupaten
+									   and kec.id = des.idkecamatan
+									   and neg.nama = ?
+									   and pro.nama = ?
+									   and kab.nama = ?
+									   and kec.nama = ?
+									   order by des.nama DESC "),
+									array($negara_name , $propinsi_name , $kabupaten_name , $kecamatan_name));
+		$hasil = array();
+		foreach($results as $res_){
+			foreach($res_ as $key => $val ){
+				$hasil [$key] = $val ; 	
+			}			
 		}
-		return null;
+		return (object)$hasil;		
     }
 
 }

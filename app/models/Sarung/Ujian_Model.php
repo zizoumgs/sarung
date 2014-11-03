@@ -133,13 +133,21 @@ class Ujis_Model extends Sarung_Model_Root{
 	 *	will find santri who dont insert into ujian id
 	 *	return obj
 	*/
-	public function get_raw_query_add($model_ujian  , $limit = "" ){
+	public function get_raw_query_add($model_ujian  , $limit = ""  , $nama_santri = ""){
 		if( !$model_ujian)
 			return array();
 		$array = array() ;
 		$array [] = $model_ujian->idkelas  ;
 		$array [] = $model_ujian->kalender->idsession;
 		$array [] = $model_ujian->id;
+		//@ new feaature is filter by name
+		$sql_nama_santri = "";
+		if($nama_santri != ""){
+			$sql_nama_santri = " and ( adm.first_name LIKE ? or adm.second_name LIKE ? ) ";
+			$array [] = "%".$nama_santri."%" ;
+			$array [] = "%".$nama_santri."%" ;
+		}
+		//@
 		$sql = sprintf('
 			select adm.first_name as first_name , adm.second_name as second_name , adm.foto as foto,
 			adm.jenis as jenis ,	adm.created_at , adm.updated_at	,
@@ -157,11 +165,12 @@ class Ujis_Model extends Sarung_Model_Root{
 			and keli.idkelas = ?
 			and ses.id = ?
 			and san.id NOT IN (select ujis_b.idsantri from ujiansantri ujis_b where ujis_b.idujian = ?)
+			%3$s
 			group by keli.idsantri
 			%2$s
 			
 
-		' , $model_ujian->id , $limit);
+		' , $model_ujian->id , $limit , $sql_nama_santri);
 		$kelas = DB::connection($this->get_db())->select( DB::raw( $sql ) , $array  );
 		return $kelas;
 	}	

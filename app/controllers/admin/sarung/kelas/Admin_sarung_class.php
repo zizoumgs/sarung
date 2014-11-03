@@ -112,6 +112,9 @@ class Admin_sarung_class_helper{
 	public function set_del_name_idsantri($val) { $this->input ['del_idsantri_f_'] = $val ; }
 	public function get_del_name_idsantri() { return $this->input ['del_idsantri_f_']; }
 
+	public function set_del_name_session($val) { $this->input ['gjfjgjfngvPogf'] = $val ; }
+	public function get_del_name_session() { return $this->input ['gjfjgjfngvPogf']; }
+
 	public function js_func_name_to_del(){
 		return  " delete_kelas ";
 	}
@@ -128,6 +131,7 @@ class Admin_sarung_class_helper{
 		$this->set_del_name_idkelas('dele_kelas_name');
 		$this->set_del_name_idsantri('dele_santri_name');
 		$this->set_del_name_id('id');
+		$this->set_del_name_session("dele_session_name_hus");
 	}
 	/**
 	 *	get js
@@ -136,16 +140,19 @@ class Admin_sarung_class_helper{
 		$delete_submit = sprintf(
 		'
 			//! for submit delete
-			function %1$s(id , idkelas , idsantri){				
+			function %1$s(id , idkelas , idsantri , session_name){
 				$("#%2$s").val(id);
 				$("#%3$s").val(idkelas);
 				$("#%4$s").val(idsantri);
-				$("#%5$s").submit();
+				$("#%5$s").val(session_name);
+				$("#%6$s").submit();
 			};	
-		', $this->js_func_name_to_del() ,
+		',
+		$this->js_func_name_to_del() ,
 		$this->get_del_name_id() ,
 		$this->get_del_name_idkelas() ,
 		$this->get_del_name_idsantri(),
+		$this->get_del_name_session() , 
 		$this->get_del_name_form()
 		);
         $js = sprintf('<script>
@@ -212,11 +219,12 @@ class Admin_sarung_class extends Admin_sarung_class_support{
 	 *	return button html
 	*/
 	private function get_delete_button($val , $idSantri){
-		return sprintf('<button title="Click to delete" class="btn btn-default btn-xs mar-rig-lit" onclick="%3$s(%4$s,\'%5$s\',\'%6$s\')"><b>%1$s</b><br>%2$s</button>',
+		return sprintf('<button title="Click to delete" class="btn btn-default btn-xs mar-rig-lit" onclick="%3$s(%4$s,\'%5$s\',\'%6$s\',\'%7$s\')"><b>%1$s</b><br>%2$s</button>',
 			 $val->kelas_name , $val->session_name , $this->helper->js_func_name_to_del() ,
 			 $val->id ,
 			 $val->idkelas ,
-			 $idSantri
+			 $idSantri		,
+			 FUNC\get_escape($val->session_name)
 		);		
 	}
 	/**
@@ -440,6 +448,7 @@ class Admin_sarung_class extends Admin_sarung_class_support{
 			$form .= Form::hidden($this->helper->get_del_name_id() , '' , array('id'=>$this->helper->get_del_name_id()) );//! id kelas isi
 			$form .= Form::hidden($this->helper->get_del_name_idkelas() , '' , array('id'=>$this->helper->get_del_name_idkelas()) );//! id kelas
 			$form .= Form::hidden($this->helper->get_del_name_idsantri() , '' , array('id'=>$this->helper->get_del_name_idsantri()) );//! id santri
+			$form .= Form::hidden($this->helper->get_del_name_session()  , '' , array('id'=>$this->helper->get_del_name_session()) );//! session_name
 			$form .= $this->get_additional_hidden_field();
 		$form .= Form::close();
 		return $form;
@@ -588,10 +597,11 @@ class Admin_sarung_class extends Admin_sarung_class_support{
 		$this->add_fakes_get_for_this( $data );
 		$idkelas	= $data [ $this->helper->get_del_name_idkelas()] ;
 		$idsantri 	= $data [ $this->helper->get_del_name_idsantri()] ;
+		$nama_session  = $data [ $this->helper->get_del_name_session()];
 		if($idkelas > 0){
 			//@ find examination that have relation with that class as well as santri id
 			$ujian = new Class_Model();
-			$objs = $ujian->getidujiansantri( $idkelas , $idsantri );
+			$objs = $ujian->getidujiansantri( $idkelas , $idsantri ,$nama_session);
 			$total = 0 ;
 			foreach($objs as $obj){
 				$total = $obj->total;

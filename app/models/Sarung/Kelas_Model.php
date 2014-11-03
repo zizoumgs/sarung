@@ -118,15 +118,18 @@ class Class_Model extends Sarung_Model_Root{
     ** this function should be called everytime you wanna delete  item from kelasisi`s table
     ** return 
     **/
-    public function getidujiansantri($idkelas , $idsantri){
+    public function getidujiansantri($idkelas , $idsantri , $nama_session){
 		$sql = " 
 			select count(*) as total
-			from ujian uji , santri san , ujiansantri ujis 
-			where uji.id = ujis.idujian 
+			from ujian uji , santri san , ujiansantri ujis , kalender kal , session ses
+			where uji.id = ujis.idujian
+			and uji.idkalender = kal.id
 			and ujis.idsantri = san.id
+			and ses.id = kal.idsession			
 			and uji.idkelas = ? and san.id = ?
+			and ses.nama = ?
 		";
-		$kelas = DB::connection($this->get_db())->select( DB::raw( $sql ) 	 , array( $idkelas , $idsantri)  );
+		$kelas = DB::connection($this->get_db())->select( DB::raw( $sql ) 	 , array( $idkelas , $idsantri , $nama_session)  );
 		return (object)$kelas;
     }
     /**

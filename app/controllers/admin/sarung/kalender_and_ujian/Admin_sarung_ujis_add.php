@@ -41,6 +41,17 @@ class Admin_sarung_ujis_add_helper{
 		return $this->input ["find_url_id_name"] ;
 	}
     
+    /**
+     *  filter by name
+    */
+	public function set_find_santri_name($val){
+		$this->input ['find_santri_name'] = $val ;
+	}
+	public function get_find_santri_name(){
+		return $this->input ["find_santri_name"] ;
+	}
+    
+
 	/**
 	 *	get and set id santri name	: this is and read only input text
 	*/
@@ -150,6 +161,7 @@ class Admin_sarung_ujis_add_helper{
         $ngamuk = $this->get_class_this_name();
         $this->set_dialog_button_name   ('dia_but_name'         .$ngamuk   );
 		$this->set_id_ujian_name        ('id_helper_name'       .$ngamuk   );
+        $this->set_find_santri_name     ('santri_helper_name'   .$ngamuk   );
 		$this->set_id_santri_name       ('id_santri_ajax'       .$ngamuk   );
 		$this->set_name_santri_name     ('name_santri_ajax'     .$ngamuk   );
 		$this->set_nilai_name           ('nilai_name_ajax'      .$ngamuk   );
@@ -377,10 +389,20 @@ class Admin_sarung_ujis extends Admin_sarung_ujis_view{
         //@ begin
 		$new_params_form = $this->array_combine( $params_default , $params_form);
         $this->use_select();
-        $name = $this->helper_add->get_id_ujian_name();
+        //@ name_filter
+        $name = $this->helper_add->get_find_santri_name();
+        $find_santri_field = sprintf('
+							<div class="input-group ">
+								<input name="%1$s" id="%1$s" type="text" class="form-control input-sm" title="Type santry name here"
+                                placeholder="Type santry name here" Value="%2$s" >
+							</div>
+        ', $name , $this->get_value($name) );
+        
+        //@ ujian filter
+        $name = $this->helper_add->get_id_ujian_name();  
         $find_id_field = sprintf('
 							<div class="input-group ">
-								<input name="%1$s" id="%1$s" type="text" class="form-control input-sm" title="Type Id Ujian Here Here"
+								<input name="%1$s" id="%1$s" type="text" class="form-control input-sm" title="Type Id Ujian Here Here.."
                                 placeholder="Type Id Ujian Here" Value="%2$s" >
 								<span class="input-group-btn"  >
 									<button type="submit" class="btn btn-success btn-sm" >
@@ -391,7 +413,7 @@ class Admin_sarung_ujis extends Admin_sarung_ujis_view{
         ', $name , $this->get_value($name) );
 		//@ form 
    		$hasil  = Form::open( $new_params_form) ;
-            $hasil .= $find_id_field;
+            $hasil .= $find_santri_field.$find_id_field;
         $hasil .= Form::close();
 		return $hasil;
 	}
@@ -427,19 +449,19 @@ class Admin_sarung_ujis extends Admin_sarung_ujis_view{
         //@ hidden value
         $wheres [$tmp]  = $id_ujian;
         $this->helper_add->set_hidden_value($tmp,$id_ujian);
-        $this->helper_add->set_hidden_value($tmp,$id_ujian);
+        //$this->helper_add->set_hidden_value($tmp,$id_ujian);
 		//@ course/pelajaran
         if( $ujian )
             $this->helper_add->set_hidden_value($this->helper_add->get_course_name() , $ujian->idpelajaran);
 
         //@ model without limit
         $events = $this->get_model_obj();
-        $events = $events->get_raw_query_add( $ujian);
+        $events = $events->get_raw_query_add( $ujian, "" , $this->get_value($this->helper_add->get_find_santri_name()));
 		$this->pagenation = Paginator::make($events, count($events),  10 );
         $lbl_pgnation = FUNC\get_pagination_label($this->pagenation);
 		//@ new model with limit
 		$event = new Ujis_Model();
-		$events = $event->get_raw_query_add($ujian , sprintf(' limit %1$s , 10 ', $from));
+		$events = $event->get_raw_query_add($ujian , sprintf(' limit %1$s , 10 ', $from) , $this->get_value($this->helper_add->get_find_santri_name()));
 				
         $information  = $form ;
         $information .= sprintf('<div class="navbar-text navbar-left information-box medium-font">

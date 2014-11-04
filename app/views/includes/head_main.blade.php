@@ -29,7 +29,8 @@
 							}
 							ul.child-menu li , ul.navbar-nav > li:hover a{
 								color:white !important;
-								background:#6b0c36 !important;
+								/*background:#6b0c36 !important;*/
+								background:#33BEF0 !important;
 							}
 							ul.child-menu li{
 								list-style-type: none;

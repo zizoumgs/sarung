@@ -21,7 +21,8 @@ body {
 	font-size:1.7em;
 }
 .navbar-default-top{
-	background:#8F1F29	!important;
+	/*background:#8F1F29	!important;*/
+	background:#00AEEC	!important;
 	border:none;
 	border-bottom: 1px solid #78BFE5;
 	color:white;

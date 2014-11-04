@@ -24,7 +24,7 @@ abstract class login_main extends root{
 			$menu_log .= sprintf('<li><a href="%1$s" >LogOut</a></li>' , $this->get_url_logout());
 		}
 		$hasil = sprintf('
-		<div class="navbar navbar-default-top" role="navigation">
+		<div class="navbar navbar-default navbar-default-top" role="navigation">
 			<div class="container">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
@@ -427,8 +427,10 @@ abstract class klasement extends login_main{
 		$santri_obj->init_array($santries);
         $santri_obj->set_score($santries, $this->get_month_per_view() , $where_query_one , $where_query_two ,$where_values , $date);
 		foreach($santries as $santri){
+			$name = sprintf('%1$s %2$s' , $santri->first_name, $santri->second_name);
+			$limit_name = str_limit( sprintf('%1$s %2$s' , $santri->second_name , $santri->first_name) , 13,'..');
 			$result .= "<tr>";
-			$result .= sprintf('<td>%1$s %2$s</td>',$santri->first_name , $santri->second_name );
+			$result .= sprintf('<td title="%1$s">%2$s<span class="badge pull-right blue">%3$s</span></td>', $name,$limit_name ,$santri->id_santri);
 			$result .= $santri_obj->get_result_for_particular_month($santri , 0 );
             $result .= $santri_obj->get_result_for_particular_month($santri , 1 );
             $result .= $santri_obj->get_result_for_particular_month($santri , 2 );

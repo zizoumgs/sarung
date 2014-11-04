@@ -199,7 +199,9 @@ class Admin_sarung_class extends Admin_sarung_class_support{
 	private function set_get_filter_by_session($model  , & $where){
 		$selected_session = $this->get_value( $this->get_session_select_name() );
 		$where [ $this->get_session_select_name()] = $selected_session;
-		return $model->where('session.nama','=',$selected_session);
+		if($selected_session  != "" && $selected_session != "All")
+			return $model->where('session.nama','=',$selected_session);
+		return $model;
 				
 	}
 	/**
@@ -313,7 +315,10 @@ class Admin_sarung_class extends Admin_sarung_class_support{
 		$new_params_form = $this->array_combine( $params_default , $params_form);
         $this->use_select();
 		//! session
-        $sessions = $this->get_session_select( array( 'class' => 'selectpicker' ,'selected' => $this->get_value($this->get_session_select_name())));
+        $sessions = $this->get_session_select(
+			array( 'class' => 'selectpicker' ,'selected' => $this->get_value($this->get_session_select_name())) ,
+			array( 'All')
+		);
 		$sessions = $this->get_form_group( $sessions );
 		//!
 		$tmp  = Form::text( $this->get_name_filter_name()  , '', array( 'class' => 'form-control input-sm' ,

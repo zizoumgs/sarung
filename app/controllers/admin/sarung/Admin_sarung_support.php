@@ -142,12 +142,13 @@ abstract class Admin_sarung_support_root extends Admin_sarung{
 		//! transfer to default array
 		$default = $this->array_combine($default , $attributes);
         $hasil = array();
+		//@ additioanl item
+        foreach($additional_item as $item){            $hasil [] = $item ;        }
+		//@ 
         $sessions = new Ujian_Model();
         foreach($sessions->get_names_of_pelajaran() as $item){
             $hasil [] = $item->name ;
         }
-		//@ additioanl item
-        foreach($additional_item as $item){            $hasil [] = $item ;        }		
         return $this->get_select( $hasil , $default);		
 	}
     /**
@@ -163,13 +164,14 @@ abstract class Admin_sarung_support_root extends Admin_sarung{
 		//! transfer to default array
 		$default = $this->array_combine($default , $attributes);
         $hasil = array();
-        $sessions = new Ujian_Model();
-        foreach($sessions->get_names_of_ujian() as $item){
-            $hasil [] = $item->name ;
-        }
 		//@ additioanl item
         foreach($additional_item as $item){
             $hasil [] = $item ;
+        }
+		//@
+        $sessions = new Ujian_Model();
+        foreach($sessions->get_names_of_ujian() as $item){
+            $hasil [] = $item->name ;
         }
 
         return $this->get_select( $hasil , $default);		
@@ -189,13 +191,14 @@ abstract class Admin_sarung_support_root extends Admin_sarung{
 			$default [$key] = $val ;
 		}			
         $hasil = array();
-        $sessions = Session_Model::orderby('nama' , 'DESC')->get();
-        foreach($sessions as $item){
-            $hasil [] = $item->nama ;
-        }
 		//@ additioanl item
         foreach($additional_item as $item){
             $hasil [] = $item ;
+        }
+		//@
+        $sessions = Session_Model::orderby('nama' , 'DESC')->get();
+        foreach($sessions as $item){
+            $hasil [] = $item->nama ;
         }
 		
         return $this->get_select( $hasil , $default);

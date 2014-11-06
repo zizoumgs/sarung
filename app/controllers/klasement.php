@@ -326,7 +326,7 @@ abstract class klasement extends login_main{
             $result .= $santri_obj->get_result_for_particular_month($santri , 3 );
 			$result .= "</tr>";
 		}
-		return $this->get_default_html($result , $this->get_filter() , $this->get_next_previous_link( $this->where_next_prev));
+		return $this->get_default_html($result , $this->get_filter() , $this->get_next_previous_link( $santries , $this->where_next_prev));
 	}
 	/**
 	 *	default html for this
@@ -353,14 +353,17 @@ abstract class klasement extends login_main{
 					%1$s
 				</table>
 			</div>
-		',$result , $filter , $this->get_next_previous_link( $this->where_next_prev));
+		',$result , $filter , $link);
 		return $hasil ; 		
 	}
     /**
      *  get next previous , it need count
      *  return html 
     */
-    private function get_next_previous_link($where , $per_page = 4){
+    private function get_next_previous_link( $santri_obj  , $where , $per_page = 4){
+		if( is_null($santri_obj)){
+			return;
+		}
         $page = Input::get($this->get_page_name());
         if( ! is_numeric ($page)){
             $page = 1;

@@ -5,61 +5,31 @@
 ***/
 abstract class login_main extends root{
 	protected $layout = 'main';
-    public function __construct(){
-        parent::__construct();
-    }
+    public function __construct(){        parent::__construct();    }
 	/**
 	 *	get header
 	 *	return html form
-	*/
-	protected function get_header(){
-		$menu_log = "";		
-		if( ! Auth::check() ) {
-			$url = url('sarung_admin');
-			$menu_log = sprintf('<li><a href="%1$s">Login</a></li>',$url);
-		}
-		else{			
-			if($this->get_user_power()>=10){
-				$menu_log .= sprintf('<li><a href="%1$s" rel="no">Dashboard</a></li>' , $this->get_url_admind());
-			}
-			$menu_log .= sprintf('<li><a href="%1$s" >LogOut</a></li>' , $this->get_url_logout());
-		}
-		$hasil = sprintf('
-		<div class="navbar navbar-default navbar-default-top" role="navigation">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<div class="page-header ">
-						<h1>Fatihul Ulum Manggisan</h1>
-						<p class="lead bold-font"><span class="glyphicon glyphicon-flash"></span>Forgotten boarding school.</p>
-					</div> 			
-				</div>
-				<div class="navbar-collapse collapse">
-					<ul class="nav navbar-nav navbar-right">
-						<li><a href="%2$s">Home</a></li>
-						<li><a href="%3$s">Klasement</a></li>
-						<li>%4$s</li>
-						<li><a href="#">Contact</a></li>
-						%1$s
-					</ul>
-				</div><!--/.nav-collapse -->
-			</div>
-		</div>						 
-		' , $menu_log , $this->get_url_home()  , $this->get_url_klasement() , uang::getMenu());
-		return $hasil;
-	}
+	**/
+	public function get_header(){	return root::get_common_menu();}
 	/**
-	 *	To logout
 	*/
-	public function anyLogout(){
-	    Auth::logout();
-	    return Redirect::to( $this->get_url_home());		
-	}
+	public function index( $param = array() ){	}
+}
+/**
+ *	class login
+ *	parent class : klasement.php
+ *	To do: protect from brute force	: https://laracasts.com/forum/?p=2268-brute-force-attacks/0
+*/
+class login extends klasement {
+	//! must be override
+    public function __construct(){
+        parent::__construct();
+		$this->set_title('Login');
+		//$this->set_body_attribute( " class='login_body' " );
+    }
+
+	protected function get_user_name(){ 		return Input::get('username'); 	}
+	protected function get_password (){ 		return Input::get('password'); 	}
 	/**
 	 *	get form login
 	 *	return html login
@@ -97,53 +67,41 @@ abstract class login_main extends root{
 				</div>
 			</div>
 		</div>
-		',
-		'username' 	,
+		'												,
+		'username' 										,
 		Form::password('password', array('class'=>'form-control', 'placeholder'=>'Password'))	,
-		'' 	,
-		URL::to('/').'/asset/images/fatihulUlum1.gif' , 
-		$open_form ,
+		'' 												,
+		URL::to('/').'/asset/images/fatihulUlum1.gif' 	, 
+		$open_form 										,
 		Form::close()
 		);
 		return $hasil ;
-	}		
-	/**
-	*/
-	public function index( $param = array() ){
-		
 	}
-}
-/**
- *	class login
- *	parent class : klasement.php
- *	To do: protect from brute force	: https://laracasts.com/forum/?p=2268-brute-force-attacks/0
-*/
-class login extends klasement {
-	//! must be override
-    public function __construct(){
-        parent::__construct();
-		$this->set_title('Login');
-		//$this->set_body_attribute( " class='login_body' " );
-    }
-	protected function get_user_name(){ 		return Input::get('username'); 	}
-	protected function get_password (){ 		return Input::get('password'); 	}
 	/**
-	 * try to login
+	 **	try to login
+	 **	return false or true
 	 **/
-	protected function try_to_login(){
+	public function anyTrylogin(){
         $userdata = array(
             'email' 		=> 	 $this->get_user_name(),
             'password' 		=>  $this->get_password()
         );
-		return (string) Auth::attempt($userdata);
+		$result =  (string) Auth::attempt($userdata);
+		return Redirect::to( "/login" )->with('message', 'Login Failed');
+		if ( ! $result ){
+			return Redirect::to( root::get_url_login());//->with('message', 'Login Failed');
+		}
+		else{
+			return $this->anyLogin();
+		}
 	}
 	/**
-	 *	try to login
+	 *	login view
 	 *	return ?
-	*/	
+	**/	
 	public function anyLogin(){
 		$content ;
-		if( ! $this->try_to_login() ){			
+		if( ! Auth::check() ){			
 			$content = $this->getformlogin();
 		}
 		else{
@@ -259,8 +217,7 @@ class login extends klasement {
 		' , helper_get_url_admin_uang() , helper_get_url_admin_sarung() , $this->get_url_admin_iman());
 		return $hasil ;
 	}
-    protected function get_side(){
-	}
+    protected function get_side(){}
     protected function get_footer(){}
     protected function get_additional_js(){}
 	protected function get_additional_css(){	}

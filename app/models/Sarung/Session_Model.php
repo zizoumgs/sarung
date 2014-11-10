@@ -28,6 +28,23 @@ class Session_Model extends Sarung_Model_Root{
 		return $this->check_and_get_id($result);
     } 
 }
+/**
+ *	Additional data for session
+*/
+class Session_Addon_Model extends Sarung_Model_Root{
+    protected $table = 'sessionaddon';
+    public function Session(){
+       return $this->belongsTo('Session_Model' ,'idsession');
+    }
+	public function get_table_name(){
+		return $this->table;
+	}
+	public function scopeSessionname($query , $name){
+		return $query->whereHas('session',function($q) use( $name) {
+			$q->where('nama', '=', $name);
+		});
+	}	
+}
 
 
 

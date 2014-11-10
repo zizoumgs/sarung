@@ -312,12 +312,21 @@ abstract class klasement extends login_main{
 		//echo count ($santries);
         $where_query_one    =   $where_query." and kal.awal < ? ";
         $where_query_two    =   $where_query." and MONTH(kal.awal) = ? ";
-        //@
+        //@ get database and then save it in array
 		$santri_obj->init_array($santries);
         $santri_obj->set_score($santries, $this->get_month_per_view() , $where_query_one , $where_query_two ,$where_values , $date);
+		//@
+		$stay_student = $this->get_poor_student($santries);
+		//@ insert array into html`s table with id as a array`s key
+		$total_row = count($santries) ;
 		foreach($santries as $santri){
+			//@
 			$name = sprintf('%1$s %2$s' , $santri->first_name, $santri->second_name);
 			$limit_name = str_limit( sprintf('%1$s %2$s' , $santri->second_name , $santri->first_name) , 13,'..');
+			if($total_row <= $stay_student){
+				$limit_name = sprintf('<span style="text-decoration: line-through;">%1$s</span>',$limit_name);
+			}
+			//@
 			$result .= "<tr>";
 			$result .= sprintf('<td title="%1$s">%2$s<span class="badge pull-right blue">%3$s</span></td>', $name,$limit_name ,$santri->id_santri);
 			$result .= $santri_obj->get_result_for_particular_month($santri , 0 );
@@ -325,8 +334,24 @@ abstract class klasement extends login_main{
             $result .= $santri_obj->get_result_for_particular_month($santri , 2 );
             $result .= $santri_obj->get_result_for_particular_month($santri , 3 );
 			$result .= "</tr>";
+			$total_row--;
 		}
 		return $this->get_default_html($result , $this->get_filter() , $this->get_next_previous_link( $santries , $this->where_next_prev));
+	}
+	/**
+	 *	will get all student will stay
+	 *	return integer
+	**/
+	protected function get_poor_student($santries){
+		$id_ses_obj = Session_Addon_Model::sessionname( $this->get_session_selected() );
+		//! yes there is object
+		if($id_ses_obj->first()){
+			$total_santri 	= 	count($santries);
+			$limit			=	$id_ses_obj->first()->nilai;
+			$point			=	ceil (	($limit*$total_santri)/100	);
+			return $point;
+		}
+		return 0;
 	}
 	/**
 	 *	default html for this

@@ -1,6 +1,44 @@
 <?php
-class Admin_sarung_kalender extends Admin_sarung_pelajaran{
-    private $input;
+class Admin_sarung_kalender_support extends Admin_sarung_pelajaran{
+    protected $input;
+    public function __construct(){
+        parent::__construct();
+    }
+	public function set_session_name($val){
+		$this->input['session_name_kal'] = $val;
+	}
+	protected function get_session_name(){
+		return $this->input ['session_name_kal'] ;
+	}
+	/* all value for input*/
+    protected function set_rating_name($val)   {  $this->input ['rating_name'] = $val; }
+    protected function get_rating_name()       {  return $this->input ['rating_name'] ; }
+    protected function get_rating_selected ()  {  return Input::get( $this->get_rating_name() ) ;}
+
+    protected function set_money_name($val)   {  $this->input ['money_name'] = $val; }
+    protected function get_money_name()       {  return $this->input ['money_name'] ; }
+    protected function get_money_selected ()  {  return Input::get( $this->get_money_name() ) ;}
+	
+    protected function set_event_name($val)   {  $this->input ['event_name'] = $val; }
+    protected function get_event_name()       {  return $this->input ['event_name'] ; }
+    protected function get_event_selected ()  {  return Input::get( $this->get_event_name() ) ;}
+
+    protected function set_aktif_name($val)   {  $this->input ['aktif_name'] = $val; }
+    protected function get_aktif_name()       {  return $this->input ['aktif_name'] ; }
+    protected function get_aktif_selected ()  {  return Input::get( $this->get_aktif_name() ) ;}
+	
+    protected function set_editor_name($val)   {  $this->input ['editor_name'] = $val; }
+    protected function get_editor_name()       {  return $this->input ['editor_name'] ; }
+    protected function get_editor_selected ()  {  return Input::get( $this->get_editor_name() ) ;}
+	
+    protected function set_awal_name($val)   {  $this->input ['awal_name_kal'] = $val; }
+    protected function get_awal_name()       {  return $this->input ['awal_name_kal'] ; }
+	
+    protected function set_akhir_name($val)   {  $this->input ['akhir_name_kal'] = $val; }
+    protected function get_akhir_name()       {  return $this->input ['akhir_name_kal'] ; }
+
+}
+class Admin_sarung_kalender extends Admin_sarung_kalender_support{
     public function __construct(){
         parent::__construct();
     }
@@ -18,15 +56,13 @@ class Admin_sarung_kalender extends Admin_sarung_pelajaran{
         $this->set_name_for_text('kalender');
         $this->set_table_name('kalender');
         
-        $this->set_perkiraan_santri_name( 'perkiraan_santri' );
 		$this->set_session_name ( 'session_name');
         $this->set_rating_name  ( 'rating_name' );
         $this->set_money_name   ( 'money_name'  );
         $this->set_event_name   ( 'event_name'  );
-        $this->set_akhir_name   ( 'akhir_name'  );
-		$this->set_awal_name	( 'awal_name'   );
-		$this->set_aktif_name   ( 'aktif_name'	);
-		
+		$this->set_awal_name	( 'awal_name_kal');
+		$this->set_akhir_name	( 'akhir_name_kal');
+		$this->set_aktif_name	( 'aktif_name_kal');
 		//! filter
 		$this->set_id_filter_name('id_filter');
 		//! editor
@@ -60,7 +96,7 @@ class Admin_sarung_kalender extends Admin_sarung_pelajaran{
         $additional = $hasil = "";
 		$tmp = Form::text( $this->get_id_filter_name()  , '', array( 'class' => 'form-control input-sm' , 'placeholder' => 'Id' , 'Value' =>  $this->get_id_filter_selected() ));
 		$additional .= $this->get_form_group( $tmp ,'Id Kalender');
-		$tmp = $this->get_session_select( $this->get_session_selected() );
+		$tmp = $this->get_session_select( $this->get_value( $this->get_session_name())  );
 		$additional .= $this->get_form_group( $tmp  , '');
 		$tmp = $this->get_event_select( $this->get_event_selected() ) ;
 		$additional .= $this->get_form_group( $tmp  , '');
@@ -101,26 +137,6 @@ class Admin_sarung_kalender extends Admin_sarung_pelajaran{
         return $this->get_input_cud_group_kalender($label , $input );
     }
 	
-	/* all value for input*/
-    protected function set_rating_name($val)   {  $this->input ['rating_name'] = $val; }
-    protected function get_rating_name()       {  return $this->input ['rating_name'] ; }
-    protected function get_rating_selected ()  {  return Input::get( $this->get_rating_name() ) ;}
-
-    protected function set_money_name($val)   {  $this->input ['money_name'] = $val; }
-    protected function get_money_name()       {  return $this->input ['money_name'] ; }
-    protected function get_money_selected ()  {  return Input::get( $this->get_money_name() ) ;}
-	
-    protected function set_event_name($val)   {  $this->input ['event_name'] = $val; }
-    protected function get_event_name()       {  return $this->input ['event_name'] ; }
-    protected function get_event_selected ()  {  return Input::get( $this->get_event_name() ) ;}
-
-    protected function set_aktif_name($val)   {  $this->input ['aktif_name'] = $val; }
-    protected function get_aktif_name()       {  return $this->input ['aktif_name'] ; }
-    protected function get_aktif_selected ()  {  return Input::get( $this->get_aktif_name() ) ;}
-	
-    protected function set_editor_name($val)   {  $this->input ['editor_name'] = $val; }
-    protected function get_editor_name()       {  return $this->input ['editor_name'] ; }
-    protected function get_editor_selected ()  {  return Input::get( $this->get_editor_name() ) ;}
 	
 	/**
 	 *	return select html for session
@@ -300,7 +316,7 @@ class Admin_sarung_kalender extends Admin_sarung_pelajaran{
 	 *	return @index()
 	*/
     public function getIndex(){
-        $find_session 	= $this->get_session_selected();
+        $find_session 	= $this->get_value($this->get_session_name()) ;
 		$find_event   	= $this->get_event_selected();
 		$id				= $this->get_id_filter_selected();
         $href = sprintf('<a href="%1$s" class="btn btn-primary btn-xs" >Add</a>' , $this->get_url_this_add() );        

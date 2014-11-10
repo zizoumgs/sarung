@@ -26,6 +26,7 @@ return array(
 	|
 	*/
 	'default' => 'fusarung',
+    'main_db' => 'fusarung',
 	/*
 	|--------------------------------------------------------------------------
 	| Database Connections

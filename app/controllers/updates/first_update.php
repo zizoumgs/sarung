@@ -3,7 +3,13 @@
  *  You should run this query since i made big changes for sarung application
  *  And you should run it once
 */
-class first_update extends Controller{
+class update_support extends Controller{
+    /**
+     *  I`m clueless for this constructor
+     *  return none
+    */    
+    public function __construct(){
+    }
     /**
      *  Will hold eveyrthing
      *  var array
@@ -78,10 +84,17 @@ class first_update extends Controller{
         $sql = sprintf('ALTER TABLE %1$s CHANGE %2$s %3$s %4$s ' , $table_name , $column_name  , $to_be_name, $to_type );
         $this->exe_non_query( $sql ) ; 
     }
-     /**
+	/**
+	 *	Change table`s name
+	*/
+	public function change_table_name($col_name , $desire_name){
+		$sql = sprintf('RENAME TABLE %1$s TO %2$s' , $col_name , $desire_name);
+        $this->exe_non_query( $sql ) ; 
+	}
+    /**
      *  remove given table
      *  return none
-    */   
+    */
     function remove_table( $table_name ){
     	$sql = sprintf('DROP TABLE %1$s ' , $table_name);
         $this->exe_non_query( $sql ) ; 
@@ -99,7 +112,57 @@ class first_update extends Controller{
     **/
     function get_max_id( $table ){
         return DB::connection( $this->get_db())->table($table)->max('id');
-    }    
+    }
+}
+/**
+ *	third update will add several column in session
+*/
+class update_third extends update_support{
+    /**
+     *  I`m clueless for this constructor
+     *  return none
+    */    
+    public function __construct(){
+		parent::__construct();
+    }
+	/**
+	**/
+	public function init_third(){
+		$table = 'sessionaddon';
+		//@ change naik_kelas to sessionaddon
+		$this->change_table_name('naik_kelas' , $table);
+		//@ delete col alias in session table
+		$this->del_column('session','alias');
+		//@ add some table
+		$this->add_column($table , "created_at"		, ' DATETIME DEFAULT \'2014-01-01\' ' );
+		$this->add_column($table , 'updated_at'  	, ' DATETIME DEFAULT \'2014-01-01\' ' );
+		
+		//@ change column`s data
+		$session_add = Session_Addon_Model::get();
+		foreach($session_add as $item){
+			$tmp = Session_Addon_Model::find	($item->id);
+			$tmp->model = "Persen";
+			$tmp->save();				
+		}
+		//@ insert new data for 14-15
+		$session = Session_Model::where('nama','=','14-15');
+		if( $session->first()){
+			$session_add = new Session_Addon_Model();
+			$session_add->nilai = 10;
+			$session_add->model = "Persen";
+			$session_add->idsession = $session->first()->id;
+			$session_add->save();
+		}
+	}
+}
+class first_update extends update_third{
+    /**
+     *  I`m clueless for this constructor
+     *  return none
+    */    
+    public function __construct(){
+		parent::__construct();
+    }
     /**	
     ***	Rename , add , and delete columns from some table
     ***/
@@ -261,12 +324,8 @@ class first_update extends Controller{
     	$array = array('password' => Hash::make('112298')  , 'email' => 'zizoumgs@gmail.com', 'id' => 1  );
            $this->exe_non_query($sql , $array);
     }
-    /**
-     *  I`m clueless for this constructor
-     *  return none
-    */    
-    public function __construct(){
-    }
+	/**
+	*/
 	public function first_update(){
     	$this->prepare_tables();
         $this->create_super_admind();
@@ -286,9 +345,9 @@ class first_update extends Controller{
         set_time_limit(1600);
         $this->set_db('fusarung');
     	echo "Prepare both santri and admin tables<br>";
-		$this->first_update();
-		$this->second_update();
-		
+		//$this->first_update();
+		//$this->second_update();
+		$this->init_third();
 		echo "Done";
     }
 	/**
@@ -445,4 +504,5 @@ class first_update extends Controller{
 		$this->remove_table("iuranlist");
 		$this->remove_table("totalbayarsantri");
 	}
+	
 }

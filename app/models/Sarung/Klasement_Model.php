@@ -86,7 +86,7 @@ class Klasement_Model extends Sarung_Model_Root{
             //! for finding position
             $pos [$result['id']] = $result ['total_nilai'] ;
         }
-        //@ sort array        
+        //@ sort array
         arsort($pos);
         $urutan = 1;
         $new_post = array();
@@ -196,7 +196,6 @@ class Klasement_Model extends Sarung_Model_Root{
                 endforeach;
                 $month++;
                 //@ we have all position for santri
-                //@ now we will harvest                    
             endfor;
     }
 	/**
@@ -214,6 +213,7 @@ class Klasement_Model extends Sarung_Model_Root{
 			where kal.id = uji.idkalender  and kel.id = uji.idkelas and  pel.id = uji.idpelajaran 
 			and ujis.idsantri = san.id  and uji.id = ujis.idujian
 			and san.idadmind = adm.id 
+			and ( san.keluar ="0000-00-00" OR YEAR(ses.akhir) < YEAR(san.keluar)   )
 			and ses.id = kal.idsession  %1$s
 			group by ujis.idsantri order by nilai DESC
 		' , $where_query);
@@ -261,6 +261,7 @@ class Klasement_Model extends Sarung_Model_Root{
 			where kal.id = uji.idkalender  and kel.id = uji.idkelas and  pel.id = uji.idpelajaran 
 			and ujis.idsantri = san.id  and uji.id = ujis.idujian
 			and san.idadmind = adm.id and ses.id = kal.idsession
+			and ( san.keluar ="0000-00-00" OR YEAR(ses.akhir) < YEAR(san.keluar)   )
             %1$s
 			group by ujis.idsantri order by nilai DESC			
 		',$where_query);
@@ -284,6 +285,7 @@ class Klasement_Model extends Sarung_Model_Root{
 			where kal.id = uji.idkalender  and kel.id = uji.idkelas and  pel.id = uji.idpelajaran 
 			and ujis.idsantri = san.id  and uji.id = ujis.idujian
 			and san.idadmind = adm.id and ses.id = kal.idsession
+			and ( san.keluar ="0000-00-00" OR YEAR(ses.akhir) < YEAR(san.keluar)   )
             %1$s
 			group by ujis.idsantri order by nilai DESC			
 		',$where_query);

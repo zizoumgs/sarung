@@ -1,19 +1,13 @@
 <?php
-class Admin_sarung_session extends Admin_sarung_event{
-    private $input;
-   
+class Admin_sarung_session_support extends Admin_sarung_support{//Admin_sarung_event{
     public function __construct(){
         parent::__construct();
-    }
+    }    
    
     protected function set_session_name($val)   {  $this->input ['session_name'] = $val; }
     protected function get_session_name()       {  return $this->input ['session_name'] ; }
     protected function get_session_selected ()  {  return Input::get( $this->get_session_name() ) ;}
     
-    protected function set_alias_name($val)     { $this->input ['alias_name'] = $val; }
-    protected function get_alias_name()         { return $this->input['alias_name'];}
-    protected function get_alis_selected ()     { return Input::get( $this->get_alias_name());}
-
     protected function set_perkiraan_santri_name($val)  { $this->input ['perkiraan_santri'] = $val ;}
     protected function get_perkiraan_santri_name()      { return $this->input ['perkiraan_santri'];}
     protected function get_perkiraan_santri_selected () { return Input::get( $this->get_perkiraan_santri_name() );}
@@ -26,15 +20,207 @@ class Admin_sarung_session extends Admin_sarung_event{
     protected function get_akhir_name()         { return $this->input ['akhir_name'] ;}
     protected function get_akhir_selected ()    { return Input::get( $this->get_akhir_name() ) ;}
     
+    protected function set_nilai_name($val)     { $this->input ['nilai_name'] = $val ; }
+    protected function get_nilai_name()         { return $this->input ['nilai_name'] ;}
+    
+    protected function set_model_name($val)     { $this->input ['model_name'] = $val ; }
+    protected function get_model_name()         { return $this->input ['model_name'] ;}
+    
+    protected function get_model_list(){        return array("Persen"  , "Peringkat");    }
+    protected function get_model_def(){        return "Persen";    }
+    
+    protected function set_text_on_top($val) { $this->input ['text_on_top'] = $val;}
+    protected function get_text_on_top(){ return $this->input ['text_on_top'] ;}
+    
+    /**
+     *  return  html input only
+    **/
+    protected function get_text_cud_group( $label , $value , $name , $disabled){
+        $input =  sprintf('
+            <input  name="%3$s" class=" %3$s form-control " type="text" placeholder="%1$s" Value="%2$s" %4$s >' ,
+            $label , $value , $name , $disabled);
+        return $this->get_input_cud_group($label , $input );
+    }
+    /**
+     *  @override
+     *  return error message
+    **/
+    protected function get_error_message(){
+        $mes = parent::get_error_message();
+        if($mes != ""){
+            return "<hr style='border:1px solid #CCCCCC;'>".$mes."<hr style='border:1px solid #CCCCCC;'>";
+        }
+        return "";
+    }
+    /**
+     *  override
+     *  prepare something that to be saved into db
+    */
+    protected function will_change_to_db(){
+        $data           = Input::all();        
+        //! insert into sessionaddon
+        $ses_addon = new Session_Addon_Model();
+        $tmp = $this->get_obj_addon($data ['id']);
+        if($this->get_purpose() == self::DELE){
+            if( $tmp->first()){
+               $ses_addon = $ses_addon->find( $tmp->first()->id );
+            }
+            else{
+                //@ error
+                return;
+            }
+            $this->add_obj_dele_db($ses_addon);
+            $this->set_invers_obj_dele();
+            return parent::will_change_to_db();            
+        }
+        else{
+            //@ there are idsession 
+            if( $tmp->first()){
+               $ses_addon = $ses_addon->find( $tmp->first()->id );
+            }
+            //@ there are no id session , usually this is add
+            else{
+                //! we need find id
+                $data ['id']    = $this->get_id_from_save_id ( $this->get_table_name() ,$this->get_max_id() );
+                $ses_addon_a = new Session_Addon_Model();        
+                $id = $this->get_id_from_save_id ( $ses_addon->get_table_name() , $ses_addon_a->max('id') );
+                $ses_addon->id = $id;
+            }        
+        }
+        //@ inti
+        $ses_addon->nilai = $data [$this->get_nilai_name()];
+        $ses_addon->model = $data [$this->get_model_name()];
+        $ses_addon->idsession = $data ['id'] ;
+        $this->add_obj_save_db($ses_addon);
+        return parent::will_change_to_db();
+    }
+    /**
+     *  get obj of sessionaddon`s table
+    */
+    protected function get_obj_addon($idsession){
+        return Session_Addon_Model::where("idsession","=", $idsession);
+    }
+}
+/**
+ *  this class prepare for deleting session especially
+**/
+class Admin_sarung_session_dele extends Admin_sarung_session_support{
+    public function __construct(){
+        parent::__construct();
+    }
+    /**
+      *   first html if you want to delete from database
+      *  return  index() or blank if non positif
+    **/
+    public function getEventdel($id , $message = ""){
+        if($id >= 0){
+            $this->set_id($id);
+            $model = $this->get_model_obj()->find( $this->get_id() );
+            $array = $this->set_values_to_inputs($model);
+            $body  = $this->get_form_cud( $this->get_url_this_dele() , $array ,"disabled");
+            $header = sprintf('<h1><span class="glyphicon glyphicon-plus"></span>Session Delete:</h1>%1$s<hr style="border:1px solid #CCCCCC;">',$message);
+            $this->set_content( $header.$body.$this->get_error_message() );
+            return $this->index();
+        }
+        else{
+            echo "You tried to put non positif id ";
+        }
+    } 
+}
+/**
+ *  this class prepare for editing session especially
+**/
+class Admin_sarung_session_edit extends Admin_sarung_session_dele{
+    public function __construct(){
+        parent::__construct();
+    }
+    /**
+      *   first html if you want to edit from database
+      *  return  index() or blank if non positif
+    **/
+    public final function getEventedit($id ,$values=array(), $message = ""){
+        if($id >= 0){
+            $this->set_id($id);
+            $model = $this->get_model_obj()->find( $this->get_id() );
+            $array = $this->set_values_to_inputs($model);
+            $body  = $this->get_form_cud( $this->get_url_this_edit() , $array );
+            $header = sprintf('<h1><span class="glyphicon glyphicon-plus"></span>Session Edit</h1>%1$s<hr style="border:1px solid #CCCCCC;">',$message);
+            $this->set_content($header.$body.$this->get_error_message() );
+            return $this->index();            
+        }
+        else{
+            echo "Your Id is Not positif";
+        }
+    }
+    /**
+     *  no override
+    **/
+    public final  function postEventedit(){
+        $this->set_purpose( self::EDIT);
+		$data = Input::all();
+        $id =   $data ['id'] ;
+   		$rules = $this->get_rules(true);
+    	$validator = Validator::make($data, $rules);
+		if ($validator->fails())    {
+			$messages = $validator->messages();
+			$message = sprintf('<span class="label label-danger">%1$s</span>' ,
+							   $this->make_message( $messages->all() ));
+            $this->set_error_message($message);
+			return $this->getEventEdit($id ,array(), $message);
+		}
+        else{
+            return $this->will_edit_to_db($data);
+        }            
+    }    
+}
+/**
+ *  this class prepare for add session especially
+**/
+class Admin_sarung_session_add extends Admin_sarung_session_edit{
+    public function __construct(){
+        parent::__construct();
+    }
+    public final function getEventadd($messages = ""){
+		$this->set_purpose( self::ADDI);
+        $all = Input::all();
+        $heading    = 'Add';
+        $body       = $this->get_form_cud( $this->get_url_this_add() , $all  );
+        $header = sprintf('<h1><span class="glyphicon glyphicon-plus"></span>Session</h1>%1$s<hr style="border:1px solid #CCCCCC;">',$messages);
+        $this->set_content( $header.$body.$this->get_error_message() );
+        return $this->index();
+    }
+    /**
+     *  Default postEventadd ; prepare to insert into database
+    **/
+    public final function postEventadd(){
+        $this->set_purpose( self::ADDI);
+        $data = Input::all();
+   		$rules = $this->get_rules( true);
+    	$validator = Validator::make($data, $rules);
+		if ($validator->fails())    {
+			$messages = $validator->messages();
+			$message = sprintf('<span class="label label-danger">%1$s</span>' ,
+							   $this->make_message( $messages->all() ));
+			return $this->getEventadd( $message );
+		}
+        else{
+            return $this->will_insert_to_db($data);
+        }        
+    }
+}
+class Admin_sarung_session extends Admin_sarung_session_add{
+    public function __construct(){        parent::__construct();    }
     protected function get_form_cud( $go_where  , $values = array()  ,$disabled = "" , $method = 'post'){
         $array = array(
                        $this->get_session_name () => '' ,
-                       $this->get_alias_name    () => '' ,
+                       $this->get_nilai_name    () => '0' ,
+                       $this->get_model_name    () => $this->get_model_def() ,
                        $this->get_perkiraan_santri_name() => '2' ,
                        $this->get_awal_name()   =>  '' ,
                        $this->get_akhir_name()  =>  ''
-                       );
+        );
         $array = $this->make_one_two_array($array , $values);
+        $this->use_select();
 		$this->set_input_date( ".".$this->get_akhir_name() , true);
 		$this->set_input_date( ".".$this->get_awal_name()  , false);
         $perkiraan_santri = sprintf('<input type="number" name="%1$s" class="%1$s form-control" min="1" max="3" Value="%2$s" %3$s  >',
@@ -46,11 +232,21 @@ class Admin_sarung_session extends Admin_sarung_event{
         $params = array('label' , 'value');
    		$hasil  = Form::open(array('url' => $go_where, 'method' => $method , 'role' => 'form' ,'class' => 'form-horizontal')) ;
         $hasil .= $this->get_text_cud_group( 'Session'     , $array [ $this->get_session_name()]   , $this->get_session_name()    , $disabled) ;
-        $hasil .= $this->get_text_cud_group( 'Short_Name'  , $array [ $this->get_alias_name()]     , $this->get_alias_name()      , $disabled) ;
         $hasil .= $this->get_input_cud_group( 'Perkiraan Santri'  , $perkiraan_santri) ;
-        $hasil .= $this->get_text_cud_group( 'Awal'        , $array [ $this->get_awal_name()]     , $this->get_awal_name()      , $disabled) ;
-        $hasil .= $this->get_text_cud_group( 'Akhir'  , $array [ $this->get_akhir_name()]     , $this->get_akhir_name()      , $disabled) ;
-        
+        //@ nilai
+        $name = $this->get_nilai_name();
+        $nilai = sprintf('<input type="number" name="%1$s" class="%1$s form-control" min="0" Value="%2$s" %3$s  >',
+                                    $name              , 
+                                    $array [ $name]    ,
+                                    $disabled );        
+        $hasil .= $this->get_input_cud_group( 'Stayed student'  , $nilai) ;
+        //@ model
+        $hasil .= $this->get_input_cud_group( 'Model Kenaikan'  , $this->get_model_kenaikan_select() ) ;        
+        //@ awal and akhir
+        $name = $this->get_awal_name();
+        $hasil .= $this->get_text_cud_group( 'Awal'     , $array [$name]    , $name     , $disabled) ;
+        $name = $this->get_akhir_name();
+        $hasil .= $this->get_text_cud_group( 'Akhir'    , $array [$name]    , $name     , $disabled) ;
         
    		$hasil .= Form::hidden('id', $this->get_id() );
 		$hasil .= '<div class="form-group"><div class="col-sm-offset-2 col-sm-10">';
@@ -59,36 +255,44 @@ class Admin_sarung_session extends Admin_sarung_event{
         $hasil .= Form::close();
         return $hasil;
     }
-
-    /*You should call this on contructor ,and you should make this*/
+    /***
+    ****  combo box for model kenaikan
+    ****  return select
+    ***/
+    protected function get_model_kenaikan_select(){
+        $name = $this->get_model_name();
+        $default = array( "class" => "selectpicker col-md-12" , "name" => $name , "id"   => $name , 'selected' => $this->get_value($name) );
+        $items = array("Persen" , "Peringkat");
+        return $this->get_select( $items , $default);
+    }
+    /***
+    ****  You should call this on contructor ,and you should make this
+    ***/
     protected function set_default_value(){
         $this->set_view('sarung/admin/index');
         $this->set_min_power( 1000 );
 		$this->set_title('Session');
 		$this->set_body_attribute( " class='admin admin_sarung_body' " );
-        $this->set_name_for_text('kalender');
         $this->set_table_name('session');
         
         $this->set_perkiraan_santri_name( 'perkiraan_santri' );
         $this->set_session_name ( 'session_name');
-        $this->set_alias_name   ( 'alias_name');
         $this->set_awal_name    ( 'awal_name');
         $this->set_akhir_name   ( 'akhir_name' );
+        $this->set_nilai_name   ( 'nilai_name') ;
+        $this->set_model_name   ( 'model_name');
+        
     }
-
-
+    /**
+     *  Default index for this function 
+    */
     public function getIndex(){
-        $find_name = $this->get_name_for_text_selected();
         $href = sprintf('<a href="%1$s" class="btn btn-primary btn-xs" >Add</a>' , $this->get_url_this_add() );        
         $this->set_text_on_top('Session Table  '.$href);
         $row = "";
-        $form = $this->get_form_filter( $this->get_url_this_view() );
+        $form = "";
         $session = new Session_Model();
         $wheres = array();
-        if( $find_name != ""){
-            $wheres [] = array( $this->get_name_for_text() => $find_name );
-            $session = $session->where('nama' , 'LIKE' , "%".$find_name."%");
-        }
         $sessions = $session->orderBy('updated_at','DESC')->paginate(15);
         foreach($sessions as $event){
             $row .= "<tr>";
@@ -133,78 +337,14 @@ class Admin_sarung_session extends Admin_sarung_event{
 
 
 
-    public function postEventadd(){
-        $data = Input::all();
-   		$rules = $this->get_rules( true);
-    	$validator = Validator::make($data, $rules);
-		if ($validator->fails())    {
-			$messages = $validator->messages();
-			$message = sprintf('<span class="label label-danger">%1$s</span>' ,
-							   $this->make_message( $messages->all() ));
-			return $this->getEventadd( $message );
-		}
-        else{
-            $id             =   $this->get_id_from_save_id ( $this->get_table_name() ,$this->get_max_id() );
-            $data ['id']    =   $id ;
-            $event = $this->Sarung_db_about($data  );
-			$messages = array("Gagal Memasukkan ");
-			$message = sprintf('<span class="label label-danger">%1$s</span>' ,
-							   $this->make_message( $messages ));
-			$bool = false ;
-            $saveId = $this->del_item_from_save_id( $this->get_table_name() , $id );
-			DB::transaction(function()use ($event , $saveId , &$bool , $id){
-				$event->save();
-                if($saveId)
-           			$saveId->delete();		
-				$bool = true;				
-			});
-			if($bool){
-				$messages = array(" Sukses Menambah");
-				$message = sprintf('<span class="label label-info">%1$s</span>' ,
-							   $this->make_message( $messages ));
-			}
-			return $this->getEventadd($message);            
-        }        
-    }
-
-
-
-    public function postEventedit(){
-		$data = Input::all() ;
-        $id = Input::get('id');
-		$rules = $this->get_rules(true);
-    	$validator = Validator::make($data, $rules);
-		if ($validator->fails())    {
-			$messages = $validator->messages();
-			$message = sprintf('<span class="label label-danger">%1$s</span>' ,
-							   $this->make_message( $messages->all() ));
-			return $this->getEventedit( $message );
-		}
-        else{
-            $event = $this->Sarung_db_about( $data , true  );
-			$messages = array("Gagal Mengedit ");
-			$message = sprintf('<span class="label label-danger">%1$s</span>' ,
-							   $this->make_message( $messages ));
-			$bool = false ; 
-			DB::transaction(function()use ($event , &$bool , $id){
-				$event->save();
-				$bool = true;				
-			});
-			if($bool){
-				$messages = array(" Sukses Mengedit");
-				$message = sprintf('<span class="label label-info">%1$s</span>' ,
-							   $this->make_message( $messages ));
-			}
-			return $this->getEventedit( $id , $message);
-        }
-    }
-
-
-
+    /**
+     *  All rules for add , edit and delete
+     *  return array
+    **/
     protected function get_rules($with_id = false){
         $array = array(
             $this->get_session_name ()  => 'required' ,
-            $this->get_alias_name   ()  => 'required' ,
+            $this->get_nilai_name   ()  => 'required' ,
             $this->get_perkiraan_santri_name() => "required|numeric" ,
             $this->get_awal_name()      => 'required' ,
             $this->get_akhir_name()     => 'required'
@@ -213,29 +353,33 @@ class Admin_sarung_session extends Admin_sarung_event{
             $array ['id'] = "required|numeric" ; 
         return $array;
     }
-
-
-
-   /* this will be called just before insert , edit */
-    protected function Sarung_db_about($data , $edit = false){
+   /**
+   ***  this will be called just before insert , edit
+   ***  return object from session
+   ***/
+    protected function Sarung_db_about($data , $edit = false , $values = array()){
         $event = new Session_Model();
-        if( !$edit ){
-            $event->id = $data ['id'] ;
-        }
-        else{
-            $event = $event->find( $data ['id'] );
-        }
+        if( !$edit ){            $event->id = $data ['id'] ;        }
+        else{   $event = $event->find( $data ['id'] );        }
        	$event->nama            = $data [ $this->get_session_name() ]           ;
-   		$event->alias           = $data [ $this->get_alias_name()   ]	        ;
         $event->perkiraansantri = $data [ $this->get_perkiraan_santri_name() ]  ;
         $event->awal            = $data [ $this->get_awal_name()    ]           ;
         $event->akhir           = $data [ $this->get_akhir_name()   ]           ;
+        //@ everything is ready
         return $event;
     }
-    protected function set_values_to_inputs($model){
+    /**
+     *  
+    */
+    protected function set_values_to_inputs($model = 'empty'){
+        $nilai_name = 0 ; 
+        $obj = $this->get_obj_addon($model->id);
+        if($obj->first()){
+            $nilai_name = $obj->first()->nilai;
+        }
         return array(
                      $this->get_session_name()              =>  $model->nama            ,
-                     $this->get_alias_name()                =>  $model->alias           ,
+                     $this->get_nilai_name()                =>  $nilai_name             ,
                      $this->get_perkiraan_santri_name()     =>  $model->perkiraansantri ,
                      $this->get_awal_name()                 =>  $model->awal            ,
                      $this->get_akhir_name()                =>  $model->akhir

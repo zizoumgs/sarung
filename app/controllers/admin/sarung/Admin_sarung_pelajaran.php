@@ -1,5 +1,5 @@
 <?php
-class Admin_sarung_pelajaran extends Admin_sarung_session{
+class Admin_sarung_pelajaran extends Admin_sarung_event{
     private $input;
     public function __construct(){        parent::__construct();    }
    

@@ -247,6 +247,12 @@ abstract class Admin_sarung_support extends Admin_sarung_support_root implements
 	}
 	protected function get_obj_save_db(){ return $this->objs_save_db ; }
 	protected function get_obj_dele_db(){ return $this->objs_dele_db ; }
+	protected function set_invers_obj_save(){
+		$this->objs_save_db = array_reverse( $this->objs_save_db );
+	}
+	protected function set_invers_obj_dele(){
+		$this->objs_dele_db = array_reverse( $this->objs_dele_db );
+	}
 	
 
 	protected function set_pdo_exception($val) {$this->input['pdo_exception'] = $val;}
@@ -494,7 +500,7 @@ abstract class Admin_sarung_support extends Admin_sarung_support_root implements
 	 *	last chance before change db
 	 *	return bool:	true if succeded , false otherwise
 	*/
-	protected final function will_change_to_db(){
+	protected function will_change_to_db(){
 		$pdo = DB::connection( $this->get_database_name() )->getPdo();
 		$pdo->beginTransaction();
 		//DB::beginTransaction();

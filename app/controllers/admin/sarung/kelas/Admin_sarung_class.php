@@ -574,10 +574,6 @@ class Admin_sarung_class extends Admin_sarung_class_support{
         $santri->idkelas		=   $idkelas        ;
 		$santri->idsantri		=   $id_user        ;
         $santri->catatan        =   $data [ $this->helper->get_ins_name_catatan()];
-        Log::info($id_user);
-		Log::info($idkelas);
-		Log::info($there->id);
-
         return $santri;
 	}	
 	/**

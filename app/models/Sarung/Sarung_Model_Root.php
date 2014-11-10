@@ -5,11 +5,13 @@
 class Sarung_Model_Root extends Eloquent{
 	protected $connection = 'fusarung';
 	/*If you decided to use raw query , use below*/
-	protected function get_db(){
-		return "fusarung";
+	public static function get_db(){
+		return Config::get('database.main_db');
+		//return "fusarung";
 	}
-	protected function get_db_name(){
-		return "mgscom_ngoos";
+	public static function get_db_name(){
+		return Config::get('database.connections.fusarung.database');
+		//return "mgscom_ngoos";
 	}	
 	/**
 	*	will check and return valid value

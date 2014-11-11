@@ -27,6 +27,7 @@ return array(
 	*/
 	'default' => 'fusarung',
     'main_db' => 'fusarung',
+    'backupdb' => array('mgscom_ngoos','test_1' ),
 	/*
 	|--------------------------------------------------------------------------
 	| Database Connections

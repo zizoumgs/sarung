@@ -28,6 +28,7 @@ ClassLoader::addDirectories(array(
 	app_path().'/database/seeds',
 	app_path().'/libs/blueimp',
 	app_path().'/libs/func',
+	app_path().'/libs/backup',
 	app_path().'/libs'
 	
 ));
@@ -94,3 +95,4 @@ require app_path().'/filters.php';
 /*This will make something helper*/
 require app_path().'/libs/helpers.php';
 require app_path().'/libs/func/func.php';
+require app_path().'/libs/backup/Mysqldump.php';

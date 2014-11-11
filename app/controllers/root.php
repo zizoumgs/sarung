@@ -288,7 +288,9 @@ abstract class root extends Controller {
 	public static  function get_url_logout(){		return url('logout');	}
 	public static  function get_url_admind(){		return url('sarung_admin');	}
 	public static  function get_url_login(){		return url('trylogin');	}
+	public static  function get_url_backup(){		return url('backupdb');	}
 	public static  function get_url_uang	($add=""){		return url('uang'.$add);	}
+	
 	/**
 	 **	Common menu for this
 	***/
@@ -339,5 +341,25 @@ abstract class root extends Controller {
 	public static function anyLogout(){
 	    Auth::logout();
 	    return Redirect::to( root::get_url_home());		
+	}
+	/**
+	 *	To back up 
+	*/
+	public static function anyBackupdb(){
+		//$backup = new BACKUP\Backup();
+		try {
+			$date = date("d_M_Y_h_i_s");
+			$path = public_path()."\backup";
+		    $dump = new Ifsnop\Mysqldump\Mysqldump('mgscom_ngoos', 'root', '1');
+			if(!File::exists($path)) {
+				File::makeDirectory( $path );
+			}
+			foreach( Config::get('database.backupdb') as $db ){
+			    $dump->start( $path . "\\$db-$date.sql");				
+			}
+		} catch (\Exception $e) {
+		    echo 'mysqldump-php error: ' . $e->getMessage();
+		}
+	    return Redirect::to( root::get_url_admind());		
 	}
 }

@@ -27,6 +27,8 @@ return array(
 	*/
 	'default' => 'fusarung',
     'main_db' => 'fusarung',
+    'main_username' => 'root',
+    'main_password' => '1',
     'backupdb' => array('mgscom_ngoos','test_1' ),
 	/*
 	|--------------------------------------------------------------------------

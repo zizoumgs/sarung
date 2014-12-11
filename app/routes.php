@@ -35,6 +35,11 @@ Route::controller('sarung_admin/user'                   , 'Admin_sarung_user_cud
 Route::controller('sarung_admin/santri'                 , 'Admin_sarung_santri_cud');
 Route::controller('sarung_admin/class'                  , 'Admin_sarung_class');
 Route::controller('sarung_admin/ujis'                   , 'Admin_sarung_ujis');
+//@larangan
+Route::controller('sarung_admin/tindakan'               , 'Admin_sarung_larangan_nama');
+Route::controller('sarung_admin/tindakan_meta'          , 'Admin_sarung_larangan_meta');
+Route::controller('sarung_admin/tindakan_kasus'          , 'Admin_sarung_larangan_kasus');
+
 //! i will remove this
 Route::any('/delete_img',
 				array('uses'=>'Admin_sarung_user_cud@getDelete_img','as' => 'delete_img')

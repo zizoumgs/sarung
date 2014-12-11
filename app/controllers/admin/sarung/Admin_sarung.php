@@ -26,6 +26,10 @@ abstract class  Admin_sarung_urls extends Admin_root {
 	protected function get_url_admin_class		()	{ 		return sprintf('%1$s/sarung_admin/class		' , $this->base_url());}
 	protected function get_url_admin_ujis		()	{ 		return sprintf('%1$s/sarung_admin/ujis		' , $this->base_url());}
 	protected function get_url_admin_sarung		()   { 		return helper_get_url_admin_sarung();}
+	//@ larangan
+	protected function get_url_admin_larangan_nama	($add="")	{		return URL::to("sarung_admin/tindakan$add");}
+	protected function get_url_admin_larangan_meta	($add="")	{		return URL::to("sarung_admin/tindakan_meta$add");}
+	protected function get_url_admin_larangan_kasus	($add="")	{		return URL::to("sarung_admin/tindakan_kasus$add");}
 	
 }
 /**
@@ -62,11 +66,15 @@ abstract class  Admin_sarung_side_root extends Admin_sarung_urls{
 			array('Class'		,'<span class="glyphicon glyphicon-inbox"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_class() ) )	,
 			array('Ujian Santri','<span class="glyphicon glyphicon-pencil"></span>'   	, sprintf('%1$s'    , $this->get_url_admin_ujis() ) )
         );
-		$address = $this->get_side_of_address();
-        $list_menu .= sprintf('<li>%1$s</li>', $address) ;
+		//@ address
+        $list_menu .= $this->get_side_of_address();
+		//@ iman
+		$list_menu .= $this->get_side_of_larangan();
+		//@
         foreach($list as $key => $val ){
            $list_menu .= sprintf('<li><a href="%1$s" rel="nofollow"> %2$s    %3$s</a></li>', $val [2] , $val [1] ,$val[0]) ;
         }
+		//@
 		$side = sprintf('
 				<ul>%1$s</ul>
 		',$list_menu);
@@ -91,13 +99,42 @@ abstract class  Admin_sarung_side_root extends Admin_sarung_urls{
                 "
                 ><span class="glyphicon glyphicon-map-marker"></span>Address</a>
         ',
-		$this->get_url_admin_negara(),
-		$this->get_url_admin_propinsi(),
+		$this->get_url_admin_negara()		,
+		$this->get_url_admin_propinsi()		,
 		$this->get_url_admin_kabupaten() 	,
 		$this->get_url_admin_kecamatan() 	,
 		$this->get_url_admin_desa()
 		);
-		return $menu;
+		//$this->js_additional .= '<script> $("#element").popover(); </script>';
+		return sprintf('<li>%1$s</li>',$menu);
+	}
+	/**
+	 *	side for larangan ,there will be there menus , larangan_nama , larangan_meta , larangan_kasus
+	**/
+	private function get_side_of_larangan(){
+        $menu  = sprintf('
+            <a id="element_larangan" href="#" tabindex="0" 
+            data-toggle="popover" 
+            data-trigger="focus"
+            data-html="true"
+            title="<span class=\'title_side_content\'>Larangan</span>" 
+            data-content="
+				<a class=\'inside_side_content\' href=\'%1$s\'><span class=\'glyphicon glyphicon-map-marker\'></span>Nama</a>
+				<a class=\'inside_side_content\' href=\'%2$s\'><span class=\'glyphicon glyphicon-map-marker\'></span>Larangan</a>
+				<a class=\'inside_side_content\' href=\'%3$s\'><span class=\'glyphicon glyphicon-map-marker\'></span>Kasus</a>
+                "
+            ><span class="glyphicon glyphicon-map-marker"></span>Larangan</a>
+        ',
+		$this->get_url_admin_larangan_nama(),
+		$this->get_url_admin_larangan_meta(),
+		$this->get_url_admin_larangan_kasus()
+		);
+		//$this->js_additional .= '<script> $("#element_larangan").popover(); </script>';
+		return sprintf('<li>%1$s</li>',$menu);
+		
+	}	
+    protected function get_additional_js(){
+		return '<script> $("#element").popover(); </script> <script> $("#element_larangan").popover(); </script>';
 	}
 }
 /**
@@ -240,15 +277,7 @@ class Admin_sarung extends Admin_sarung_side_root{
 	 *	return additional js string
 	*/
     protected function get_additional_js(){
-		$js = sprintf('
-			<!-- additional css -->
-            <script>
-	            $("#element").popover();
-            </script>
-			',
-			$this->base_url()
-			);
-		return $js;
+		return parent::get_additional_js();//$this->js_additional;
     }
 	/**
 	 * this function will combine two array which has same key

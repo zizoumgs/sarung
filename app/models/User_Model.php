@@ -77,7 +77,8 @@ class User_Model extends Sarung_Model_Root implements UserInterface, RemindableI
 	 *	return object of Kabupaten_Model
 	 **/
 	public function Santri(){
-		return $this->hasOne('Santri_Model' , 'idadmind');
+		return $this->hasOne('Santri_Model' , 'idadmind' , 'id');
+		//return $this->belongsTo('Santri_Model' , 'idadmind');
 	}
 	/**
 	 * get userr which has no id in santri

@@ -70,21 +70,23 @@ function get_session_select( $attributes = array() , $additional_item = array())
                          "name" => '' ,
                          'id'   => '' , 
                          'selected' => '',
+						 'data-size' => '5',
 						 );
 	//! transfer to default array
 	foreach( $attributes as $key => $val){
 		$default [$key] = $val ;
 	}			
     $hasil = array();
+	//@ additioanl item
+    foreach($additional_item as $item){
+	    $hasil [] = $item ;
+    }
+    //@
     $sessions = new \Session_Model();
 	$sessions = $sessions->orderby('nama' , 'DESC')->get();
     foreach($sessions as $item){
 	    $hasil [] = $item->nama ;
     }
-	//@ additioanl item
-    foreach($additional_item as $item){
-	    $hasil [] = $item ;
-    }		
     return get_select( $hasil , $default);
 }
 
@@ -98,18 +100,20 @@ function get_pelajaran_select( $attributes ,   $additional_item = array()){
 		"name" => ''				,
         'id'   => '' 				, 
         'selected' => ''			,
+		 'data-size' => '5',
 	 );
 	//! transfer to default array
 	foreach( $attributes as $key => $val){
 		$default [$key] = $val ;
 	}			
     $hasil = array();
+	//@ additioanl item
+    foreach($additional_item as $item){            $hasil [] = $item ;        }		
+    //@
     $sessions = new \Ujian_Model();
     foreach($sessions->get_names_of_pelajaran() as $item){
 		$hasil [] = $item->name ;
     }
-	//@ additioanl item
-    foreach($additional_item as $item){            $hasil [] = $item ;        }		
     return get_select( $hasil , $default);		
 }
 /**
@@ -121,19 +125,21 @@ function get_event_ujian_select( $attributes , $additional_item = array() ){
                          "name" => '',
                          'id'   => '' , 
                          'selected' => '',
+						 'data-size' => '5',						 
 						 );
 		//! transfer to default array
 	foreach( $attributes as $key => $val){
 		$default [$key] = $val ;
 	}			
     $hasil = array();
-    $sessions = new \Ujian_Model();
-    foreach($sessions->get_names_of_ujian() as $item){
-	    $hasil [] = $item->name ;
-    }
 	//@ additioanl item
     foreach($additional_item as $item){
 	    $hasil [] = $item ;
+    }
+    //@
+    $sessions = new \Ujian_Model();
+    foreach($sessions->get_names_of_ujian() as $item){
+	    $hasil [] = $item->name ;
     }
     return get_select( $hasil , $default);		
 }
@@ -142,25 +148,79 @@ function get_event_ujian_select( $attributes , $additional_item = array() ){
  *  return select
 **/
 function get_kelas_select( $attributes , $additional_item = array()){
-        $default = array( "class" => "selectpicker",
-                         "name" => '',
-                         'id'   => '' , 
-                         'selected' => '',
-						 );
+    $default = array( "class" => "selectpicker",
+        "name" => '',
+        'id'   => '' , 
+        'selected' => '',
+		 'data-size' => '5',
+	);
 	//! transfer to default array
 	foreach( $attributes as $key => $val){
 		$default [$key] = $val ;
 	}
 	
-        $hasil = array();
-        $sessions = \Kelas_Model::orderby('nama' , 'ASC')->get();
-        foreach($sessions as $item){
-            $hasil [] = $item->nama ;
-        }		
+    $hasil = array();
 	//@ additioanl item
     foreach($additional_item as $item){            $hasil [] = $item ;        }		
+    //@    
+    $sessions = \Kelas_Model::orderby('nama' , 'ASC')->get();
+    foreach($sessions as $item){
+    	$hasil [] = $item->nama ;
+    }		
 	return get_select( $hasil , $default);		
 }
+/**
+ *  get kelas
+ *  return select
+**/
+function get_pelanggaran_name_select( $attributes , $additional_item = array()){
+        $default = array( "class" => "selectpicker",
+                         "name" => '',
+                         'id'   => '' , 
+                         'selected' => '',
+						 'data-size' => '5',
+						 );
+	//! transfer to default array
+	foreach( $attributes as $key => $val){
+		$default [$key] = $val ;
+	}
+	//@ get from database
+    $hasil = array();
+	//@ additioanl item
+    foreach($additional_item as $item){            $hasil [] = $item ;        }
+    //@
+    $sessions = \Larangan_Nama_Model::orderby('nama' , 'ASC')->get();
+    foreach($sessions as $item){
+	    $hasil [] = $item->nama ;
+    }
+	return get_select( $hasil , $default);		
+}
+/**
+ *  get jenis pelanggaran
+ *  return select
+*/
+function get_jenis_pelanggaran_select( $attributes = array() , $additional_item = array() ){
+	$default = array( "class" => "selectpicker",
+                         "name" => '' ,
+                         'id'   => '' , 
+                         'selected' => '',
+						 'data-size' => '5',
+						 );
+	//! transfer to default array
+	foreach( $attributes as $key => $val){
+		$default [$key] = $val ;
+	}			
+    $hasil = array();
+	//@ additioanl item
+    foreach($additional_item as $item){            $hasil [] = $item ;        }
+    //@
+    $sessions = array("B","M","R");
+    foreach($sessions as $item){
+	    $hasil [] = $item ;
+    }
+    return get_select( $hasil , $default);
+}
+
 /**
  *	get pagination label 
  *	return label and total count or empty if failur happened
@@ -245,6 +305,7 @@ function add_month_to_date( $time , $months = "+1", $format = " Y-m-d "){
 }
 //@ escape from single quote
 function get_escape($val){
+	//@ or you can use : addalash
 	return htmlentities(str_replace("'","\'",$val));
 }	
 

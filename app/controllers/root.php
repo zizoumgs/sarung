@@ -346,11 +346,14 @@ abstract class root extends Controller {
 	 *	To back up 
 	*/
 	public static function anyBackupdb(){
+		root::backup_tables('localhost',Config::get("database.main_db"));
+		return;
 		//$backup = new BACKUP\Backup();
 		try {
 			$date = date("d_M_Y_h_i_s");
 			$path = public_path()."\backup";
-		    $dump = new Ifsnop\Mysqldump\Mysqldump('mgscom_ngoos', 'root', '1');
+		    $dump = new Ifsnop\Mysqldump\Mysqldump('mgscom_ngoos', Config::get("database.connections.fusarung.username"),
+												   Config::get("database.connections.fusarung.password") );
 			if(!File::exists($path)) {
 				File::makeDirectory( $path );
 			}
@@ -360,6 +363,55 @@ abstract class root extends Controller {
 		} catch (\Exception $e) {
 		    echo 'mysqldump-php error: ' . $e->getMessage();
 		}
-	    return Redirect::to( root::get_url_admind());		
+	    return Redirect::to( root::get_url_admind());
 	}
+	/* backup the db OR just a table */
+	public static function backup_tables($host,$name,$tables = '*')	{
+		$user = Config::get("database.connections.fusarung.username");
+		$pass = Config::get("database.connections.fusarung.password");
+		//$link = mysql_connect($host,$user,$pass);
+		//$link = DB::connection("database.main_db")->getPdo();
+		//mysql_select_db($name,$link);
+	
+		//get all of the tables
+		if($tables == '*')	{
+			$tables = array();
+			//$result = mysql_query('SHOW TABLES');
+			$result = DB::connection($name)->select( DB::raw("select * from information_schema.tables where table_schema='mgscom_ngoos'"));
+			foreach($result as $row){
+				$tables[] = $row->TABLE_NAME;
+			}
+		}
+		else{
+			$tables = is_array($tables) ? $tables : explode(',',$tables);
+		}
+		
+		//cycle through
+		foreach($tables as $table){
+			$result = mysql_query('SELECT * FROM '.$table);
+			$num_fields = mysql_num_fields($result);
+			
+			$return.= 'DROP TABLE IF EXISTS '.$table.' IF;';
+			$row2 = mysql_fetch_row(mysql_query('SHOW CREATE TABLE '.$table));
+			$return.= "\n\n".$row2[1].";\n\n";
+		
+			for ($i = 0; $i < $num_fields; $i++) 		{
+				while($row = mysql_fetch_row($result))			{
+					$return.= 'INSERT INTO '.$table.' VALUES(';
+					for($j=0; $j<$num_fields; $j++) 				{
+						$row[$j] = addslashes($row[$j]);
+						$row[$j] = ereg_replace("\n","\\n",$row[$j]);
+						if (isset($row[$j])) { $return.= '"'.$row[$j].'"' ; } else { $return.= '""'; }
+						if ($j<($num_fields-1)) { $return.= ','; }
+					}
+					$return.= ");\n";
+				}
+			}
+			$return.="\n\n\n";
+		}
+		//save file
+		$handle = fopen('db-backup-'.time().'-'.(md5(implode(',',$tables))).'.sql','w+');
+		fwrite($handle,$return);
+		fclose($handle);
+	}	
 }

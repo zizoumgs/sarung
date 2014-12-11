@@ -23,6 +23,10 @@ interface Admin_sarung_crud {
 	public function postEventadd();
 	/*this function for view*/
     public function getIndex();
+	//
+	public function add_obj_save_db($obj);
+	public function add_obj_dele_db($obj);
+	
 }
 /**
  *	i separated class` in order to learn easily
@@ -233,13 +237,13 @@ abstract class Admin_sarung_support extends Admin_sarung_support_root implements
 	private $objs_save_db = array();
 	private $objs_dele_db = array();
 	//! parameter is obj
-	protected function add_obj_save_db($obj){
+	public function add_obj_save_db($obj){
 		$tmp = $obj ; 
 		if( ! is_object($obj))
 			$tmp = null ;
 		$this->objs_save_db [] = $tmp ;
 	}
-	protected function add_obj_dele_db($obj){
+	public function add_obj_dele_db($obj){
 		$tmp = $obj ; 
 		if( ! is_object($obj))
 			$tmp = null ;

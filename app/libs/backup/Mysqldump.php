@@ -96,7 +96,7 @@ class Mysqldump
             'disable-keys' => true,
             'where' => '',
             'no-create-info' => false,
-            'skip-triggers' => false,
+            'skip-triggers' => true,
             'add-drop-trigger' => true,
             'hex-blob' => true,
             'databases' => false,

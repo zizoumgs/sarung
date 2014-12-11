@@ -1,0 +1,15 @@
+/**
+ * this css will be used nby both admind and another
+*/
+.text-justify{
+    text-align:justify;   
+}
+.text-left{
+    text-align:left;
+}
+.text-center{
+    text-align:center;
+}
+.text-right{
+    text-align:right;
+}

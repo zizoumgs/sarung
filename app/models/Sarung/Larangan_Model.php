@@ -53,4 +53,29 @@ class Larangan_Kasus_Model extends Sarung_Model_Root{
     public function Userobj(){
 		return $this->belongsTo('User_Model', 'idadmind' , 'id');
     }	
+	public function scopeWheresantri($query , $nama){
+		return $query->whereHas('userObj', function($q) use($nama) {
+			//$q->whereRaw(sprintf('first_name LIKE "%1$s" or second_name LIKE "%1$s" ' , "$nama"));
+			//$q->where('first_name','LIKE' ,$nama )->where('second_name','LIKE' ,$nama);
+            $q->whereRaw(" (first_name LIKE ? or second_name LIKE ? ) " ,
+                                        array( "%".$nama."%" ,
+                                              "%".$nama."%" )
+                                        );
+		});
+	}
+	public function scopeWheresession($query , $nama){
+		return $query->whereHas('metaObj', function($q) use($nama) {
+			$q->wheresession($nama);
+		});
+	}
+	public function scopeWherejenis($query , $nama){
+		return $query->whereHas('metaObj', function($q) use($nama) {
+			$q->wherejenis($nama);
+		});
+	}
+	public function scopeWherenama($query , $nama){
+		return $query->whereHas('metaObj', function($q) use($nama) {
+			$q->wherenama($nama);
+		});
+	}
 }

@@ -34,7 +34,7 @@ class Admin_sarung_larangan_kasus_helper_filter{
 		return $this->input ['filter_by_name'];
 	}
 	/**
-	 *	for pelajaran name
+	 *	for id
 	*/
 	public function set_id_filter_name($val){
 		$this->input ['filter_byid'] = $val;
@@ -42,15 +42,40 @@ class Admin_sarung_larangan_kasus_helper_filter{
 	public function get_id_filter_name(){
 		return $this->input ['filter_byid'];
 	}
+	/**
+	 *	for santri name
+	*/
+	public function set_filter_santri($val){
+		$this->input ['filter_by_santri'] = $val;
+	}
+	public function get_filter_santri(){
+		return $this->input ['filter_by_santri'];
+	}
+	
 	public function set_url($val){		$this->input ['url_this_'] = $val;	}
 	public function get_url(){			return $this->input ['url_this_'] ;	}
 	/**
 	 *	filter result by kelas`s name
 	 *	return additonal string
 	 **/
+	public function set_get_filter_by_santri( & $where ,  $model ){
+		//@ remove end space
+		$find = rtrim( Input::get( $this->get_filter_santri() ) );
+		//@ remove first space
+		$selected = ltrim($find);
+		if($selected != "" && $selected !="All"){
+			$where [ $this->get_filter_santri()] = $selected;
+            return $model->wheresantri($selected);
+		}
+		return $model;
+	}
+	/**
+	 *	filter result by kelas`s name
+	 *	return additonal string
+	 **/
 	public function set_get_filter_by_name( & $where ,  $model ){
 		$selected = Input::get( $this->get_name_filter_name() );
-		if($selected != "" && $selected !="All"){			
+		if($selected != "" && $selected !="All"){
 			$where [ $this->get_name_filter_name()] = $selected;
             return $model->wherenama($selected);
 		}
@@ -102,6 +127,7 @@ class Admin_sarung_larangan_kasus_helper_filter{
         $this->set_id_filter_name("id_siapa");
         $this->set_session_filter_name('session_name');
         $this->set_jenis_filter_name('jenis_name');
+		$this->set_filter_santri('filter_santri');
 	}
 	/**
 	 *	form to filter
@@ -137,9 +163,14 @@ class Admin_sarung_larangan_kasus_helper_filter{
         $name = $this->get_jenis_filter_name();
         $attrs = array( 'name' => $name ,"class" => "selectpicker span1" ,'selected'=> Input::get($name) ) ;
         $jenis  = FUNC\get_jenis_pelanggaran_select( $attrs , array("All") );
+        //@ session
+		$tmp  = Form::text( $this->get_filter_santri()  , '', array( 'class' => 'form-control input-sm' ,
+                                                                       'placeholder' => 'Santri' ,
+                                                                       'Value' =>  Input::get($this->get_filter_santri() ) ));
+		$santri = FUNC\get_form_group( $tmp );
 		//@ form
    		$hasil  = Form::open( $new_params_form) ;
-            $hasil .= $name_filter . $id_filter . $session. $jenis;
+            $hasil .= $name_filter.$santri . $id_filter . $session. $jenis;
     		$hasil .= '<div class="form-group">';
         		$hasil .= Form::submit('Filter' , array( 'class' => 'btn btn-primary btn-sm' ) );
     		$hasil .= '</div>';
@@ -678,7 +709,8 @@ class Admin_sarung_larangan_kasus_ajax extends Admin_sarung_larangan_kasus_delet
 	*/
 	public function anyAjaxchangeidsantri(){
 		$this->set_default_values_for_add();
-		$santri = Santri_Model::find( Input::get( $this->get_name_id_santri() ) );
+		$santri = new Santri_Model();
+		$santri = $santri ->find( Input::get($this->get_name_id_santri() ));
 		if($santri){
 			$name = $santri->user->first_name ." " . $santri->user->second_name;
 			$alamat = $santri->user->desa->kecamatan->nama ."-" . $santri->user->desa->nama;
@@ -694,7 +726,6 @@ class Admin_sarung_larangan_kasus_ajax extends Admin_sarung_larangan_kasus_delet
 	 *	ajax wil go here , so do what you need
 	*/
 	public function anyAjaxchangeidadmind(){
-		Log::info("Admind");
 		$this->set_default_values_for_add();
 		$id = Input::get( $this->get_name_id_admind());
 		$user = new User_Model();
@@ -799,6 +830,7 @@ class Admin_sarung_larangan_kasus extends Admin_sarung_larangan_kasus_ajax{
         $model = $filter->set_get_filter_by_name($where , $model);
         $model = $filter->set_get_filter_by_session($where , $model);
         $model = $filter->set_get_filter_by_jenis($where , $model);
+		$model = $filter->set_get_filter_by_santri($where , $model);
         $models = $model->orderBy('updated_at','DESC')->paginate(15);		
         //@ information
         $information = $filter->get_form_filter_for_view();

@@ -250,6 +250,8 @@ abstract class root extends Controller {
 	//! about auth
 	protected function get_user_id(){ return Auth::id() ; }
 	protected function get_user_name() { return Auth::user()->email;}
+	protected function get_user_email() { return Auth::user()->email;}
+	protected function get_user_names() { return Auth::user()->first_name ." ".Auth::user()->second_name;}
 	/**
 	 *	take user power
 	 *	return user power or 0;

@@ -194,9 +194,15 @@ class login extends klasement {
 			$content = sprintf ('<h1>Welcome Super Admind %1$s  , You can do anything s in this application </h1>' , $this->get_user_name() );
 			$content .= $this->get_list_of_admin_url();
 		}
+		elseif( $power == 100) {
+			
+			$title = sprintf ('Welcome Admind <small>%1$s</small> ' , $this->get_user_names() );
+			$content = FUNC\make_title($title);
+			$content .= $this->get_list_of_admin_url();
+		}
 		else{
 			//! we should send email to developer
-			$content = sprintf ('<h1>There is error with this application </h1>' );
+			$content = FUNC\make_title('There is error with this application');
 			$content .= $this->get_list_of_admin_url();
 		}
 		return $content;

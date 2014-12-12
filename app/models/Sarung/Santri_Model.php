@@ -8,10 +8,16 @@ class Santri_Model extends Sarung_Model_Root{
 		return $this->belongsTo('Session_Model' , 'id');
     }
 	/**
+	*	Session
+	**/
+    public function SessionObj(){
+		return $this->belongsTo('Session_Model' , 'idsession');
+    }	
+	/**
 	 *	parent table
 	*/
     public function User(){
-		return $this->belongsTo('User_Model', 'id');
+		return $this->belongsTo('User_Model', 'idadmind');
     }
 	/**
 	 *	child table

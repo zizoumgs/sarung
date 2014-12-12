@@ -1143,9 +1143,6 @@ class Admin_sarung_user_cud extends Admin_sarung_user_cud_input {
         }
         else{
             $event = $event->find( $data ['id'] );
-            if( $data [$this->get_password_over_name()] != ""){
-                $event->password        =   Hash::make($data [$this->get_password_over_name()]);                
-            }
             $event->foto = $data [ $this->get_foto_name()] ;
         }
         $desa = new Desa_Model() ;
@@ -1178,7 +1175,10 @@ class Admin_sarung_user_cud extends Admin_sarung_user_cud_input {
         //@ ability to change password , just for admind who has 1000 power
         if($this->get_purpose() == parent::EDIT){
             if($this->get_user_power() >= 1000){
-                $event->password = Hash::make($data [$this->get_password_over_name()]);   
+                if( $data [$this->get_password_name()] != "" &&
+                   ($data [$this->get_password_name()] ==  $data [$this->get_password_over_name()] )){
+                    $event->password        =   Hash::make($data [$this->get_password_over_name()]); 
+                }
             }
         }
         return $event;

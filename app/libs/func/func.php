@@ -308,6 +308,9 @@ function get_escape($val){
 	//@ or you can use : addalash
 	return htmlentities(str_replace("'","\'",$val));
 }	
-
+//@ will make title for this application 
+function make_title($text){
+	return sprintf('<h1>%1$s</h1>',$text);
+}
 
 

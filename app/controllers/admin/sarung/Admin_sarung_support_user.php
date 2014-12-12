@@ -137,11 +137,15 @@ abstract class Admin_sarung_support_user extends Admin_sarung_support{
      * Return obj
     */
     protected function set_filter_by_name($model_obj , & $wheres ){
-        if( $this->get_name_filter_selected() != ""){
-            $wheres [$this->get_name_filter_name()] = $this->get_name_filter_selected();
+		//@ remove end space
+		$find = rtrim( $this->get_name_filter_selected()  );
+		//@ remove first space
+		$selected = ltrim($find);
+        if( $selected != ""){
+            $wheres [$this->get_name_filter_name()] = $selected;
             return $model_obj->whereRaw(" (first_name LIKE ? or second_name LIKE ? ) " ,
-                                        array( "%".$this->get_name_filter_selected()."%" ,
-                                              "%".$this->get_name_filter_selected()."%" )
+                                        array( "%".$selected."%" ,
+                                              "%".$selected."%" )
                                         );
         }
         return $model_obj;

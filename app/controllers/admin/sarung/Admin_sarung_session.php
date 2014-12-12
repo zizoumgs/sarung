@@ -270,7 +270,7 @@ class Admin_sarung_session extends Admin_sarung_session_add{
     ***/
     protected function set_default_value(){
         $this->set_view('sarung/admin/index');
-        $this->set_min_power( 1000 );
+        $this->set_min_power( 100 );
 		$this->set_title('Session');
 		$this->set_body_attribute( " class='admin admin_sarung_body' " );
         $this->set_table_name('session');

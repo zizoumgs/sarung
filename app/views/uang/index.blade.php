@@ -6,12 +6,9 @@
 <div class="container">
 	<div id="main" class="row">
 		<article class='col-md-9'>
-			@section('content')
-	       		{{ $content }}
-	       	@show
+			kdlfkdkf
 		</article>
 		<aside class='col-md-3'>
-			{{ $side }}
 		</aside>	
 	</div>
 	{{ $footer }}

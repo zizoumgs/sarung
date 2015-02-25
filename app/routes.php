@@ -3,7 +3,7 @@
 Route::when('*', 'csrf', array('post', 'put', 'delete'));
 
 //! uang
-Route::controller('uang'      , 'uang');
+Route::controller('uang'      , 'Uang_controller');
 Route::get('admin_uang'     , 'Admin_uang@index');
 Route::get('admin_uang/outcome'     , 'Admin_outcome@index');
 

@@ -3,13 +3,12 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="_token" content="{{ csrf_token() }}" />
 	<title>
-    	@section('title')
-        	{{ $title }}
-        @show
+            @yield('title')
     </title>
     	<!-- CSS are placed here -->
-    		{{ $css }}
-	<link href="{{ Url::to('/') }}/asset/css/fudc.css" rel="stylesheet" type="text/css"/>
+	<link href=" {{ URL::to('/').'/asset/bootstrap/css/bootstrap.css' }}" rel="stylesheet" type="text/css"/>
+	<link href=" {{ URL::to('/').'/asset/bootstrap/css/bootstrap-theme.css' }}" rel="stylesheet" type="text/css"/>
+	<link href="{{ URL::to('/') }}/asset/css/fudc.css" rel="stylesheet" type="text/css"/>
 						<style>
 						@media (min-width: 768px) {
 							ul.navbar-nav > li {
@@ -51,6 +50,9 @@
 						.page-header {
 							border: none !important;
 							
+						}
+						footer{
+							background:#F5F5F2;
 						}
 						</style>
 </head>

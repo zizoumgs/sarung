@@ -178,7 +178,7 @@ abstract class Admin_sarung_ujian_dialog{
 		$event = FUNC\get_form_group($tmp);
 		//@ pelajaran
 		$name = $this->get_pelajaran_name();
-		$tmp = FUNC\get_pelajaran_select(array( 'id'=> $name, 'class' => "selectpicker cold-md-6 " ,'name'=> $name ,
+		$tmp = FUNC\get_all_pelajaran_select(array( 'id'=> $name, 'class' => "selectpicker cold-md-6 " ,'name'=> $name ,
 											   'selected' => $this->default_value[$name] ));
 		$pelajaran = FUNC\get_form_group($tmp);
 		//@ kelas

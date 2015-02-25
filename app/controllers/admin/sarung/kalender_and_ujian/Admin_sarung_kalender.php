@@ -483,7 +483,7 @@ class Admin_sarung_kalender extends Admin_sarung_kalender_support{
         else{
             $event = $event->find( $data ['id'] );
         }
-		$session 		= Session_Model::where('nama', '=' , $this->get_session_selected() )->first();
+		$session 		= Session_Model::where('nama', '=' , Input::get( $this->get_session_name() ) )->first();
 		$event_model   	= Event_Model::where('nama', '=', $this->get_event_selected()  )->first();
 		$aktif = 0 ;
 		if($this->get_aktif_selected() == "1"){ $aktif = "1" ;}

@@ -75,7 +75,6 @@ class Admin_subdivisi_crud extends Admin_uang{
 		$div 	 = $data ['divisi'];
 		if ($validator->fails())    {
 			$messages = $validator->messages();
-			//$messages = array("Pak nurholis " , "Pak Tono");
 			$message = sprintf('<span class="label label-danger">%1$s</span>' ,
 							   $this->make_message( $messages->all() ));
 			return $this->getAdd( 0 , $div ,  $message );
@@ -132,7 +131,7 @@ class Admin_subdivisi_crud extends Admin_uang{
 	public function getEdit($id , $nama = "" , $message = ''  ){
 		$this->set_id($id);
 		//! get table
-		$post = DivisiSub::find($id);
+		$post = Divisisub_Model::find($id);
 		$this->selected_divisi = $post->divisi->nama;
 		$this->set_divisisub( $post->nama );
 		$on_top  = sprintf('<div class="thumbnail"><h2>Anda akan mengedit Sub divisi dengan Id %1$s</h2>%2$s</div>', $id , $message);
@@ -158,8 +157,8 @@ class Admin_subdivisi_crud extends Admin_uang{
 		}
 		//! update database
 		else{
-			$divisi   	= Divisi::where('nama' , '=' , $div , 'and' )->firstOrFail();
-			$obj = DivisiSub::find($id);
+			$divisi   	= Divisi_Model::where('nama' , '=' , $div , 'and' )->firstOrFail();
+			$obj = Divisisub_Model::find($id);
 			$obj->iddivisi = $divisi->id	 ;
 			$obj->nama = $sub;
 			//! prepare
@@ -193,7 +192,7 @@ class Admin_subdivisi_crud extends Admin_uang{
 	public function getDel($id , $nama = ""  , $message = "" ){
 		$this->set_id($id);
 		//! get table
-		$post = DivisiSub::find($id);
+		$post = Divisisub_Model::find($id);
 		$this->selected_divisi = $post->divisi->nama;
 		$this->set_divisisub( $post->nama );
 		$on_top  = sprintf('<div class="thumbnail"><h2>Anda akan menghapus Sub divisi dengan Id %1$s</h2>%2$s</div>', $id , $message);
@@ -211,7 +210,7 @@ class Admin_subdivisi_crud extends Admin_uang{
 		}
 		$data = array();
 		$messages = array();
-		$obj = DivisiSub::find( $id );
+		$obj = Divisisub_Model::find( $id );
 		$messages = array("Gagal menghapus");
 		$message = sprintf('<span class="label label-danger">%1$s</span>' ,
 						   $this->make_message( $messages ));		
@@ -345,7 +344,10 @@ class Admin_subdivisi_crud extends Admin_uang{
             'side'  => $this->get_side()
         );
         return View::make( $this->get_view() , $data);		
-	}	
+	}
+	/**
+	 *	get additional css 
+	*/
 	protected function get_additional_css(){
 		return sprintf(
 		'
@@ -356,6 +358,9 @@ class Admin_subdivisi_crud extends Admin_uang{
 		parent::get_additional_css()
 		);
 	}	
+	/**
+	 *	get additional js
+	*/
     protected function get_additional_js(){
 		$js = sprintf('
 				%1$s

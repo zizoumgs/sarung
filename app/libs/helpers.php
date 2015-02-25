@@ -169,3 +169,6 @@ function helper_get_pagenation_link( $pagenation , $array = array() ){
     return $pagenation->links ( );
 }
 */
+function helper_get_rupiah( $angka){
+	return number_format($angka,0,',','.');
+}

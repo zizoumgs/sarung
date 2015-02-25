@@ -131,7 +131,7 @@ class Admin_divisi_crud extends Admin_uang{
 		}
 		//! update database
 		else{
-			$obj = Divisi::find($id);
+			$obj = Divisi_Model::find($id);
 			$obj->nama = $div;
 			//! prepare
 			$messages = array("Gagal mengedit");
@@ -164,7 +164,7 @@ class Admin_divisi_crud extends Admin_uang{
 	public function getDel($id , $nama = ""  , $message = "" ){
 		$this->set_id($id);
 		//! get table
-		$post = Divisi::find($id);
+		$post = Divisi_Model::find($id);
 		$this->set_divisi( $post->nama );
 		$on_top  = sprintf('<div class="thumbnail"><h2>Anda akan menghapus Divisi dengan Id %1$s</h2>%2$s</div>', $id , $message);
 		$this->set_message_on_top( $on_top );
@@ -181,7 +181,7 @@ class Admin_divisi_crud extends Admin_uang{
 		}
 		$data = array();
 		$messages = array();
-		$obj = Divisi::find( $id );
+		$obj = Divisi_Model::find( $id );
 		$messages = array("Gagal menghapus");
 		$message = sprintf('<span class="label label-danger">%1$s</span>' ,
 						   $this->make_message( $messages ));		

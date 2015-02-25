@@ -162,11 +162,13 @@ class update_tindakan extends update_third{
 	public function __construct(){
 		parent::__construct();
 	}
+	/**
+	**/
 	public function init_update_tindakan(){
 		//@ get object
 		$sarung = Config::get("database.connections.fusarung.database");
 		$db_sarung = new PDO("mysql:host=localhost;dbname=$sarung;charset=utf8", Config::get("database.main_username") , Config::get("database.main_password"));
-		$db = new PDO('mysql:host=localhost;dbname=iman;charset=utf8', Config::get("database.main_username") , Config::get("database.main_password"));
+		$db = new PDO('mysql:host=localhost;dbname=mgscom_iman;charset=utf8', Config::get("database.main_username") , Config::get("database.main_password"));
 		//@ get names of tindakan
 		//
 		$sql = "select namaLarangan as nama_larangan from larangan group by nama_larangan";
@@ -180,7 +182,7 @@ class update_tindakan extends update_third{
 				"updated_at DATETIME ,".
 				"created_at DATETIME ,". 
 				"UNIQUE(nama), ".
-				"PRIMARY KEY ( id )); ";
+				"PRIMARY KEY ( id ))ENGINE=InnoDB DEFAULT CHARSET=latin1; ";
 		$result = $db_sarung->exec($sql);
 		//@ insert what we got before
 		$id = 1 ; 
@@ -191,6 +193,8 @@ class update_tindakan extends update_third{
 		}
 		//@ get  name of tindakan with session
 		//
+		$db_sarung->query("SET wait_timeout=12000;");
+		$db->query("SET wait_timeout=1200;");
 		$this->insert_into_larangan_meta($db_sarung , $db);
 		$this->insert_into_larangan_kasus($db_sarung , $db);
 	}
@@ -1234,7 +1238,7 @@ $santri = array(
 	*/
 	private function insert_into_larangan_kasus($db_sarung , $db_iman){
 		//@ create kasus table in sarung
-		$table_name = "larangan_kasus";
+		$table_name = "larangan_kasus_";
 		$sql = sprintf('
 			CREATE TABLE IF NOT EXISTS  %1$s(
 				id INTEGER PRIMARY KEY NOT NULL ,
@@ -1298,10 +1302,12 @@ $santri = array(
 				"point INT NOT NULL, ".
 				"hukuman varchar(70) NOT NULL, ".
 				"updated_at DATETIME ,".
-				"created_at DATETIME ,". 				
+				"created_at DATETIME ,".
+				"PRIMARY KEY ( id )  ,". 	
+				"KEY larangan_nama_ibfk (idlarangan),".			
 				"UNIQUE KEY larangan_unique (idsession, idlarangan), ".
-				"CONSTRAINT larangan_nama FOREIGN KEY (idlarangan) REFERENCES larangan_nama (id) ON DELETE NO ACTION ON UPDATE CASCADE,".
-				"PRIMARY KEY ( id ))ENGINE=InnoDB DEFAULT CHARSET=latin1; ";
+				"FOREIGN KEY larangan_nama_ibfk (idlarangan) REFERENCES larangan_nama (id) ON DELETE NO ACTION ON UPDATE CASCADE".
+				")ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 		$result = $db_sarung->exec($sql);
 		//@ get session of iman
 		$sql = "select * from sessionfu order by awal DESC";
@@ -1310,6 +1316,7 @@ $santri = array(
 		$sql = "select * from larangan order by id ASC";
 		$larangan_meta = $db_iman->query( $sql );
 		foreach($larangan_meta as $row){
+			echo "TEST<br>";
 			//@ get id larangan
 			$larangan_obj  = $this->findLarangan($db_sarung , $db_iman , $row['namaLarangan']  );
 			//@ get idsession;
@@ -1338,6 +1345,7 @@ $santri = array(
 				print $e->getMessage ();
 			}
 		}
+		echo "Done to execute larangan_meta";
 	}
 	/**
 	 *	find larangan id
@@ -1355,9 +1363,38 @@ $santri = array(
 	}
 }
 /**
+*/
+class update_ujian extends update_tindakan{
+    public function __construct(){
+		parent::__construct();
+    }
+	/**
+	 * the purpose is to change kalinilai from integer to float
+	*/
+	public function init_ujian(){
+		/**
+#ALTER TABLE ujian ADD rate FLOAT(5);
+#UPDATE ujian SET rate=kalinilai;
+#ALTER TABLE ujian MODIFY kalinilai FLOAT(5);
+#UPDATE ujian SET kalinilai=rate;
+#ALTER TABLE ujian DROP rate;	
+		*/
+		$query = "ALTER TABLE ujian ADD tmp FLOAT(5)";
+		$this->exe_non_query($query);
+		$query = "UPDATE ujian SET tmp=kalinilai";
+		$this->exe_non_query($query);
+		$query = "ALTER TABLE ujian MODIFY kalinilai FLOAT(5)";
+		$this->exe_non_query($query);
+		$query = "UPDATE ujian SET kalinilai=tmp";
+		$this->exe_non_query($query);
+		$query = "ALTER TABLE ujian DROP tmp";
+		$this->exe_non_query($query);
+	}
+}
+/**
  *	First Update
 */
-class first_update extends update_tindakan{
+class first_update extends update_ujian{
     /**
      *  I`m clueless for this constructor
      *  return none
@@ -1550,7 +1587,8 @@ class first_update extends update_tindakan{
 		//$this->first_update();
 		//$this->second_update();
 		//$this->init_third();
-	    $this->init_update_tindakan();
+	    // $this->init_update_tindakan();
+		$this->init_ujian();
 		echo "Done";
     }
 	/**

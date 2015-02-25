@@ -120,6 +120,32 @@ function get_pelajaran_select( $attributes ,   $additional_item = array()){
  *  get pelajaran
  *  return select
 **/
+function get_all_pelajaran_select( $attributes ,   $additional_item = array()){
+	$default = array(
+		"class" => "selectpicker"	,
+		"name" => ''				,
+        'id'   => '' 				, 
+        'selected' => ''			,
+		 'data-size' => '5',
+	 );
+	//! transfer to default array
+	foreach( $attributes as $key => $val){
+		$default [$key] = $val ;
+	}			
+    $hasil = array();
+	//@ additioanl item
+    foreach($additional_item as $item){            $hasil [] = $item ;        }		
+    //@
+    $sessions = new \Pelajaran_Model();
+    foreach($sessions->orderBy('nama')->get() as $item){
+		$hasil [] = $item->nama ;
+    }
+    return get_select( $hasil , $default);		
+}
+/**
+ *  get pelajaran
+ *  return select
+**/
 function get_event_ujian_select( $attributes , $additional_item = array() ){
         $default = array( "class" => "selectpicker",
                          "name" => '',

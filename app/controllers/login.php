@@ -149,7 +149,7 @@ class login extends klasement {
 		$this->get_user_id();
 		$power = $this->get_user_power();
 		$content = sprintf('
-			
+
 			<hr>
 			<h1 class="page-header text-center bold-font">Salam kaum bersarung</h1>
 			<hr>

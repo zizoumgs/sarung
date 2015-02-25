@@ -46,7 +46,8 @@ class Larangan_Meta_Model extends Sarung_Model_Root{
  *  this file will be dwelling form larangan_nama , larangan_meta , and larangan_kasus
 */
 class Larangan_Kasus_Model extends Sarung_Model_Root{
-	protected $table = 'larangan_kasus';
+	/* in the beginning i use larangan_kasus but i encounter error so i decided to change to be larangan_kasus_*/
+	protected $table = 'larangan_kasus_';
     public function MetaObj(){
 		return $this->belongsTo('Larangan_Meta_Model', 'idlarangan' , 'id');
     }

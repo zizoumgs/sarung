@@ -287,7 +287,7 @@ abstract class root extends Controller {
 	/*		all static link	*/
 	public static function get_url_klasement(){		return url('klasement');	}
 	public static function get_url_home(){		return url('/');	}
-	public static  function get_url_logout(){		return url('logout');	}
+	public static  function get_url_logout(){		return url('login/logout');	}
 	public static  function get_url_admind(){		return url('sarung_admin');	}
 	public static  function get_url_login(){		return url('trylogin');	}
 	public static  function get_url_backup(){		return url('backupdb');	}

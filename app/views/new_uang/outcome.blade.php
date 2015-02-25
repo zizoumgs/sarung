@@ -62,7 +62,7 @@
 					</tr>
 					@foreach ($posts as $post)
 						<tr>
-							<td><a href="?cat={{$post->divisisub->divisi->nama}} "> {{ $post->divisisub->divisi->nama }} </a></td>
+							<td>{{ $post->divisisub->divisi->nama }} </td>
 							<td><a href="?cat={{$post->divisisub->nama}} "> {{ $post->divisisub->nama }} </a></td>
 							<td> {{ helper_get_rupiah($post->jumlah) }} </td>
 							<td> {{ $post->tanggal }} </td>

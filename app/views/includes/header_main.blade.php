@@ -28,7 +28,7 @@
 						@if ( ! Auth::check() )
 							<li><a href="{{root::get_url_admind()}}">Login</a></li>
 						@else
-							<li><a href="{{root::get_url_logout()}}">ALogin</a></li>
+							<li><a href="{{root::get_url_logout()}}">Logout</a></li>
 						@endif
 					</ul>
 				</div><!--/.nav-collapse -->

@@ -48,10 +48,15 @@ Route::any('/delete_img',
 //! for updating
 Route::controller('update'                 , 'first_update');
 
+Route::controller('/home'     , 'Home_controller');
+
 //Route::controller('/'                 , 'sarung_controller');
 Route::controller('sarung_admin'      , 'Sarung_admin_controller');
 
-Route::controller('/'     , 'login');
+Route::controller('/login'     , 'Login_controller');
+
+
+Route::controller('/'     , 'Home_controller');
 
 /* for uploading*/
 //Route::put('eventupload', array('as' => 'admin.upload', 'uses' => 'App\Controllers\Admin\ImageController@postUpload'));

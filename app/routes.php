@@ -52,6 +52,7 @@ Route::controller('/home'     , 'Home_controller');
 
 //Route::controller('/'                 , 'sarung_controller');
 Route::controller('sarung_admin'      , 'Sarung_admin_controller');
+Route::controller('klasement'      , 'Klasement_controller');
 
 Route::controller('/login'     , 'Login_controller');
 

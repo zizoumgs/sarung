@@ -18,6 +18,7 @@ class Klasement_Model extends Sarung_Model_Root{
 			$this->result_indi [$model->id_santri] = array(
 				'nilai' 		=>  0 	,
 				'total_nilai'   => 	0 	,
+				'total_attend'   => 	0 	, /* Not yet implement */
                 'last_pos'      =>  0 	,
                 'current_pos'   =>  0 	,
 				'id'		    => $model->id_santri	,	
@@ -26,6 +27,9 @@ class Klasement_Model extends Sarung_Model_Root{
 				
 			);
 		}
+	}
+	public function get_html_result(){
+		return $this->html_result;
 	}
     /**
      *  arrow
@@ -60,7 +64,8 @@ class Klasement_Model extends Sarung_Model_Root{
                 $arrow = $this->get_arrow( $last_post , $current_pos);
    				$santri = array(
    					'nilai'			=> 	0	            ,
-   					'total_nilai'	=>	$total_nilai	,	
+   					'total_nilai'	=>	$total_nilai	,
+					'total_attend'  => 	0 	, 
    					'last_pos'		=>	$last_post      ,
    					'current_pos'	=>	$current_pos    ,
    					'arrow'			=>	$arrow          ,
@@ -100,6 +105,7 @@ class Klasement_Model extends Sarung_Model_Root{
 		foreach( $this->result_indi as $key => $santri){
             $star = "";
 			$id_santri = $key;
+			$total_attend = $santri['total_attend'];
 			//@ santri attends examination
 			if(  array_key_exists($id_santri , $sql_array) ){
 				$sql_array_the_santri = $sql_array [$key];
@@ -111,6 +117,7 @@ class Klasement_Model extends Sarung_Model_Root{
                     $choosen_color = array("green" , "gold" , "blue");
                     $star = sprintf('<span class="glyphicon glyphicon-star %1$s very_small pull-right"></span>' , $choosen_color [$star_pos-1]) ; 
                 }
+				$total_attend++;
             }
 			//@ santri didn`t attend
             else{
@@ -121,15 +128,17 @@ class Klasement_Model extends Sarung_Model_Root{
             }
 			$total_nilai    =   $santri ['total_nilai'] + $nilai;
             $last_pos      =   $santri['current_pos'];
+			
             $arrow = $this->get_arrow( $last_pos , $current_pos);
             //@ score
             $this->result_indi[$id_santri] ['nilai']        =  $nilai;
             $this->result_indi[$id_santri] ['total_nilai']  =  $total_nilai;
             $this->result_indi[$id_santri] ['last_pos']     =  $last_pos;
             $this->result_indi[$id_santri] ['star']         =   $star;
+			$this->result_indi[$id_santri] ['total_attend'] =  $total_attend;			
             $pos_correction [$id_santri] = $total_nilai;
 		}
-         //@ sort array   to correct position , this found in nabil during 2014-juny     
+         //@ sort array   to correct position , this has been found in nabil during 2014-june
         arsort( $pos_correction);
         $urutan = 1;
         $new_post = array();
@@ -182,14 +191,21 @@ class Klasement_Model extends Sarung_Model_Root{
     			$this->set_klasement_ind_month( $model );
       			//@ check if exist
                 foreach($santries as $santri):
-                    $result = "";
+                    $result =  array() ;
            			if( array_key_exists($santri->id_santri, $this->result_indi) ){
            				$emas = $this->result_indi [$santri->id_santri] ;
            				if($emas){
+							/*
            					$result .= sprintf('<td class="text-center">%1$s %2$s</td>',$emas ['nilai'], $emas ['star'] );
                             $result .= sprintf('<td class="text-center"><b>%1$s</b></td>',$emas ['total_nilai'] );
                             $result .= sprintf('<td class="text-center">%1$s</td>',$emas ['last_pos'] );
                             $result .= sprintf('<td><b>%1$s</b></td>',$emas ['arrow'] );
+							*/
+           					$result [] = $emas ['nilai'] .  $emas ['star'] ;
+                            $result [] = $emas ['total_nilai'];
+                            $result [] = $emas ['last_pos'];
+                            $result [] = $emas ['arrow'];
+							
           				}
            			}
                     $this->html_result [$santri->id_santri] [$x]  = $result ; 

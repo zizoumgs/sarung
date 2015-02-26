@@ -112,6 +112,8 @@ return array(
     'Kelas_Model' => $baseDir . '/app/models/Sarung/Kelas_Model.php',
     'Kelas_Root_Model' => $baseDir . '/app/models/Sarung/Kelas_Model.php',
     'Klasement_Model' => $baseDir . '/app/models/Sarung/Klasement_Model.php',
+    'Klasement_controller' => $baseDir . '/app/controllers/klasement_controller.php',
+    'Klasement_helper' => $baseDir . '/app/controllers/klasement_controller.php',
     'Larangan_Kasus_Model' => $baseDir . '/app/models/Sarung/Larangan_Model.php',
     'Larangan_Meta_Model' => $baseDir . '/app/models/Sarung/Larangan_Model.php',
     'Larangan_Nama_Model' => $baseDir . '/app/models/Sarung/Larangan_Model.php',

@@ -11,7 +11,7 @@ class Klasement_helper extends Controller {
         $this->where_text = "";
         $this->values = new StdClass;
 		$this->values->header = $this->header = array();
-		
+		$this->values->stay_santri = 0 ;
     }
     public function get_time_from_string($string){
         $time = strtotime($string);//"2013-09-01";
@@ -33,6 +33,7 @@ class Klasement_helper extends Controller {
 	protected function get_session(){		return Input::get('session');	}
 	protected function get_pelajaran(){		return Input::get('pelajaran');	}
 	public function get_header(){ return $this->values->header; }
+	public function get_total_poor(){		return $this->values->stay_santri;	}
     /**
      *  this will limit output of santri
     */
@@ -64,7 +65,6 @@ class Klasement_helper extends Controller {
     */
     protected function get_santri(){
 		$headers = $this->get_header();
-        $this->set_filters();
         $date = $this->get_date_from_string($headers [1]."-01" ,"Y-m-d");
 		$santri_obj 	= new Klasement_Model();
 		$santries 	= $santri_obj->get_klasement_all( $this->where_text  , $this->where_values );
@@ -173,6 +173,7 @@ class Klasement_controller extends Klasement_helper{
                                              'headers'  =>  $this->get_header() ,
                                              'santries' =>  $santries ,
                                              'html_santri'  => $html_santries ,
+											 'total_stay'	=> $this->get_total_poor(),
                                              'pg' => $pg )
                           );
     }

@@ -51,6 +51,7 @@ abstract class root extends Controller {
 	protected function get_js_only (){ return $this->js;}
 	/**
 	 *	Will get css
+	 *	Deprecated
 	 *	return css
 	*/	
 	protected function get_css(){
@@ -68,6 +69,7 @@ abstract class root extends Controller {
 	}
 	/**
 	 *	Will get js 
+	 *	Deprecated
 	 *	return js
 	*/
 	protected function get_js(){
@@ -89,6 +91,7 @@ abstract class root extends Controller {
 	}
 	/**
 	 *	it will be need by pagination
+	 *	Deprecated
 	 *	return jump value
 	*/	
 	protected function get_total_jump(){		return $this->value ['jump'];	}
@@ -256,7 +259,7 @@ abstract class root extends Controller {
 	 *	take user power
 	 *	return user power or 0;
 	*/
-	protected static function get_user_power() {
+	public static function get_user_power() {
 		if(Auth::user())
 			return	Auth::user()->admindgroup->power;
 		return 0;
@@ -291,52 +294,7 @@ abstract class root extends Controller {
 	public static  function get_url_admind(){		return url('sarung_admin');	}
 	public static  function get_url_login(){		return url('trylogin');	}
 	public static  function get_url_backup(){		return url('backupdb');	}
-	public static  function get_url_uang	($add=""){		return url('uang'.$add);	}
-	
-	/**
-	 **	Common menu for this
-	***/
-	public static function get_common_menu(){
-		$menu_log = "";		
-		if( ! Auth::check() ) {
-			$url = url('sarung_admin');
-			$menu_log = sprintf('<li><a href="%1$s">Login</a></li>', root::get_url_admind() );
-		}
-		else{			
-			if( root::get_user_power() >= 10 ){
-				$menu_log .= sprintf('<li><a href="%1$s" rel="no">Dashboard</a></li>' , root::get_url_admind());
-			}
-			$menu_log .= sprintf('<li><a href="%1$s" >LogOut</a></li>' , root::get_url_logout());
-		}
-		$hasil = sprintf('
-		<div class="navbar navbar-default navbar-default-top" role="navigation">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<div class="page-header ">
-						<h1>Fatihul Ulum Manggisan</h1>
-						<p class="lead bold-font"><span class="glyphicon glyphicon-flash"></span>Forgotten boarding school.</p>
-					</div> 			
-				</div>
-				<div class="navbar-collapse collapse">
-					<ul class="nav navbar-nav navbar-right">
-						<li><a href="%2$s">Home</a></li>
-						<li><a href="%3$s">Klasement</a></li>
-						<li>%4$s</li>
-						<li><a href="#">Contact</a></li>
-						%1$s
-					</ul>
-				</div><!--/.nav-collapse -->
-			</div>
-		</div>						 
-		' , $menu_log , root::get_url_home()  , root::get_url_klasement() , uang::getMenu());
-		return $hasil;		
-	}
+	public static  function get_url_uang	($add=""){		return url('uang'.$add);	}	
 	/**
 	 *	To logout
 	*/

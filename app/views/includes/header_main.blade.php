@@ -28,6 +28,9 @@
 						@if ( ! Auth::check() )
 							<li><a href="{{root::get_url_admind()}}">Login</a></li>
 						@else
+							@if( root::get_user_power() >= 10 )
+								<li><a href="{{root::get_url_admind()}}" rel="no">Dashboard</a></li>
+							@endif
 							<li><a href="{{root::get_url_logout()}}">Logout</a></li>
 						@endif
 					</ul>

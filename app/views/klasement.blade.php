@@ -73,9 +73,18 @@
 						@endif
 					@endfor
 					</tr>
+					<?php $total_row = count($santries) ; ?>
 					@foreach($santries as $santri)
 						<tr>
-							<td colspan="4" >{{ $santri->first_name ." ". $santri->second_name}}<span class="badge pull-right blue">{{$santri->id_santri}}</span></td>
+							<td colspan="4" >
+							@if ( $total_row <= $total_stay )
+									<span style="text-decoration: line-through;">{{$santri->first_name ." ". $santri->second_name}}</span>
+							@else
+									{{$santri->first_name ." ". $santri->second_name}}
+							@endif
+									<span class="badge pull-right blue">{{$santri->id_santri}}</span>
+							</td>
+							
 							@foreach( $html_santri [$santri->id_santri] [0] as $ind)
 								<td class="text-center">{{ $ind }} </td>
 							@endforeach
@@ -89,6 +98,7 @@
 								<td class="text-center"><b>{{ $ind }} </b></td>
 							@endforeach
 						</tr>
+						<?php $total_row--; ?>
 					@endforeach
 					
 				</table>

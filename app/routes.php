@@ -18,8 +18,8 @@ Route::controller('admin_uang/divisi_crud'      , 'Admin_divisi_crud');
 //! all sarung admin controller
 //                  url name                                class  name
 Route::controller('sarung_admin/event'                  , 'Event_Controller');
+Route::controller('sarung_admin/session'                , 'Session_Controller');
 Route::controller('sarung_admin/pelajaran'              , 'Admin_sarung_pelajaran');
-Route::controller('sarung_admin/session'                , 'Admin_sarung_session');
 Route::controller('sarung_admin/kalender'               , 'Admin_sarung_kalender');
 Route::controller('sarung_admin/jurusan'                , 'Admin_sarung_jurusan');
 Route::controller('sarung_admin/kelas_root'             , 'Admin_sarung_kelas_root');

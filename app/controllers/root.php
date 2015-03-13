@@ -97,20 +97,23 @@ abstract class root extends Controller {
 	protected function get_total_jump(){		return $this->value ['jump'];	}
 	/**
 	 *	it will be need by pagination
+	 *	Depreced
 	*/	
 	protected function set_total_jump($val) { $this->value ['jump'] = $val ; }
 	/**
 	 *	in order to make as close as possible to codeigniter
 	 *	return string 
 	*/	
-	protected function base_url(){		return URL::to('/');	}
+	public static  function base_url(){		return URL::to('/');	}
 	/**
 	 *	folder in which js laid
+	 *	Depreced
 	 *	return string 
 	*/	
 	protected function get_url_js(){		return $this->base_url()."/asset/js";	}
 	/**
 	 *	value and text is differect
+	 *		 *	Depreced
 	 *	return html select 
 	*/	
     protected function get_select_by_key ( $items  , $array = array() , $disabled = ""){
@@ -296,7 +299,26 @@ abstract class root extends Controller {
 	public static  function get_url_backup(){		return url('backupdb');	}
 	public static  function get_url_uang	($add=""){		return url('uang'.$add);	}
 	public static  function get_url_admin_event	( $add=""){		return url("sarung_admin/event/".$add);	}
-	public static  function get_url_admin_session	(){		return url("sarung_admin/session");	}
+	public static  function get_url_admin_session	($add=""){		return url("sarung_admin/session/".$add);	}
+	public static  function get_diff_date	($time_){
+		$datediff = time() - strtotime ($time_);
+		$total = floor($datediff/(60*60*24));
+		if( $total < 1 ){
+			return "Just Now";
+		}
+		elseif($total < 7 ){
+			return $total ." Days Ago ";
+		}
+		elseif($total < 30){
+			return floor($total/7) ." weeks Ago"; 
+		}
+		elseif($total < 365){
+			return floor($total/30) ." Months Ago"; 
+		}
+		else{
+			return floor($total/365) ." Years Ago"; 
+		}
+	}
 	/**
 	 *	To logout
 	*/

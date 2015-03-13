@@ -1,8 +1,9 @@
 <?php
 /**
  *	this class will support to things , user and santri , class
- *	this class has develope base on event class 
-*/
+ *	this class has develope base on event class
+ *	this class depreced
+**/
 interface Admin_sarung_crud {
 	const VIEW = 0;
 	const ADDI = 1;

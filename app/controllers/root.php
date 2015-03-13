@@ -294,7 +294,9 @@ abstract class root extends Controller {
 	public static  function get_url_admind(){		return url('sarung_admin');	}
 	public static  function get_url_login(){		return url('trylogin');	}
 	public static  function get_url_backup(){		return url('backupdb');	}
-	public static  function get_url_uang	($add=""){		return url('uang'.$add);	}	
+	public static  function get_url_uang	($add=""){		return url('uang'.$add);	}
+	public static  function get_url_admin_event	( $add=""){		return url("sarung_admin/event/".$add);	}
+	public static  function get_url_admin_session	(){		return url("sarung_admin/session");	}
 	/**
 	 *	To logout
 	*/

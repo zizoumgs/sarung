@@ -2,6 +2,7 @@
 /**
  *  This is event , and this is not kalender
  *  Sub class from this class if you want to semi automatic crud
+ *  Depreced
  **/
 class Admin_sarung_event extends Admin_sarung{
     private $input;

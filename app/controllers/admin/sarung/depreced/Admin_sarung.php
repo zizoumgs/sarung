@@ -12,7 +12,7 @@ abstract class  Admin_sarung_urls extends Admin_root {
 	}
 	protected function get_url_admind_event     ()   { 		return sprintf('%1$s/sarung_admin/event' , $this->base_url());}
 	protected function get_url_admind_session   ()	{ 		return sprintf('%1$s/sarung_admin/session' , $this->base_url());}
-	protected function get_url_admin_kalender  () 	{ 		return sprintf('%1$s/sarung_admin/kalender' , $this->base_url());}
+	protected function get_url_admin_kalender_  () 	{ 		return sprintf('%1$s/sarung_admin/kalender' , $this->base_url());}
 	protected function get_url_admin_pelajaran ()	{ 		return sprintf('%1$s/sarung_admin/pelajaran' , $this->base_url());}
 	protected function get_url_admin_jurusan   ()	{ 		return sprintf('%1$s/sarung_admin/jurusan' , $this->base_url());}
 	protected function get_url_admin_kelas_root   ()	{ 	return sprintf('%1$s/sarung_admin/kelas_root' , $this->base_url());}

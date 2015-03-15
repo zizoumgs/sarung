@@ -5,7 +5,11 @@ abstract class admin extends Controller {
 			return	Auth::user()->admindgroup->power;
 		return 0;
 	}
-	public static function get_user_name_group() {return Auth::user()->admindgroup->nama;}
+	public static function get_user_name_group() {
+		if(Auth::user())
+			return Auth::user()->admindgroup->nama;
+		return 0;		
+	}
     
     public static function get_id( $table_name , $max_id ){
 		$id = 0 ;
@@ -15,9 +19,7 @@ abstract class admin extends Controller {
 		else
 			return $max_id + 1;
     }
-   	public static function get_the_saveid_obj( $table_name , $id_table){        
-        return SaveId::where('namatable' , '=' , $table_name)->where('idtable' ,'=' , $id_table )->first();
-    }
+	
    	public static function get_saveid_obj( $table_name , $id_table){
 		$user = new SaveId();        
 		$user->namatable = $table_name;

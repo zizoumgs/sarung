@@ -9,5 +9,8 @@ class Event_Model extends Sarung_Model_Root{
 		$result =  $query->where('nama' , '=' , $name);
 		return $this->check_and_get_id($result);
     } 
-	
+    public function scopeGet_name_by_id($query , $id){
+		$result =  $query->where('id' , '=' , $id);
+		return $this->check_and_get_id($result);
+    }	
 }

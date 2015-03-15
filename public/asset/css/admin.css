@@ -171,3 +171,15 @@ hr {
 .mar_25{
 	margin: 25px 0px;	
 }
+.clear{ clear:both;}
+.well-sm{
+	margin:5px !important;
+}
+
+.rating-container{
+	position:relative;
+}
+.rating-star{
+	position:absolute;
+	top:0px;
+}

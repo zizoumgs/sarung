@@ -12,8 +12,7 @@
 				<th>Id</th>
                 <th>Edit/Delete</th>
 				<th>Name</th>
-				<th>Awal</th>
-                <th>Akhir</th>
+                <th>Time</th>
                 <th>Nominal santri</th>
  				<th>Kenaikan</th>
  				<th>Date</th>
@@ -26,8 +25,10 @@
                         <a href="{{ root::get_url_admin_session('delete') }}/{{ $item->id }}" class="btn btn-danger btn-xs" >Delete</a>
                     </td>
                     <td>{{ $item->nama }}</td>
-                    <td>{{ $item->awal }} </td>
-					<td>{{ $item->akhir }} </td>
+                    <td title="Awal: {{ $item->awal }} , Akhir: {{ $item->akhir }} ">
+						Awal:  {{ root::get_diff_date( $item->awal)  }} <br>
+						Akhir: {{ root::get_diff_date( $item->akhir ) }}
+					</td>
 					<td>{{ $item->perkiraansantri }} </td>
                     <td>
 						Model: {{ Session_Addon_Model::sessionid($item->id)->first()->model }} <br>

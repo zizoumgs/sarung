@@ -20,4 +20,8 @@ class SaveId extends Sarung_Model_Root{
     public function scopeNamaTable($query , $namatable){
         return $query->where('namatable', '=', $namatable);
     }
+    
+   	public static function scopeNameNid( $query , $table_name , $table_id){        
+        return $query->where('namatable' , '=' , $table_name)->where('idtable' ,'=' , $table_id )->first();
+    }    
 }

@@ -1,7 +1,8 @@
 <?php
-class Session_Controller extends Controller{
-    public function __contruct(){            }
-	
+class Session_Controller extends AdminRoot_Controller {
+    public function __construct(){
+		parent::__construct(1);
+	}
     public function getIndex(){
         $data = array();
         $data ["sessions"] = Session_Model::orderBy('updated_at' , 'DESC')->paginate(15);
@@ -121,7 +122,7 @@ class Session_Controller extends Controller{
         $id 			= 	admin::get_id( Session_Helper::table_name , Session_Helper::get_max_id() );
         $session 		= 	Session_Helper::get_the_session_obj( true , $id );
 		$session_addon 	= 	Session_Helper::get_the_addon_session_obj("add" , $id );
-        $save_id 		= 	admin::get_the_saveid_obj( Session_Helper::table_name , $id ) ; 
+        $save_id 		= 	SaveId::nameNid( Session_Helper::table_name , $id ) ; 
 		return DB::transaction(function()use ($session,$session_addon , $save_id ){
             $session->save();
             if($save_id)

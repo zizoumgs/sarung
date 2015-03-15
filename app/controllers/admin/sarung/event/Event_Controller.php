@@ -121,7 +121,7 @@ class Event_Controller extends Controller{
     private function insert_to_db(){
         $id = admin::get_id( self::table_name , self::get_max_id() );
         $event = $this->get_obj_for_save( true , $id );
-        $save_id = admin::get_the_saveid_obj( self::table_name , $id ) ; 
+        $save_id = SaveId::nameNid( self::table_name , $id ) ; 
 		return DB::transaction(function()use ($event , $save_id ){
             $event->save();
             if($save_id)

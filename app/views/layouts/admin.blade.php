@@ -38,17 +38,7 @@
 <div class="container-fluid">
     <div class="row">
 		<aside class='col-md-2 admin_side'>
-            <ul>
-                <li>
-                    <a href="#" rel="nofollow" class="title"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a>
-                </li>
-                <li>
-                    <a href="{{ root::get_url_admin_event() }}" rel="nofollow"><span class="glyphicon glyphicon-refresh"></span> Event</a>
-                </li>
-                <li>
-                    <a href="{{ root::get_url_admin_session() }}" rel="nofollow"><span class="glyphicon glyphicon-refresh"></span> Session</a>
-                </li>                    
-            </ul>
+			@include('layouts.admin_sidebar')
         </aside>
 		<article class='col-md-10'>
 	        <!-- main content -->

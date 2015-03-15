@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-	Session|Add
+	Session|Delete
 @stop
 @include( 'sarung.admin.session.common')
 @section('content')

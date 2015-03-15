@@ -300,23 +300,34 @@ abstract class root extends Controller {
 	public static  function get_url_uang	($add=""){		return url('uang'.$add);	}
 	public static  function get_url_admin_event	( $add=""){		return url("sarung_admin/event/".$add);	}
 	public static  function get_url_admin_session	($add=""){		return url("sarung_admin/session/".$add);	}
+	public static  function get_url_admin_kalender	($add=""){		return url("sarung_admin/kalender/".$add);	}
+	
+	private static function get_old_or_future( $diffday){
+		if( $diffday >= 0 ){
+			return " Ago ";
+		}
+		return " Left ";
+	}
 	public static  function get_diff_date	($time_){
 		$datediff = time() - strtotime ($time_);
 		$total = floor($datediff/(60*60*24));
-		if( $total < 1 ){
-			return "Just Now";
+		$future_or_no = self::get_old_or_future( $total );
+		//$future_or_no = $total;
+		if( ($total < 1) && ($total) > -7 ){
+			return "Just Now" . $future_or_no;
 		}
-		elseif($total < 7 ){
-			return $total ." Days Ago ";
+		$total = abs ($total );
+		if( $total < 7){
+			return $total ." Days ".$future_or_no ;
 		}
 		elseif($total < 30){
-			return floor($total/7) ." weeks Ago"; 
+			return floor($total/7) ." weeks ".$future_or_no ; 
 		}
 		elseif($total < 365){
-			return floor($total/30) ." Months Ago"; 
+			return floor($total/30) ." Months ".$future_or_no ; 
 		}
 		else{
-			return floor($total/365) ." Years Ago"; 
+			return floor($total/365) ." Years ".$future_or_no ; 
 		}
 	}
 	/**

@@ -122,6 +122,10 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
+        /*        
+        'Appitventures\Phpgmaps\PhpgmapsServiceProvider',
+        'Gmaps' => 'Appitventures\Phpgmaps\Facades\Phpgmaps'
+        */
 	),
 
 	/*

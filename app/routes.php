@@ -21,14 +21,15 @@ Route::controller('sarung_admin/event'                  , 'Event_Controller');
 Route::controller('sarung_admin/session'                , 'Session_Controller');
 Route::controller('sarung_admin/pelajaran'              , 'Admin_sarung_pelajaran');
 
-Route::controller('sarung_admin/kalender_'               , 'Admin_sarung_kalender');
 Route::controller('sarung_admin/kalender'                , 'Kalender_Controller');
 
+Route::controller('sarung_admin/ujian'                  , 'Ujian_Controller');
+
+/*
 Route::controller('sarung_admin/jurusan'                , 'Admin_sarung_jurusan');
 Route::controller('sarung_admin/kelas_root'             , 'Admin_sarung_kelas_root');
 Route::controller('sarung_admin/kelas'                  , 'Admin_sarung_kelas');
 Route::controller('sarung_admin/wali'                   , 'Admin_sarung_wali');
-Route::controller('sarung_admin/ujian'                  , 'Admin_sarung_ujian');
 Route::controller('sarung_admin/negara'                 , 'Admin_sarung_negara');
 Route::controller('sarung_admin/propinsi'               , 'Admin_sarung_propinsi');
 Route::controller('sarung_admin/kabupaten'              , 'Admin_sarung_kabupaten');
@@ -42,6 +43,7 @@ Route::controller('sarung_admin/ujis'                   , 'Admin_sarung_ujis');
 Route::controller('sarung_admin/tindakan'               , 'Admin_sarung_larangan_nama');
 Route::controller('sarung_admin/tindakan_meta'          , 'Admin_sarung_larangan_meta');
 Route::controller('sarung_admin/tindakan_kasus'          , 'Admin_sarung_larangan_kasus');
+*/
 
 //! i will remove this
 Route::any('/delete_img',

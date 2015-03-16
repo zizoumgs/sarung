@@ -2,6 +2,7 @@
 class Ujian_Model extends Sarung_Model_Root{
 	protected $table = 'ujian';
 	
+	public static function get_table(){ return self::table;}
     public function Kalender(){
        return $this->belongsTo('Kalender_Model' ,'idkalender');
     }    
@@ -39,27 +40,27 @@ class Ujian_Model extends Sarung_Model_Root{
 	 *	get all name of event which is exist in ujian
 	 *	return obj
 	*/
-	public function get_names_of_ujian(){
-			$sql = " select eve.nama as name
-			from event eve , ujian uji , kalender kal 
-			where eve.id = kal.idevent
-			and kal.id = uji.idkalender
-			group by name
+	public static function get_ujian_pelajaran_names(){
+		$sql = " select pel.nama as nama
+			from ujian uji , pelajaran pel 
+			where uji.idpelajaran = pel.id
+			group by nama
 		";
-		$kelas = DB::connection($this->get_db())->select( DB::raw( $sql ));
-		return (object)$kelas;	
+		$kelas = DB::connection( parent::get_db())->select( DB::raw( $sql ));
+		return (object)$kelas;
 	}
 	/**
 	 *	get all name of pelajaran which is exist in ujian
+	 *	depreceated
 	 *	return obj
 	*/
 	public function get_names_of_pelajaran(){
-			$sql = " select pel.nama as name
+		$sql = " select pel.nama as name
 			from ujian uji , pelajaran pel 
 			where uji.idpelajaran = pel.id
 			group by name
 		";
-		$kelas = DB::connection($this->get_db())->select( DB::raw( $sql ));
+		$kelas = DB::connection( parent::get_db())->select( DB::raw( $sql ));
 		return (object)$kelas;	
 	}
 }
@@ -78,6 +79,9 @@ class Ujis_Model extends Sarung_Model_Root{
     public function Kelas(){
         return $this->belongsTo('Kelas_Model' ,'idkelas');
     }
+	public function scopeUjianid($query , $id){
+		$query->where('idujian', '=', $id);
+	}
 	public function scopeBypelajaran($query , $nama_session){
 		//@ prepare
 		$ujian_obj = new Ujian_Model();
@@ -189,22 +193,3 @@ class Ujian_Model_AddOn extends Sarung_Model_Root{
        return $this->belongsTo('Ujian_Model' ,'idujian');
     }    
 }
-
-
-/**
-			pel.nama as course_name , kel.nama as kelas_name	, uji.kalinilai as kalinilai	,	uji.pelaksanaan as pelaksanaan ,
-			eve.nama as event_name
-	
-
-
-			select adm.first_name as first_name , adm.second_name as second_name , adm.foto,
-			adm.jenis as jenis ,	adm.created_at , adm.updated_at	,
-			san.idsession as idsession , san.nis as nis , san.id as santri_id		,		
-			ses.awal , ses.perkiraansantri as perkiraansantri	,	adm.id as id_user
-			from santri san , admind adm , session ses , ujian uji , ujiansantri ujis
-			
-			where san.idadmind = adm.id
-			and ses.id	=	san.idsession
-			and ses.nama = "14-15"
-			and uji.id	 = 155
-*/

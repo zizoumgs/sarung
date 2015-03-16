@@ -92,6 +92,7 @@ function get_session_select( $attributes = array() , $additional_item = array())
 
 /**
  *  get pelajaran
+ *  depreceated
  *  return select
 **/
 function get_pelajaran_select( $attributes ,   $additional_item = array()){
@@ -111,7 +112,7 @@ function get_pelajaran_select( $attributes ,   $additional_item = array()){
     foreach($additional_item as $item){            $hasil [] = $item ;        }		
     //@
     $sessions = new \Ujian_Model();
-    foreach($sessions->get_names_of_pelajaran() as $item){
+    foreach($sessions->get_ujian_pelajaran_names() as $item){
 		$hasil [] = $item->name ;
     }
     return get_select( $hasil , $default);		

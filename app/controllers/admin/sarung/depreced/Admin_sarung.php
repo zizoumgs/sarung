@@ -18,7 +18,7 @@ abstract class  Admin_sarung_urls extends Admin_root {
 	protected function get_url_admin_kelas_root   ()	{ 	return sprintf('%1$s/sarung_admin/kelas_root' , $this->base_url());}
 	protected function get_url_admin_kelas		()	{ 		return sprintf('%1$s/sarung_admin/kelas' , $this->base_url());}
 	protected function get_url_admin_wali		()	{ 		return sprintf('%1$s/sarung_admin/wali' , $this->base_url());}
-	protected function get_url_admin_ujian		()	{ 		return sprintf('%1$s/sarung_admin/ujian' , $this->base_url());}
+	//protected function get_url_admin_ujian		()	{ 		return sprintf('%1$s/sarung_admin/ujian' , $this->base_url());}
 	protected function get_url_admin_negara		()	{ 		return sprintf('%1$s/sarung_admin/negara' , $this->base_url());}
 	protected function get_url_admin_propinsi	()	{ 		return sprintf('%1$s/sarung_admin/propinsi' , $this->base_url());}
 	protected function get_url_admin_kabupaten	()	{ 		return sprintf('%1$s/sarung_admin/kabupaten' , $this->base_url());}

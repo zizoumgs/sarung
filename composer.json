@@ -5,7 +5,9 @@
 	"license": "MIT",
 	"type": "project",
 	"require": {
-		"laravel/framework": "4.2.*"
+		"laravel/framework": "4.2.*",
+		"pda/pheanstalk": "~2.0"	,	
+		"appitventures/phpgmaps": "1.0.*@dev"
 	},
 	"autoload": {
 		"classmap": [

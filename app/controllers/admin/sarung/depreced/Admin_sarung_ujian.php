@@ -207,7 +207,7 @@ class Admin_sarung_ujian extends Admin_sarung_ujian_dele{
                 $row .= sprintf('<td>%1$s%2$s</td>', $this->dialog_edit->get_dialog_button_edit($event),
 								$this->dialog_del->get_dialog_button_delete( $event));
                 $row .= sprintf('<td>%1$s</td>' , $event->pelajaran->nama);
-                $row .= sprintf('<td>%1$s</td>' , $event->kalender->event->nama);				
+                $row .= sprintf('<td>%1$s</td>' , $event->kalender->event->nama);
                 //$row .= sprintf('<td>%1$s%2$s</td>',$event->kelas->kelasRoot->tingkat , $event->kelas->nama);
 				$row .= sprintf('<td>%1$s</td>' , $event->kelas->nama);
 				$row .= sprintf('<td>%1$s</td>' , $event->kalender->session->nama);

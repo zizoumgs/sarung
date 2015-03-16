@@ -11,4 +11,7 @@
         <li>
 			<a href="{{ root::get_url_admin_kalender() }}" rel="nofollow"><span class="glyphicon glyphicon-refresh"></span> Kalender</a>
         </li>		
+        <li>
+			<a href="{{ root::get_url_admin_ujian() }}" rel="nofollow"><span class="glyphicon glyphicon-road"></span> Ujian</a>
+		</li>
     </ul>

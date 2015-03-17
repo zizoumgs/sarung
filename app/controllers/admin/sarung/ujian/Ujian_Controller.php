@@ -7,7 +7,7 @@ class Ujian_Controller extends AdminRoot_Controller{
 	}
     public function getIndex(){
         $data = array();
-        $data ['wheres']  =  $this->helper->get_table_filter();
+        $data ['wheres']  =  $this->helper->get_values_for_pagenation();
         $data ["items"] = $this->helper->get_obj_find()->orderBy('updated_at' , 'DESC')->paginate(15);
 		$data ["info"]     = $this->helper->get_table_info( $data ["items"] ); 
         return View::make( "sarung.admin.ujian.index" , $data);

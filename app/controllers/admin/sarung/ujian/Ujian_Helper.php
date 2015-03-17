@@ -17,17 +17,19 @@ class Ujian_Helper {
 	
 	public static function get_create_model() { return new Ujian_Model; }
 	
-	/**
-	 *	return array
-	*/
-    public static function get_validator(){
-        $rules = array(
+	public static function get_rules(){
+        return array(
             self::get_kelipatan_name	=> 	"required|numeric" ,
 			self::get_nilai_name 		=> 	"required|numeric" ,
             self::get_date_name      	=> 	'required' ,
             self::get_time_name     	=> 	'required'
-        ); 
-        return Validator::make(  Input::all() , $rules);
+        );
+	}
+	/**
+	 *	return array
+	*/
+    public static function get_validator(){
+        return Validator::make(  Input::all() , self::get_rules() );
     }
     
 	/**
@@ -60,7 +62,6 @@ class Ujian_Helper {
    		$obj->idpelajaran	= Input::get(self::get_pelajaran_name);
 		$obj->idkelas		= Input::get(self::get_kelas_name);
 		$obj->pelaksanaan	= self::get_date_and_time();
-		Log::info(self::get_date_and_time());
 		$obj->minnilai 		= Input::get(    self::get_nilai_name	)   ;
         $obj->kalinilai    	= Input::get(    self::get_kelipatan_name	)   ;
         return $obj;
@@ -74,8 +75,8 @@ class Ujian_Helper {
 		$datas  [ 'event' ]  		=   $obj->kalender->event->nama;
 		$datas  [ 'id_pelajaran']		=	$obj->pelajaran->id;
 		$datas  [ 'id_kelas']		=	$obj->kelas->id;
-		$datas  [ 'nilai' ]  		=   $obj->minnilai;
-		$datas  [ 'kelipatan' ]  	=   $obj->kalinilai;	
+		$datas  [ 'nilai' ]  		=   round($obj->minnilai,1);
+		$datas  [ 'kelipatan' ]  	=   round($obj->kalinilai,1);	
         $datas  [ 'aktif' ]  		=   $obj->aktif;
 		$datas  [ 'date' ]			=	self::get_date( $obj );
 		$datas  [ 'time' ]			=	self::get_time( $obj );
@@ -84,37 +85,48 @@ class Ujian_Helper {
         return $datas;
     }
 	
+	public static function should_be_keep($text){
+		if( $text  !== "All" && $text != "" )
+			return true;
+		return false;
+	}
+	
 	public static function get_obj_find(){
 		$main   	= 	self::get_create_model() ;
 		$event 		= 	Input::get('find_event_name');
 		$session 	= 	Input::get('find_session_name');
 		$pelajaran  =	Input::get('find_pelajaran_name');
 		$kelas	  	=	Input::get('find_kelas_name');
-		if( $event  !== "All" && $event != "" ){
+		if( self::should_be_keep($event) ){
 			$main 	= 	$main->eventname($event);
 		}
-		if( $session  !== "All" && $session != ""  ){
+		if( self::should_be_keep( $session ) ){
 			$main 	= 	$main->sessionname($session);
 		}
-		if( $pelajaran !== "All" && $pelajaran != ""  ){
+		if( self::should_be_keep( $pelajaran ) ) {
 			$main 	= 	$main->pelajaranname($pelajaran);
 		}
-		if( $kelas !== "All" && $kelas != ""  ){
+		if( self::should_be_keep( $kelas ) ) {
 			$main 	= 	$main->kelasname($kelas);
 		}		
 		return $main;
 	}
-	public static function get_table_filter(){
+	public static function get_values_for_pagenation(){
 		$where = array () ;
-		if( Input::get('find_event_name') !== "All"){
+		if( self::should_be_keep( Input::get('find_event_name') ) ) {
 			$where ['find_event_name'] = Input::get('find_event_name');
 		}
-		if( Input::get('find_session_name') !== "All"){
+		if( self::should_be_keep( Input::get('find_session_name') ) ) {
 			$where ['find_session_name'] = Input::get('find_session_name');
 		}
+		if( self::should_be_keep( Input::get('find_pelajaran_name') ) ) {
+			$where ['find_pelajaran_name'] = Input::get('find_pelajaran_name');
+		}
+		if( self::should_be_keep( Input::get('find_kelas_name') ) ) {
+			$where ['find_kelas_name'] = Input::get('find_kelas_name');
+		}		
 		return $where;
 	}
-	
 	public static function get_table_info( $obj ){
 		return sprintf('Show %1$s of %2$s', $obj->getFrom() , $obj->getTotal()) ;
 	}

@@ -109,6 +109,8 @@
 
                     <td  >
                         Kelas:  {{ $item->kelas->nama  }}                       <br>
+						Kelipatan:  {{ $item->kalinilai  }}                       <br>
+						Harapan:    {{ $item->minnilai  }}                       <br>
                         <span title="Pelaksanaan: {{ $item->pelaksanaan }} " >Pelaksanaan:  {{ root::get_diff_date( $item->pelaksanaan ) }} </span><br>
                     </td>
                     <td>

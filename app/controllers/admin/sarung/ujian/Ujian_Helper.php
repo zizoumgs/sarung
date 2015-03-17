@@ -31,15 +31,6 @@ class Ujian_Helper {
     }
     
 	/**
-	 *	return integer 0 , 1 
-	*/
-	private static function get_active_value(){
-		$aa = Input::get(    self::get_aktif_name	) ;
-		if( ! $aa )
-			return 0 ;
-		return $aa;
-	}
-	/**
 	 *
 	*/
 	public static function get_date_and_time(){

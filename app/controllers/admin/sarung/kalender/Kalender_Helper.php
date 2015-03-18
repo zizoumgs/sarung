@@ -1,5 +1,5 @@
 <?php
-class Kalender_Helper {
+class Kalender_Helper extends Root_Helper{
     const table_name = 'kalender' ;
     const get_session_name = "session_name_hoho";
     const get_event_name = "nilai_name";
@@ -38,15 +38,19 @@ class Kalender_Helper {
 			return 0 ;
 		return $aa;
 	}
-	/**
-	 *	return particular object
-	*/	
-    public static function get_the_obj( $add , $id ){
+	private static function get_proper_the_obj($add  , $id ){
         $obj = self::get_create_model();
         if( $add )
             $obj->id = $id;
         else
-            $obj = $obj->find( $id );
+            return $obj->find( $id );
+		return $obj;
+	}	
+	/**
+	 *	return particular object
+	*/	
+    public static function get_the_obj( $add , $id ){		
+        $obj = self::get_proper_the_obj( $add , $id );
        	$obj->idsession				= Session_Model::get_id_by_name( Input::get(    self::get_session_name	    ) )	    ;
    		$obj->idevent     			= Event_Model::get_id_by_name(   Input::get(    self::get_event_name		) )		;
 		$obj->rating     			= Input::get(    self::get_rating_name	)   ;
@@ -71,16 +75,15 @@ class Kalender_Helper {
         $datas  ['id']				=   $id ;
         return $datas;
     }
-	
 	public static function get_obj_find(){
 		$kalender = new Kalender_Model ;
 		$event 		= 	Input::get('find_event_name');
 		$session 	= 	Input::get('find_session_name');
-		if( $event  !== "All" && $event != "" ){
+		if( Root_Helper::should_be_keep( $event ) ){
 			$id = Event_Model::where('nama' , '=' , $event )->first()->id;
 			$kalender 	= 	$kalender->where("idevent" , "=" , $id );
 		}
-		if( $session  !== "All" && $session != ""  ){
+		if( Root_Helper::should_be_keep( $session )  ){
 			$id 		= 	Session_Model::where('nama' , '=' , $session )->first()->id;
 			$kalender 	= 	$kalender->where("idsession" , "=" , $id );
 		}
@@ -88,11 +91,13 @@ class Kalender_Helper {
 	}
 	public static function get_table_filter(){
 		$where = array () ;
-		if( Input::get('find_event_name') !== "All"){
-			$where ['find_event_name'] = Input::get('find_event_name');
+		$event 		= 	Input::get('find_event_name');
+		$session 	= 	Input::get('find_session_name');
+		if( Root_Helper::should_be_keep( $event ) ){
+			$where ['find_event_name'] = $event ;
 		}
-		if( Input::get('find_session_name') !== "All"){
-			$where ['find_session_name'] = Input::get('find_session_name');
+		if( Root_Helper::should_be_keep( $session ) ){
+			$where ['find_session_name'] = $session ; 
 		}
 		return $where;
 	}

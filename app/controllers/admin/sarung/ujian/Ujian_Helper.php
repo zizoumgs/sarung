@@ -1,5 +1,5 @@
 <?php
-class Ujian_Helper {
+class Ujian_Helper extends Root_Helper {
     const table_name = 'ujian' ;
     const get_session_name = "session_name_hoho";
     const get_event_name = "nilai_name";
@@ -49,15 +49,20 @@ class Ujian_Helper {
 		return date_format($date	,"H:i") ;
 	}
 	
-	/**
-	 *	return particular object
-	*/	
-    public static function get_the_obj( $add , $id ){
+	private static function get_proper_the_obj( $add , $id ){
         $obj = self::get_create_model();
         if( $add )
             $obj->id = $id;
         else
             $obj = $obj->find( $id );
+		return $obj ;
+	}
+	/**
+	 *	return particular object
+	*/	
+    public static function get_the_obj( $add   , $id ){
+		$obj = self::get_proper_the_obj( $add , $id ) ;
+		
        	$obj->idkalender	= Input::get(    self::get_kalender_name	 )	    ;
    		$obj->idpelajaran	= Input::get(self::get_pelajaran_name);
 		$obj->idkelas		= Input::get(self::get_kelas_name);
@@ -85,44 +90,38 @@ class Ujian_Helper {
         return $datas;
     }
 	
-	public static function should_be_keep($text){
-		if( $text  !== "All" && $text != "" )
-			return true;
-		return false;
-	}
-	
 	public static function get_obj_find(){
 		$main   	= 	self::get_create_model() ;
 		$event 		= 	Input::get('find_event_name');
 		$session 	= 	Input::get('find_session_name');
 		$pelajaran  =	Input::get('find_pelajaran_name');
 		$kelas	  	=	Input::get('find_kelas_name');
-		if( self::should_be_keep($event) ){
+		if( Root_Helper::should_be_keep($event) ){
 			$main 	= 	$main->eventname($event);
 		}
-		if( self::should_be_keep( $session ) ){
+		if( Root_Helper::should_be_keep( $session ) ){
 			$main 	= 	$main->sessionname($session);
 		}
-		if( self::should_be_keep( $pelajaran ) ) {
+		if( Root_Helper::should_be_keep( $pelajaran ) ) {
 			$main 	= 	$main->pelajaranname($pelajaran);
 		}
-		if( self::should_be_keep( $kelas ) ) {
+		if( Root_Helper::should_be_keep( $kelas ) ) {
 			$main 	= 	$main->kelasname($kelas);
 		}		
 		return $main;
 	}
 	public static function get_values_for_pagenation(){
 		$where = array () ;
-		if( self::should_be_keep( Input::get('find_event_name') ) ) {
+		if( Root_Helper::should_be_keep( Input::get('find_event_name') ) ) {
 			$where ['find_event_name'] = Input::get('find_event_name');
 		}
-		if( self::should_be_keep( Input::get('find_session_name') ) ) {
+		if( Root_Helper::should_be_keep( Input::get('find_session_name') ) ) {
 			$where ['find_session_name'] = Input::get('find_session_name');
 		}
-		if( self::should_be_keep( Input::get('find_pelajaran_name') ) ) {
+		if( Root_Helper::should_be_keep( Input::get('find_pelajaran_name') ) ) {
 			$where ['find_pelajaran_name'] = Input::get('find_pelajaran_name');
 		}
-		if( self::should_be_keep( Input::get('find_kelas_name') ) ) {
+		if( Root_Helper::should_be_keep( Input::get('find_kelas_name') ) ) {
 			$where ['find_kelas_name'] = Input::get('find_kelas_name');
 		}		
 		return $where;

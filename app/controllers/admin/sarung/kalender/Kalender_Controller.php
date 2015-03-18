@@ -1,5 +1,5 @@
 <?php
-class Kalender_Controller extends AdminRoot_Controller{
+class Kalender_Controller extends Admin{
 	public $helper ;
     public function __construct(){
 		parent::__construct(1);
@@ -90,49 +90,21 @@ class Kalender_Controller extends AdminRoot_Controller{
     }
 	
     private function delete_to_db($id){
-        $session 		= 	$this->helper->get_the_obj( false , $id );
-        $save_id 		= 	admin::get_saveid_obj( $this->helper->get_table_name() , $id ) ; 
-		$pdo = DB::connection( Config::get('database.default') )->getPdo();
-		$pdo->beginTransaction();
-		$status = false;
-		try {
-			//! for saving
-			$session->delete();
-			if($save_id)
-				$save_id->save();
-			$pdo->commit();
-			$status = true;
-		    // all good
-		}
-		catch (\Exception $e) {
-			//$this->set_pdo_exception($e);
-			//$this->set_error_message($e->getMessage()) ;
-		    //DB::rollback();
-			$pdo->rollback();
-		}
-		return $status;
+		$del_objects  [] = $this->helper->get_the_obj( false , $id ) ;
+		$save_objects [] = admin::get_saveid_obj( $this->helper->get_table_name() , $id ) ;
+		return admin::multi_purpose_db( self::get_db_name() , $save_objects , $del_objects );
     }
 	
     private function edit_to_db($id){
-        $kalender 		= 	$this->helper->get_the_obj( false , $id );
-		$status = DB::transaction(function()use ( $kalender ){
-            $kalender->save();
-			return true;
-		});
-		return $status;
+		$save_objects = array($this->helper->get_the_obj( false , $id ));
+		return admin::multi_purpose_db( self::get_db_name() , $save_objects , array()  );
     }
 	
     private function insert_to_db(){
-
-        $id 			= 	admin::get_id( $this->helper->table_name , $this->helper->get_max_id() );
-        $the_obj 		= 	$this->helper->get_the_obj( true , $id );
-        $save_id 		= 	SaveId::nameNid( $this->helper->table_name , $id ) ; 
-		return DB::transaction(function()use ( $the_obj , $save_id ){
-            $the_obj->save();
-            if($save_id)
-                $save_id->delete();
-			return true;
-		});
+        $id 			= 	admin::get_id( $this->helper->get_table_name() , $this->helper->get_max_id() );		
+		$save_objects = array($this->helper->get_the_obj( true , $id ));
+		$del_objects  = array(SaveId::nameNid( $this->helper->get_table_name() , $id ));
+		return admin::multi_purpose_db( self::get_db_name() , $save_objects , $del_objects );
     }
     
 }

@@ -33,20 +33,14 @@ class Kelas_Isi_Helper {
         $obj->catatan		=   Input::get('dialog_catatan_name')	;
         return $obj;
     }
-	public static function should_be_keep($text){
-		if( $text  !== "All" && $text != "" )
-			return true;
-		return false;
-	}
-	
 	public static function get_obj_find(){
 		$model   	= 	Santri_Model::get_santri_raw() ;
 		$session 	= 	Input::get('find_session_name');
 		$santri_name	  	=	Input::get('find_santri_name');
-		if( self::should_be_keep($session) ){
+		if( Root_Helper::should_be_keep($session) ){
 			$model = $model->where('session.nama','=',$session);
 		}
-		if( self::should_be_keep( $santri_name ) ){
+		if( Root_Helper::should_be_keep( $santri_name ) ){
 	        $model = $model->whereRaw(" (first_name LIKE ? or second_name LIKE ? ) " ,
                                         array( "%".$santri_name."%" ,
                                               "%".$santri_name."%" )
@@ -56,10 +50,10 @@ class Kelas_Isi_Helper {
 	}
 	public static function get_values_for_pagenation(){
 		$where = array () ;
-		if( self::should_be_keep( Input::get('find_session_name') ) ) {
+		if( Root_Helper::should_be_keep( Input::get('find_session_name') ) ) {
 			$where ['find_session_name'] = Input::get('find_session_name');
 		}
-		if( self::should_be_keep( Input::get('find_santri_name') ) ) {
+		if( Root_Helper::should_be_keep( Input::get('find_santri_name') ) ) {
 			$where ['find_santri_name'] = Input::get('find_santri_name');
 		}
 		return $where;

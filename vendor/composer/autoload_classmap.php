@@ -130,6 +130,7 @@ return array(
     'Outcome_Model' => $baseDir . '/app/models/Outcome_Model.php',
     'Pelajaran_Model' => $baseDir . '/app/models/Sarung/Pelajaran_Model.php',
     'Propinsi_Model' => $baseDir . '/app/models/Sarung/Alamat_Model.php',
+    'Root_Helper' => $baseDir . '/app/controllers/admin/sarung/Root_Helper.php',
     'Root_model' => $baseDir . '/app/models/Root_model.php',
     'Santri_Helper' => $baseDir . '/app/controllers/admin/sarung/santri/Santri_Helper.php',
     'Santri_Model' => $baseDir . '/app/models/Sarung/Santri_Model.php',

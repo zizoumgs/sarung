@@ -1,10 +1,12 @@
 <?php
-class Ujian_Controller extends AdminRoot_Controller{
+class Ujian_Controller extends Admin{
 	public $helper ;
     public function __construct(){
 		parent::__construct(1);
 		$this->helper = new Ujian_Helper;
 	}
+	private static function get_db_name(){	return Config::get('database.default'); }
+	
     public function getIndex(){
         $data = array();
         $data ['wheres']  =  $this->helper->get_values_for_pagenation();
@@ -60,7 +62,7 @@ class Ujian_Controller extends AdminRoot_Controller{
                 return Redirect::to( $edit_url )->with('message',  "Berhasil merubah database");
             }
             else{
-                return Redirect::to( $edit_url )->with('message',  "Gagal merubah ke database");
+                return Redirect::to( $edit_url )->with('message',  admin::get_error_message() );
             }
         }
         
@@ -89,48 +91,21 @@ class Ujian_Controller extends AdminRoot_Controller{
     }
 	
     private function delete_to_db($id){
-        $session 		= 	$this->helper->get_the_obj( false , $id );
-        $save_id 		= 	admin::get_saveid_obj( $this->helper->get_table_name() , $id ) ; 
-		$pdo = DB::connection( Config::get('database.default') )->getPdo();
-		$pdo->beginTransaction();
-		$status = false;
-		try {
-			//! for saving
-			$session->delete();
-			if($save_id)
-				$save_id->save();
-			$pdo->commit();
-			$status = true;
-		    // all good
-		}
-		catch (\Exception $e) {
-			//$this->set_pdo_exception($e);
-			//$this->set_error_message($e->getMessage()) ;
-		    //DB::rollback();
-			$pdo->rollback();
-		}
-		return $status;
+		$del_objects  [] = $this->helper->get_the_obj( false , $id ) ;
+		$save_objects [] = admin::get_saveid_obj( $this->helper->get_table_name() , $id ) ;
+		return admin::multi_purpose_db( self::get_db_name() , $save_objects , $del_objects );
     }
 	
     private function edit_to_db($id){
-        $model 		= 	$this->helper->get_the_obj( false , $id );
-		return DB::transaction(function()use ( $model ){
-            $model->save();
-			return true;
-		});
+		$save_objects = array($this->helper->get_the_obj( false , $id ));
+		return admin::multi_purpose_db( self::get_db_name() , $save_objects , array()  );
     }
 	
     private function insert_to_db(){
-
-        $id 			= 	admin::get_id( $this->helper->get_table_name() , $this->helper->get_max_id() );
-        $the_obj 		= 	$this->helper->get_the_obj( true , $id );
-        $save_id 		= 	SaveId::nameNid( $this->helper->get_table_name() , $id ) ;
-		return DB::transaction(function()use ( $the_obj , $save_id ){
-            $the_obj->save();
-            if($save_id)
-                $save_id->delete();
-			return true;
-		});
+        $id 			= 	admin::get_id( $this->helper->get_table_name() , $this->helper->get_max_id() );		
+		$save_objects = array($this->helper->get_the_obj( true , $id ));
+		$del_objects  = array(SaveId::nameNid( $this->helper->get_table_name() , $id ));
+		return admin::multi_purpose_db( self::get_db_name() , $save_objects , $del_objects );
     }
     
 }

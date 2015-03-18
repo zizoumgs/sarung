@@ -81,7 +81,7 @@ class Kelas_Isi_Controller extends admin{
     private function delete_to_db($id){
 		//@ find examination that have relation with that class as well as santri id
 		if( $this->should_be_deleted() ){
-			$del_objects  [] = $this->helper->get_the_obj( false , $id ) ;
+			$del_objects  [] = $this->helper->get_create_model()->find( $id );
 			$save_objects [] = admin::get_saveid_obj( $this->helper->get_table_name() , $id ) ;
 			return admin::multi_purpose_db( self::get_db_name() , $save_objects , $del_objects );
 		}

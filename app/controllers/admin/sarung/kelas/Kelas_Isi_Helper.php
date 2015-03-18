@@ -6,20 +6,12 @@ class Kelas_Isi_Helper extends Root_Helper{
     public static function get_max_id(){   return self::get_create_model()->max('id') ;   }	
 	public static function get_create_model() { return new Class_Model(); }
 		
-
-	private static function get_proper_the_obj($add  , $id ){
-        $obj = self::get_create_model();
-        if( $add )
-            $obj->id = $id;
-        else
-            return $obj->find( $id );
-		return $obj;
-	}
 	/**
 	 *	return particular object
 	*/	
     public static function get_the_obj( $add , $id ){
-		$obj = self::get_proper_the_obj( $add , $id );
+        $obj = self::get_create_model();
+        $obj->id = $id;		
         //! get idsession
 		$session_obj = new Session_Model();
 		$id_session = $session_obj->getfirst( Input::get('dialog_session_name') )->id;

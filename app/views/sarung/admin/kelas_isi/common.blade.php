@@ -21,12 +21,14 @@
 		$("#dialog_santri_name").val(first_name +" "+ second_name);
 	}
 	function delete_handle(id , idkelas , idsantri , session_name){
-		$("#dialog_del_id_name").val(id);
-		$("#dialog_del_id_kelas_name").val(idkelas);
-		$("#dialog_del_id_santri_name").val(idsantri);
-		$("#dialog_del_session_name").val(session_name);
-		$("#dialog_del_form_name").submit();
-	};			
+		if (confirm("This will delete pressed class !") == true) {
+			$("#dialog_del_id_name").val(id);
+			$("#dialog_del_id_kelas_name").val(idkelas);
+			$("#dialog_del_id_santri_name").val(idsantri);
+			$("#dialog_del_session_name").val(session_name);
+			$("#dialog_del_form_name").submit();
+		}
+	};
 	$(function() {
 		$("#dialog_submit_name").click(function(){
 			$("#dialog_name").submit();

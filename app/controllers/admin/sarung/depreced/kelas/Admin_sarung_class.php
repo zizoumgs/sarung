@@ -247,9 +247,7 @@ class Admin_sarung_class extends Admin_sarung_class_support{
      * Return string
     */
     protected function get_user_data_add($model , $col_array = array( "col-md-2" , "col-md-10 x-small-font" )){
-        $date = new DateTime($model->awal);
-        $nis = $date->format("y").str_pad($model->nis,$model->perkiraansantri,"0", STR_PAD_LEFT);
-        $nis   = sprintf('<span><span class="glyphicon glyphicon-user"></span> Nis: %1$s</span>' , $nis);
+         $nis   = sprintf('<span><span class="glyphicon glyphicon-user"></span> Nis: %1$s</span>' , $nis);
         $nama = sprintf('<span><span class="glyphicon glyphicon-user"></span> Nama: %1$s %2$s</span>  %3$s<br>' ,
                         $model->first_name ,
                         $model->second_name ,
@@ -614,7 +612,7 @@ class Admin_sarung_class extends Admin_sarung_class_support{
 			}
 		}
 		$this->set_error_message($message);
-		return $this->getEventadd("fjdjjfkdjfkd");		
+		return $this->getEventadd();		
 	}
 	/**
 	 *	failed to delete item

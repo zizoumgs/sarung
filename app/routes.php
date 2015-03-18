@@ -21,9 +21,10 @@ Route::controller('sarung_admin/event'                  , 'Event_Controller');
 Route::controller('sarung_admin/session'                , 'Session_Controller');
 Route::controller('sarung_admin/pelajaran'              , 'Admin_sarung_pelajaran');
 
-Route::controller('sarung_admin/kalender'                , 'Kalender_Controller');
+Route::controller('sarung_admin/kalender'               , 'Kalender_Controller');
 
 Route::controller('sarung_admin/ujian'                  , 'Ujian_Controller');
+Route::controller('sarung_admin/kelas_isi'              , 'Kelas_Isi_Controller');
 
 /*
 Route::controller('sarung_admin/jurusan'                , 'Admin_sarung_jurusan');

@@ -14,10 +14,14 @@ abstract class  Admin_sarung_urls extends Admin_root {
 	protected function get_url_admind_session   ()	{ 		return sprintf('%1$s/sarung_admin/session' , $this->base_url());}
 	protected function get_url_admin_kalender_  () 	{ 		return sprintf('%1$s/sarung_admin/kalender' , $this->base_url());}
 	protected function get_url_admin_pelajaran ()	{ 		return sprintf('%1$s/sarung_admin/pelajaran' , $this->base_url());}
+
+	//protected function get_url_admin_class		()	{ 		return sprintf('%1$s/sarung_admin/class		' , $this->base_url());}
+	
 	protected function get_url_admin_jurusan   ()	{ 		return sprintf('%1$s/sarung_admin/jurusan' , $this->base_url());}
 	protected function get_url_admin_kelas_root   ()	{ 	return sprintf('%1$s/sarung_admin/kelas_root' , $this->base_url());}
-	protected function get_url_admin_kelas		()	{ 		return sprintf('%1$s/sarung_admin/kelas' , $this->base_url());}
+	//protected function get_url_admin_kelas		()	{ 		return sprintf('%1$s/sarung_admin/kelas' , $this->base_url());}
 	protected function get_url_admin_wali		()	{ 		return sprintf('%1$s/sarung_admin/wali' , $this->base_url());}
+	
 	//protected function get_url_admin_ujian		()	{ 		return sprintf('%1$s/sarung_admin/ujian' , $this->base_url());}
 	protected function get_url_admin_negara		()	{ 		return sprintf('%1$s/sarung_admin/negara' , $this->base_url());}
 	protected function get_url_admin_propinsi	()	{ 		return sprintf('%1$s/sarung_admin/propinsi' , $this->base_url());}
@@ -26,7 +30,6 @@ abstract class  Admin_sarung_urls extends Admin_root {
 	protected function get_url_admin_desa		()	{ 		return sprintf('%1$s/sarung_admin/desa' 	, $this->base_url());}
 	protected function get_url_admin_user		()	{ 		return sprintf('%1$s/sarung_admin/user' 	, $this->base_url());}
 	protected function get_url_admin_santri		()	{ 		return sprintf('%1$s/sarung_admin/santri	' , $this->base_url());}
-	protected function get_url_admin_class		()	{ 		return sprintf('%1$s/sarung_admin/class		' , $this->base_url());}
 	protected function get_url_admin_ujis		()	{ 		return sprintf('%1$s/sarung_admin/ujis		' , $this->base_url());}
 	protected function get_url_admin_sarung		()   { 		return helper_get_url_admin_sarung();}
 	//@ larangan

@@ -40,7 +40,6 @@ return array(
 	*/
 
 	'timezone' => 'Asia/Jakarta',
-
 	/*
 	|--------------------------------------------------------------------------
 	| Application Locale Configuration

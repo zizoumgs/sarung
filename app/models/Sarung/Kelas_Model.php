@@ -102,7 +102,7 @@ class Class_Model extends Sarung_Model_Root{
 	***	function to get kelas according to id santri
 	***	return obj
 	**/
-	public function getkelassantribyid($santri_id){
+	public static function getkelassantribyid($santri_id){
 		$sql = " select kel.nama as kelas_name, ses.nama as session_name  , keli.id as id ,kel.id as idkelas
 		from kelasisi keli , santri san , admind adm , kelas kel , session ses
 		where san.idadmind = adm.id 
@@ -111,14 +111,14 @@ class Class_Model extends Sarung_Model_Root{
 		and keli.idkelas   = kel.id
 		and san.id         = ?
 		";
-		$kelas = DB::connection($this->get_db())->select( DB::raw( $sql ) 	 , array($santri_id)  );
+		$kelas = DB::connection( parent::get_db())->select( DB::raw( $sql ) 	 , array($santri_id)  );
 		return (object)$kelas;
 	}
     /**
     ** this function should be called everytime you wanna delete  item from kelasisi`s table
-    ** return 
+    ** return object
     **/
-    public function getidujiansantri($idkelas , $idsantri , $nama_session){
+    public static function getidujiansantri($idkelas , $idsantri , $nama_session){
 		$sql = " 
 			select count(*) as total
 			from ujian uji , santri san , ujiansantri ujis , kalender kal , session ses
@@ -129,7 +129,7 @@ class Class_Model extends Sarung_Model_Root{
 			and uji.idkelas = ? and san.id = ?
 			and ses.nama = ?
 		";
-		$kelas = DB::connection($this->get_db())->select( DB::raw( $sql ) 	 , array( $idkelas , $idsantri , $nama_session)  );
+		$kelas = DB::connection( parent::get_db())->select( DB::raw( $sql ) 	 , array( $idkelas , $idsantri , $nama_session)  );
 		return (object)$kelas;
     }
     /**

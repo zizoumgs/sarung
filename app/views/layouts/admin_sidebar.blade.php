@@ -14,4 +14,7 @@
         <li>
 			<a href="{{ root::get_url_admin_ujian() }}" rel="nofollow"><span class="glyphicon glyphicon-road"></span> Ujian</a>
 		</li>
+        <li>
+			<a href="{{ root::get_url_admin_Kelas_Isi() }}" rel="nofollow"><span class="glyphicon glyphicon-road"></span> Kelas Isi</a>
+		</li>
     </ul>

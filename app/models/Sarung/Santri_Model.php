@@ -4,15 +4,10 @@ class Santri_Model extends Sarung_Model_Root{
 	/**
 	*	Session
 	**/
-    public function Fusip(){
-		return $this->belongsTo('Session_Model' , 'id');
-    }
-	/**
-	*	Session
-	**/
-    public function SessionObj(){
+    public function Session(){
 		return $this->belongsTo('Session_Model' , 'idsession');
     }	
+
 	/**
 	 *	parent table
 	*/

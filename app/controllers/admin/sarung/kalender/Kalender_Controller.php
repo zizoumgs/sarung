@@ -1,6 +1,5 @@
 <?php
 class Kalender_Controller extends Admin{
-	public $helper ;
     public function __construct(){
 		parent::__construct(1);
 		$this->helper = new Kalender_Helper;

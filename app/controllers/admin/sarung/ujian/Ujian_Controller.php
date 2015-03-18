@@ -1,6 +1,5 @@
 <?php
 class Ujian_Controller extends Admin{
-	public $helper ;
     public function __construct(){
 		parent::__construct(1);
 		$this->helper = new Ujian_Helper;

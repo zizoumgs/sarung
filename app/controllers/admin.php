@@ -1,6 +1,7 @@
 <?php 
 abstract class admin extends Controller {
-	private $value;
+	private $value ;
+	protected $helper ;
     public function __construct($min_power){
 		$this->value = new stdClass();
 		$this->set_error_message("Unknow Error");

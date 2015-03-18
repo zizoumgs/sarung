@@ -5,7 +5,6 @@
  *		database table name: kelasisi
 */
 class Kelas_Isi_Controller extends admin{
-	public $helper ;
     public function __construct(){
 		parent::__construct(1);
 		$this->helper = new Kelas_Isi_Helper;

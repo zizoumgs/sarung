@@ -1,5 +1,5 @@
 <?php
-class Kelas_Isi_Helper {
+class Kelas_Isi_Helper extends Root_Helper{
     const table_name = 'kelasisi' ;
 
 	public function get_table_name(){ return self::table_name;}

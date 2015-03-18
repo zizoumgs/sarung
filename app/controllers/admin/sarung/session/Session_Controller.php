@@ -1,8 +1,11 @@
 <?php
-class Session_Controller extends AdminRoot_Controller {
+class Session_Controller extends Admin {
     public function __construct(){
 		parent::__construct(1);
+		$this->helper = new Session_Helper;
 	}
+	private static function get_db_name(){	return Config::get('database.default'); }
+
     public function getIndex(){
         $data = array();
         $data ["sessions"] = Session_Model::orderBy('updated_at' , 'DESC')->paginate(15);
@@ -75,62 +78,32 @@ class Session_Controller extends AdminRoot_Controller {
             return Redirect::to( $url )->with('message',  "Berhasil Menghapus database");
         }
         else{
-            return Redirect::to( $url )->with('message',  "Gagal Menghapus database");
+            return Redirect::to( $url )->with('message',  admin::get_error_message() );
         }
     }
 	
     private function delete_to_db($id){
-        $session = Session_Helper::get_the_session_obj( false , $id );
-		$session_addon 	= 	Session_Helper::get_the_addon_session_obj("delete" , $id );
-        $save_id 		= 	admin::get_saveid_obj( Session_Helper::table_name , $id ) ; 
-
-		$pdo = DB::connection( Config::get('database.default') )->getPdo();
-		$pdo->beginTransaction();
-		$status = false;
-		try {
-			$session_addon->delete();
-			//! for saving
-			$session->delete();
-			if($save_id)
-				$save_id->save();
-			$pdo->commit();
-			$status = true;
-		    // all good
-		}
-		catch (\Exception $e) {
-			//$this->set_pdo_exception($e);
-			//$this->set_error_message($e->getMessage()) ;
-		    //DB::rollback();
-			$pdo->rollback();
-		}
-		return $status;
+		$del_objects  []	= 	$this->helper->get_the_addon_session_obj("delete" , $id );
+		$del_objects  [] 	= 	$this->helper->get_the_session_obj( false , $id ) ;
+		$save_objects [] = admin::get_saveid_obj( $this->helper->get_table_name() , $id ) ;
+		return admin::multi_purpose_db( self::get_db_name() , $save_objects , $del_objects );
     }
 	
     private function edit_to_db($id){
-        $session 		= 	Session_Helper::get_the_session_obj( false , $id );
-		$session_addon 	= 	Session_Helper::get_the_addon_session_obj("edit" , $id )		;
-		$status = DB::transaction(function()use ( $session,$session_addon ){
-            $session->save();
-			$session_addon->save();
-			return true;
-		});
-		return $status;
+		$save_objects = array(
+								Session_Helper::get_the_session_obj( false , $id ) ,
+								Session_Helper::get_the_addon_session_obj("edit" , $id )
+						);
+		return admin::multi_purpose_db( self::get_db_name() , $save_objects , array()  );
     }
 	
     private function insert_to_db(){
-
-        $id 			= 	admin::get_id( Session_Helper::table_name , Session_Helper::get_max_id() );
-        $session 		= 	Session_Helper::get_the_session_obj( true , $id );
-		$session_addon 	= 	Session_Helper::get_the_addon_session_obj("add" , $id );
-        $save_id 		= 	SaveId::nameNid( Session_Helper::table_name , $id ) ; 
-		return DB::transaction(function()use ($session,$session_addon , $save_id ){
-            $session->save();
-            if($save_id)
-                $save_id->delete();
-			if($session_addon)
-				$session_addon->save();
-			return true;
-		});
+		$id 			= 	admin::get_id( Session_Helper::table_name , Session_Helper::get_max_id() );
+		$save_objects = array(
+							  Session_Helper::get_the_session_obj( true , $id ) 		,
+							  Session_Helper::get_the_addon_session_obj("add" , $id ) 	);
+		$del_objects  = array(SaveId::nameNid( Session_Helper::table_name , $id ));
+		return admin::multi_purpose_db( self::get_db_name() , $save_objects , $del_objects );
     }
     
 }

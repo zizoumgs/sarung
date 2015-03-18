@@ -8,15 +8,18 @@ class Session_Helper {
     const get_akhir_name = "akhir_name";
     const get_up_model_name = "model_name";
     public static function get_max_id(){   return Session_Model::max('id') ;   }
-    public static function get_validator(){
-        $rules = array(
+	public function get_table_name(){ return self::table_name;}	
+	private static function get_rules(){
+        return array(
             Session_Helper::get_session_name   => 'required' ,
             Session_Helper::get_nilai_name     => 'required' ,
             Session_Helper::get_perkiraan_santri_name => "required|numeric" ,
             Session_Helper::get_awal_name      => 'required' ,
             Session_Helper::get_akhir_name     => 'required'
-        ); 
-        return Validator::make(  Input::all() , $rules);
+        ); 		
+	}
+    public static function get_validator(){
+        return Validator::make(  Input::all() , self::get_rules() );
     }
     
     public static function get_the_session_obj( $add , $id ){

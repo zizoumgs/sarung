@@ -34,8 +34,8 @@ class Kelas_Isi_Helper extends Root_Helper{
 		}
 		if( Root_Helper::should_be_keep( $santri_name ) ){
 	        $model = $model->whereRaw(" (first_name LIKE ? or second_name LIKE ? ) " ,
-                                        array( "%".$santri_name."%" ,
-                                              "%".$santri_name."%" )
+                                        array( "%".trim($santri_name)."%" ,
+                                              "%".trim($santri_name)."%" )
                                         );				
 		}
 		return $model;

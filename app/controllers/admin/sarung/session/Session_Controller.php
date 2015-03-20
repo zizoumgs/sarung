@@ -2,7 +2,8 @@
 class Session_Controller extends Admin {
     public function __construct(){
 		parent::__construct(1);
-		$this->helper = new Session_Helper;
+		admin::init_helper( new Session_Helper);
+		
 	}
 	private static function get_db_name(){	return Config::get('database.default'); }
 
@@ -14,11 +15,11 @@ class Session_Controller extends Admin {
     }    
     public function getAdd(){
 		$datas = array();
-		$datas ['models'] = Session_Helper::get_up_model();
+		$datas ['models'] = admin::get_helper()->get_up_model();
         return View::make( "sarung.admin.session.add" , $datas);
     }
     public function postAdd(){
-        $validator = Session_Helper::get_validator();        
+        $validator = admin::get_helper()->get_validator();        
         if ( $validator->fails() ){            
             $message = implode ( "<br>",$validator->messages()->all() ) ;
             return Redirect::to( root::get_url_admin_session('add') )->with('message',    $message );
@@ -36,7 +37,7 @@ class Session_Controller extends Admin {
     public function getEdit($id){
         $obj = Session_Model::find($id);
         if($obj){
-            return View::make('sarung.admin.session.edit' , Session_Helper::get_values($obj , $id ) );
+            return View::make('sarung.admin.session.edit' , admin::get_helper()->get_values($obj , $id ) );
         }
         else{
             return Redirect::to( root::get_url_admin_session() );
@@ -45,7 +46,7 @@ class Session_Controller extends Admin {
 
     public function postEdit(){
         $edit_url  = root::get_url_admin_session('edit/'.Input::get("id"));
-        $validator = Session_Helper::get_validator();  
+        $validator = admin::get_helper()->get_validator();  
         if ( $validator->fails() ){ 
             $message = implode ( $validator->messages()->all() ) ;
             return Redirect::to( $edit_url )->with('message', $message );
@@ -65,7 +66,7 @@ class Session_Controller extends Admin {
     public function getDelete($id){
         $obj = Session_Model::find($id);
         if($obj){
-            return View::make('sarung.admin.session.delete' , Session_Helper::get_values($obj , $id ) );
+            return View::make('sarung.admin.session.delete' , admin::get_helper()->get_values($obj , $id ) );
         }
         else{
             return Redirect::to( root::get_url_admin_session() );
@@ -83,26 +84,26 @@ class Session_Controller extends Admin {
     }
 	
     private function delete_to_db($id){
-		$del_objects  []	= 	$this->helper->get_the_addon_session_obj("delete" , $id );
-		$del_objects  [] 	= 	$this->helper->get_the_session_obj( false , $id ) ;
-		$save_objects [] = admin::get_saveid_obj( $this->helper->get_table_name() , $id ) ;
+		$del_objects  []	= 	admin::get_helper()->get_the_addon_session_obj("delete" , $id );
+		$del_objects  [] 	= 	admin::get_helper()->get_the_session_obj( false , $id ) ;
+		$save_objects [] = admin::get_saveid_obj( admin::get_helper()->get_table_name() , $id ) ;
 		return admin::multi_purpose_db( self::get_db_name() , $save_objects , $del_objects );
     }
 	
     private function edit_to_db($id){
 		$save_objects = array(
-								Session_Helper::get_the_session_obj( false , $id ) ,
-								Session_Helper::get_the_addon_session_obj("edit" , $id )
+								admin::get_helper()->get_the_session_obj( false , $id ) ,
+								admin::get_helper()->get_the_addon_session_obj("edit" , $id )
 						);
 		return admin::multi_purpose_db( self::get_db_name() , $save_objects , array()  );
     }
 	
     private function insert_to_db(){
-		$id 			= 	admin::get_id( Session_Helper::table_name , Session_Helper::get_max_id() );
+		$id 			= 	admin::get_id( admin::get_helper()->table_name , admin::get_helper()->get_max_id() );
 		$save_objects = array(
-							  Session_Helper::get_the_session_obj( true , $id ) 		,
-							  Session_Helper::get_the_addon_session_obj("add" , $id ) 	);
-		$del_objects  = array(SaveId::nameNid( Session_Helper::table_name , $id ));
+							  admin::get_helper()->get_the_session_obj( true , $id ) 		,
+							  admin::get_helper()->get_the_addon_session_obj("add" , $id ) 	);
+		$del_objects  = array(SaveId::nameNid( admin::get_helper()->table_name , $id ));
 		return admin::multi_purpose_db( self::get_db_name() , $save_objects , $del_objects );
     }
     

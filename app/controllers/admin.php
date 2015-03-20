@@ -1,7 +1,14 @@
 <?php 
 abstract class admin extends Controller {
 	private $value ;
+	//! i will private this
 	protected $helper ;
+	protected function init_helper( $obj ){
+		$this->helper = $obj ; 
+	}
+	public function get_helper(){
+		return $this->helper;
+	}
     public function __construct($min_power){
 		$this->value = new stdClass();
 		$this->set_error_message("Unknow Error");

@@ -1,6 +1,8 @@
 <?php
-class Event_Controller extends Controller{
-    public function __contruct(){            }
+class Event_Controller extends Admin{
+    public function __construct(){
+		parent::__construct(1);
+	}
     const get_name = "name";
     const get_short_name = "short_name";
     const table_name = 'event' ; 

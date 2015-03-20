@@ -136,6 +136,10 @@ class Kecamatan_Model extends Alamat_Model{
     public function Kabupaten(){
 		return $this->belongsTo('Kabupaten_Model', 'idkabupaten');
     }
+    public function Desa(){
+		return $this->hasOne('Desa_Model', 'idkecamatan' , 'id');
+    }
+
     /**
      *  return id kabupaten
     */
@@ -206,6 +210,11 @@ class Desa_Model extends Alamat_Model{
     public function Kecamatan(){
 		return $this->belongsTo('Kecamatan_Model', 'idkecamatan');
     }
+	public function scopeKecamatanname( $query , $nama_kecamatan ){
+        return $query->whereHas('kecamatan', function($q) use ( $nama_kecamatan ){
+			$q->whereRaw(' nama LIKE ? ', array( "%". $nama_kecamatan ."%" )  );
+        });
+	}
 	/**
 	 *	Get kecamatans by propinsi`s and negara  and kabupaten name
 	 *	return list of kecamatan

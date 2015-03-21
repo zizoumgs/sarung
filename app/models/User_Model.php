@@ -4,7 +4,7 @@ use Illuminate\Auth\UserTrait;
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Auth\Reminders\RemindableInterface;
-class AdmindGroup extends Sarung_Model_Root {
+class AdmindGroup_Model extends Sarung_Model_Root {
 	protected $table = 'admindgroup';
     public function User()
     {
@@ -49,7 +49,7 @@ class User_Model extends Sarung_Model_Root implements UserInterface, RemindableI
 	 *	return object of admind_group
 	 **/
 	public function Admindgroup(){
-		return $this->belongsTo('AdmindGroup' , 'idgroup' , 'id');
+		return $this->belongsTo('AdmindGroup_Model' , 'idgroup' , 'id');
 	}
 	/**
 	 *	return object of Desa_Model
@@ -81,11 +81,15 @@ class User_Model extends Sarung_Model_Root implements UserInterface, RemindableI
 		//return $this->belongsTo('Santri_Model' , 'idadmind');
 	}
 	/**
-	 * get userr which has no id in santri
-	 * parameter is 0 or 1
-	 *return obj
+	 *	Depreceated
+	 * 	get userr which has no id in santri
+	 * 	parameter is 0 or 1
+	 *	return obj
 	*/
 	public function scopeGetstatussantri($query, $status = 0){
 		return $query->has('santri' , '=', $status );
 	}
+	public function scopeStatusLimitation($query, $status){
+		return $query->where('status', '=', $status );
+	}	
 }

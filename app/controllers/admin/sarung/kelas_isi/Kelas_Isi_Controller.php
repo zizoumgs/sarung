@@ -7,16 +7,16 @@
 class Kelas_Isi_Controller extends admin{
     public function __construct(){
 		parent::__construct(1);
-		$this->helper = new Kelas_Isi_Helper;
+		admin::init_helper(new Kelas_Isi_Helper);
 	}
 	private static function get_db_name(){	return Config::get('database.default'); }
 	
     public function getIndex(){
         $datas = array();
-        $datas ['wheres']  =  $this->helper->get_values_for_pagenation();
-        $datas ["items"] = $this->helper->get_obj_find()->orderBy('santri.id' , 'DESC')->paginate(15);
-		$datas ["info"]     = $this->helper->get_table_info( $datas ["items"] );
-		$datas ['helper'] = $this->helper;
+        $datas ['wheres']  	=	admin::get_helper()->get_values_for_pagenation();
+        $datas ["items"] 	= 	admin::get_helper()->get_obj_find()->orderBy('santri.id' , 'DESC')->paginate(15);
+		$datas ["info"]     = 	admin::get_helper()->get_table_info( $datas ["items"] );
+		$datas ['helper'] 	= 	admin::get_helper();
         return View::make( "sarung.admin.kelas_isi.index" , $datas);
     }	
 
@@ -81,17 +81,17 @@ class Kelas_Isi_Controller extends admin{
     private function delete_to_db($id){
 		//@ find examination that have relation with that class as well as santri id
 		if( $this->should_be_deleted() ){
-			$del_objects  [] = $this->helper->get_create_model()->find( $id );
-			$save_objects [] = admin::get_saveid_obj( $this->helper->get_table_name() , $id ) ;
+			$del_objects  [] = admin::get_helper()->get_create_model()->find( $id );
+			$save_objects [] = admin::get_saveid_obj( admin::get_helper()->get_table_name() , $id ) ;
 			return admin::multi_purpose_db( self::get_db_name() , $save_objects , $del_objects );
 		}
 		return false;
     }
 	
     private function insert_to_db(){
-        $id 				= 	admin::get_id( $this->helper->get_table_name() , $this->helper->get_max_id() );
-		$save_objects = array($this->helper->get_the_obj( true , $id ));
-		$del_objects  = array(SaveId::nameNid( $this->helper->get_table_name() , $id ));
+        $id 				= 	admin::get_id( admin::get_helper()->get_table_name() , admin::get_helper()->get_max_id() );
+		$save_objects = array(admin::get_helper()->get_the_obj( true , $id ));
+		$del_objects  = array(SaveId::nameNid( admin::get_helper()->get_table_name() , $id ));
 		return admin::multi_purpose_db( self::get_db_name() , $save_objects , $del_objects );
     }
     

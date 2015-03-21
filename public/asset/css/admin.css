@@ -4,6 +4,7 @@
 body {
     height: 100%;
     background: black;
+	font-family: "Times New Roman", Times, serif;
 }
 /*Reset*/
 .pagination {
@@ -22,6 +23,8 @@ article.main-article{
 aside .title{
     font-size:1.3em;
     margin-bottom:5px;
+	background: #3E85C3;
+	padding:10px ;
 }
 .footer {
 	padding-top:15px;
@@ -92,7 +95,7 @@ article.col-md-10{
           background-clip: padding-box;
 }
 .x-small-font{
-	font-size:.7em !important;
+	font-size:.8em !important;
 }
 .medium-font{
 	font-size: .8em !important;

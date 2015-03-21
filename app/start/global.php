@@ -94,5 +94,6 @@ App::down(function()
 require app_path().'/filters.php';
 /*This will make something helper*/
 require app_path().'/libs/helpers.php';
+require app_path().'/libs/Helper_File.php';
 require app_path().'/libs/func/func.php';
 require app_path().'/libs/backup/Mysqldump.php';

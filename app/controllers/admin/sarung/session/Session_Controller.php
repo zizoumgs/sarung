@@ -2,8 +2,7 @@
 class Session_Controller extends Admin {
     public function __construct(){
 		parent::__construct(1);
-		admin::init_helper( new Session_Helper);
-		
+		admin::init_helper( new Session_Helper);		
 	}
 	private static function get_db_name(){	return Config::get('database.default'); }
 

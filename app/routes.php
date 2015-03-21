@@ -10,11 +10,11 @@ Route::get('admin_uang/outcome'     , 'Admin_outcome@index');
 //! admin_uang
 //Route::controller('admin_uang/income_cud'      , 'Admin_uang_controller');
 //! admind_income
-Route::get('admin_uang/income'          , 'Admin_income@index');
-Route::controller('admin_uang/income_cud'      , 'Admin_income_cud');
-Route::controller('admin_uang/outcome_cud'      , 'Admin_outcome_cud');
-Route::controller('admin_uang/subdivisi_crud'      , 'Admin_subdivisi_crud');
-Route::controller('admin_uang/divisi_crud'      , 'Admin_divisi_crud');
+Route::get('admin_uang/income'                      , 'Admin_income@index');
+Route::controller('admin_uang/income_cud'           , 'Admin_income_cud');
+Route::controller('admin_uang/outcome_cud'          , 'Admin_outcome_cud');
+Route::controller('admin_uang/subdivisi_crud'       , 'Admin_subdivisi_crud');
+Route::controller('admin_uang/divisi_crud'          , 'Admin_divisi_crud');
 //! all sarung admin controller
 //                  url name                                class  name
 Route::controller('sarung_admin/event'                  , 'Event_Controller');
@@ -25,6 +25,7 @@ Route::controller('sarung_admin/kalender'               , 'Kalender_Controller')
 
 Route::controller('sarung_admin/ujian'                  , 'Ujian_Controller');
 Route::controller('sarung_admin/kelas_isi'              , 'Kelas_Isi_Controller');
+Route::controller('sarung_admin/user'                   , 'User_Controller');
 
 /*
 Route::controller('sarung_admin/jurusan'                , 'Admin_sarung_jurusan');

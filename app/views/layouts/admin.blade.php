@@ -1,8 +1,9 @@
 <!doctype html>
 <html lang="en">
-<head>
+<head>	
+		<meta name="csrf-token" content="{{ csrf_token() }}" />
         <link href="{{ URL::to('/') }}/asset/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-    	<link href="{{ URL::to('/') }}/asset/bootstrap/css/bootstrap-theme.css" rel="stylesheet" type="text/css"/>			
+    	<link href="{{ URL::to('/') }}/asset/bootstrap/css/bootstrap-theme.css" rel="stylesheet" type="text/css"/>
 		<!-- additional css -->
 		<link href="{{ URL::to('/') }}/asset/css/admin.css" rel="stylesheet" type="text/css"/>
         <title>
@@ -46,10 +47,14 @@
 		</article>
     </div>
 </div>
-	<script type="text/javascript" src="{{ URL::to('/').'/asset/js/jquery-1.11.min.js' }}" ></script>
-    <script type="text/javascript" src="{{ URL::to('/').'/asset/js/jquery-ui.js' }}" ></script>
-    <script type="text/javascript" src="{{ URL::to('/').'/asset/bootstrap/js/bootstrap.js' }}" ></script>
-	<script type="text/javascript" src="{{ URL::to('/').'/asset/js/sarung.js' }}" ></script>
+	<script type="text/javascript" src="{{ URL::to('/').'/asset/js/jquery-1.11.min.js'}}">
+	</script>
+    <script type="text/javascript" src="{{ URL::to('/').'/asset/js/jquery-ui.js'}}">
+	</script>
+    <script type="text/javascript" src="{{ URL::to('/').'/asset/bootstrap/js/bootstrap.js'}}">
+	</script>
+	<script type="text/javascript" src="{{ URL::to('/').'/asset/js/sarung.js'}}">
+	</script>
     @yield('additional_js')
 </body>
 </html>

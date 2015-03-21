@@ -1,3 +1,6 @@
+//= require jquery-ui/widget
+//= require jquery.iframe-transport
+
 /*
  * jQuery File Upload Plugin 5.42.0
  * https://github.com/blueimp/jQuery-File-Upload

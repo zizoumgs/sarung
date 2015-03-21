@@ -140,15 +140,27 @@
 				<label for="group_name" class="col-sm-3 control-label" >Group</label>
 				<div class="col-sm-9">
 					<select class="form-control" name="group_name">
-						@foreach( AdmindGroup_Model::where('id','>',1)->get() as $val )
-							<option value="{{ $val->id }}"
-								@if ( $val->id === (int) $group_name ) &&  $group_name != "All" )
-									selected
-								@endif
-							>
-								{{ $val->nama }}
-							</option>
-						@endforeach
+						@if ( root::get_user_power() > 999)
+							@foreach( AdmindGroup_Model::get() as $val )
+								<option value="{{ $val->id }}"
+									@if ( $val->id === (int) $group_name ) &&  $group_name != "All" )
+										selected
+									@endif
+								>
+									{{ $val->nama }}
+								</option>
+							@endforeach
+						@else
+							@foreach( AdmindGroup_Model::where('id','>',1)->get() as $val )
+								<option value="{{ $val->id }}"
+									@if ( $val->id === (int) $group_name ) &&  $group_name != "All" )
+										selected
+									@endif
+								>
+									{{ $val->nama }}
+								</option>
+							@endforeach
+						@endif
 					</select>
 				</div>
 			</div>

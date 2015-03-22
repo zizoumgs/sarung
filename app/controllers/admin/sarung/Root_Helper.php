@@ -6,4 +6,7 @@ class Root_Helper {
 			return true;
 		return false;
 	}
+	public static function get_table_info( $obj ){
+		return sprintf('Show %1$s of %2$s', $obj->getFrom() , $obj->getTotal()) ;
+	}
 }

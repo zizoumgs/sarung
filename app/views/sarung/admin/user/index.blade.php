@@ -6,7 +6,10 @@
 @include( 'sarung.admin.user.common')
 
 @section('content')
-    <h1 class="title"> User Table <a href="{{ root::get_url_admin_user('add')}}" class="btn btn-primary btn-xs" >Add</a></h1><hr>
+    <h1 class="title"> Santri Info
+		<a href="{{ root::get_url_admin_user('add')}}" class="btn btn-primary btn-xs" >Add</a>
+		<small>adalah santri yang mondok.</small>		
+	</h1><hr>
 		{{ Form::open(array('url' => root::get_url_admin_user() , 'method' => 'get' ,
 		'role' => 'search' ,'class' => 'navbar-form pull-left ',
 		"ng-app" => "NumberApp" ,"ng-controller" => "NumberController"  )) ; }}
@@ -43,7 +46,7 @@
                     <th><a href="%2$s/1">User Status</a></th>
                     <th><a href="%3$s/2">User Data</a></th>
     			</tr>
-				@foreach ($items as $item)
+				@foreach (  $items as $item)
                 <tr>
                     <td>
 						{{ $item->id }}

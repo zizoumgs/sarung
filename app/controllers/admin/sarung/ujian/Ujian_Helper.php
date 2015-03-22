@@ -110,23 +110,20 @@ class Ujian_Helper extends Root_Helper {
 		}		
 		return $main;
 	}
-	public static function get_values_for_pagenation(){
+	public function get_values_for_pagenation(){
 		$where = array () ;
-		if( Root_Helper::should_be_keep( Input::get('find_event_name') ) ) {
-			$where ['find_event_name'] = Input::get('find_event_name');
-		}
 		if( Root_Helper::should_be_keep( Input::get('find_session_name') ) ) {
 			$where ['find_session_name'] = Input::get('find_session_name');
+		}
+		if( Root_Helper::should_be_keep( Input::get('find_event_name') ) ) {
+			$where ['find_event_name'] = Input::get('find_event_name');
 		}
 		if( Root_Helper::should_be_keep( Input::get('find_pelajaran_name') ) ) {
 			$where ['find_pelajaran_name'] = Input::get('find_pelajaran_name');
 		}
 		if( Root_Helper::should_be_keep( Input::get('find_kelas_name') ) ) {
 			$where ['find_kelas_name'] = Input::get('find_kelas_name');
-		}		
-		return $where;
-	}
-	public static function get_table_info( $obj ){
-		return sprintf('Show %1$s of %2$s', $obj->getFrom() , $obj->getTotal()) ;
+		}
+		return $where;		
 	}
 }

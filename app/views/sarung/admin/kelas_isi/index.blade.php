@@ -93,8 +93,8 @@
 									'{{ $item->id }}'				,
 									'{{ FUNC\get_escape($kelas->session_name) }}' )"
 							>
-									<b>{{ $kelas->kelas_name }}</b><br>
-									{{ $kelas->session_name }}
+								<b>{{ $kelas->kelas_name }}</b><br>
+								{{ $kelas->session_name }}
 							</button>	
 						@endforeach						
 					</td>

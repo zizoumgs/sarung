@@ -26,7 +26,7 @@ Route::controller('sarung_admin/kalender'               , 'Kalender_Controller')
 Route::controller('sarung_admin/ujian'                  , 'Ujian_Controller');
 Route::controller('sarung_admin/kelas_isi'              , 'Kelas_Isi_Controller');
 Route::controller('sarung_admin/user'                   , 'User_Controller');
-
+Route::controller('sarung_admin/santri'                 , 'Santri_Controller');
 /*
 Route::controller('sarung_admin/jurusan'                , 'Admin_sarung_jurusan');
 Route::controller('sarung_admin/kelas_root'             , 'Admin_sarung_kelas_root');

@@ -73,28 +73,28 @@
 					</td>
 					<td>
 						<div class="col-md-2" >
-							<img src="{{ Santri_Helper::get_foto_url($item->id_user,$item->foto) }}" class="small-img thumbnail" />
+							<img src="{{ User_Model::find($item->id_user)->foto; }}" class="small-img thumbnail" />
 						</div>
 						<div class="col-md-10">
 							<span>
 								<span class="glyphicon glyphicon-user"></span> Nama: {{ $item->first_name }} {{ $item->second_name }}</span>
-								<span><span class="glyphicon glyphicon-user"></span> Nis: {{ Santri_Helper::get_nis( $item->id ) }}</span><br>
+								<span><span class="glyphicon glyphicon-user"></span> Nis: {{ Nis_Helper::get_nis( $item->id ) }}</span><br>
 								<span><span class="glyphicon glyphicon-envelope"></span> Email: {{ $item->email }}</span><br>
 								<span><span class="glyphicon glyphicon-user"></span> Session: {{ $item->nama }}</span><br>
 							 <br>
 						</div>
 					</td>
 					<td>
-						@foreach ( Class_Model::getkelassantribyid ($item->id) as $kelas )
+						@foreach ( Class_Model::santriid ($item->id)->get() as $class )
 							<button title="Click to delete" class="btn btn-default btn-xs mar-rig-lit"
 									onclick="
-									delete_handle(  {{ $kelas->id}}			,
-									'{{ $kelas->idkelas}}'			,
+									delete_class(  {{ $class->id}}			,
+									'{{ $class->idkelas}}'			,
 									'{{ $item->id }}'				,
-									'{{ FUNC\get_escape($kelas->session_name) }}' )"
+									'{{ FUNC\get_escape($class->session->nama) }}' )"
 							>
-								<b>{{ $kelas->kelas_name }}</b><br>
-								{{ $kelas->session_name }}
+								<b>{{ $class->kelas->nama }}</b><br>
+								{{ $class->session->nama }}
 							</button>	
 						@endforeach						
 					</td>

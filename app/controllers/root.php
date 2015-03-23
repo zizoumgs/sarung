@@ -302,8 +302,9 @@ abstract class root extends Controller {
 	public static  function get_url_admin_session	($add=""){		return url("sarung_admin/session/".$add);	}
 	public static  function get_url_admin_kalender	($add=""){		return url("sarung_admin/kalender/".$add);	}
 	public static  function get_url_admin_ujian		($add=""){		return url("sarung_admin/ujian/".$add);	}
-	public static  function get_url_admin_kelas_isi		($add=""){		return url("sarung_admin/kelas_isi/".$add);	}
+	public static  function get_url_admin_kelas_isi	($add=""){		return url("sarung_admin/kelas_isi/".$add);	}
 	public static  function get_url_admin_user		($add=""){		return url("sarung_admin/user/".$add);	}
+	public static  function get_url_admin_santri	($add=""){		return url("sarung_admin/santri/".$add);	}
 	
 	public static function get_url_base(){ return URL::to('/') ;}
 	public static function get_path_base(){ return public_path()  ;}

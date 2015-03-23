@@ -50,8 +50,4 @@ class Kelas_Isi_Helper extends Root_Helper{
 		}
 		return $where;
 	}
-	public static function get_table_info( $obj ){
-		return sprintf('Show %1$s of %2$s', $obj->getFrom() , $obj->getTotal()) ;
-	}
-
 }

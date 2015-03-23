@@ -78,8 +78,20 @@ class User_Model extends Sarung_Model_Root implements UserInterface, RemindableI
 	 **/
 	public function Santri(){
 		return $this->hasOne('Santri_Model' , 'idadmind' , 'id');
-		//return $this->belongsTo('Santri_Model' , 'idadmind');
 	}
+	public function scopeSantriexistence( $query  , $total_id  ){
+		return $query->has('santri' , '=' , $total_id  );
+	}
+	public function scopeSessionname($query , $name){
+		$session = Session_Model::get_id_by_name($name);
+		return $query->whereHas('santri',function($query_two) use( $session) {
+			$query_two->whereHas('session',function($query_three) use( $session) {
+				$query_three->where('idsession', '=', $session);
+			});
+		});
+		//return 	$query->where('idsession' , '=' , $session);
+	}
+
 	/**
 	 *	Depreceated
 	 * 	get userr which has no id in santri

@@ -27,6 +27,11 @@ class Santri_Model extends Sarung_Model_Root{
 		});
 		//return 	$query->where('idsession' , '=' , $session);
 	}
+	public static function can_be_deleted( $id ){
+		if( Class_Model::santriid( $id )->count() <= 0 )
+			return true;
+		return false;
+	}	
 	/**
 	 *
 	**/
@@ -76,5 +81,8 @@ class Santri_Model extends Sarung_Model_Root{
 		$max = $this->where('idsession' , '=' , $there->id )->max('nis');
 		return $max + 1 ;
     }    
+	public static function getHisClass($idSantri) {
+		return Class_Model::santriid ( $idSantri );
+	}
 }
 

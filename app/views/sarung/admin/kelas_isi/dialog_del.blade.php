@@ -1,5 +1,4 @@
 
-
     {{ Form::open(
         array	(
 			'url'		=> 	root::get_url_admin_kelas_isi('delete') 	,

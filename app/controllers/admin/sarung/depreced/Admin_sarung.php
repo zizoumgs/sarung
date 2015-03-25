@@ -30,7 +30,7 @@ abstract class  Admin_sarung_urls extends Admin_root {
 	protected function get_url_admin_desa		()	{ 		return sprintf('%1$s/sarung_admin/desa' 	, $this->base_url());}
 	//protected function get_url_admin_user		()	{ 		return sprintf('%1$s/sarung_admin/user' 	, $this->base_url());}
 	//protected function get_url_admin_santri		()	{ 		return sprintf('%1$s/sarung_admin/santri	' , $this->base_url());}
-	protected function get_url_admin_ujis		()	{ 		return sprintf('%1$s/sarung_admin/ujis		' , $this->base_url());}
+	//protected function get_url_admin_ujis		()	{ 		return sprintf('%1$s/sarung_admin/ujis		' , $this->base_url());}
 	protected function get_url_admin_sarung		()   { 		return helper_get_url_admin_sarung();}
 	//@ larangan
 	protected function get_url_admin_larangan_nama	($add="")	{		return URL::to("sarung_admin/tindakan$add");}

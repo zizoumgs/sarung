@@ -153,6 +153,8 @@ return array(
     'Ujian_Helper' => $baseDir . '/app/controllers/admin/sarung/ujian/Ujian_Helper.php',
     'Ujian_Model' => $baseDir . '/app/models/Sarung/Ujian_Model.php',
     'Ujian_Model_AddOn' => $baseDir . '/app/models/Sarung/Ujian_Model.php',
+    'Ujian_Santri_Controller' => $baseDir . '/app/controllers/admin/sarung/ujian/Ujian_Santri_Controller.php',
+    'Ujian_Santri_Helper' => $baseDir . '/app/controllers/admin/sarung/ujian/Ujian_Santri_Helper.php',
     'Ujis_Model' => $baseDir . '/app/models/Sarung/Ujian_Model.php',
     'User_Controller' => $baseDir . '/app/controllers/admin/sarung/user/User_Controller.php',
     'User_Helper' => $baseDir . '/app/controllers/admin/sarung/user/User_Helper.php',

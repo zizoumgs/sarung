@@ -23,5 +23,7 @@
         <li>
 			<a href="{{ root::get_url_admin_Santri() }}" rel="nofollow"><span class="glyphicon glyphicon-user"></span> Siswa </a>
 		</li>
-		
+        <li>
+			<a href="{{ root::get_url_admin_ujis() }}" rel="nofollow"><span class="glyphicon glyphicon-user"></span> Ujian Siswa </a>
+		</li>		
     </ul>

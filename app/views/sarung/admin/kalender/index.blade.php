@@ -7,7 +7,7 @@
 @section('content')
     <h1 class="title"> Kalender Table <a href="{{ root::get_url_admin_kalender('add')}}" class="btn btn-primary btn-xs" >Add</a></h1>
     {{ Form::open(array('url' => root::get_url_admin_kalender() , 'method' => 'get' ,
-	'role' => 'form' ,'class' => 'form-inline navbar-form navbar-left',
+	'role' => 'form' ,'class' => 'navbar-form navbar-left',
 	"ng-app" => "NumberApp" ,"ng-controller" => "NumberController"  )) ; }}
         <div class="form-group">
             <label for="find_session_name" >Session</label>
@@ -40,11 +40,11 @@
 			</select>
         </div>
         <div class="form-group">
-       {{ Form::submit('Submit' , array( 'class' => 'btn btn-primary btn-sm' ) ) }}
+			{{ Form::submit('Submit' , array( 'class' => 'btn btn-primary btn-sm' ) ) }}
         </div>
     {{ Form::close() }}
 	<p class="navbar-text navbar-right well well-sm x-small-font">{{$info}}</p>
-	
+	<div class="clear"></div>
     <div class="table_div medium-font">
         <table class="table table-striped table-hover" >
             <tr class ="header">

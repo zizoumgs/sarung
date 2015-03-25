@@ -137,7 +137,7 @@ class Ujis_Model extends Sarung_Model_Root{
 	 *	will find santri who dont insert into ujian id
 	 *	return obj
 	*/
-	public function get_raw_query_add($model_ujian  , $limit = ""  , $nama_santri = ""){
+	public function get_raw_query_add($model_ujian , $nama_santri = ""  , $limit = ""  ){
 		if( !$model_ujian)
 			return array();
 		$array = array() ;
@@ -168,6 +168,7 @@ class Ujis_Model extends Sarung_Model_Root{
 			and kel.id = keli.idkelas
 			and keli.idkelas = ?
 			and ses.id = ?
+			and ( san.keluar != "0000-00-00")
 			and san.id NOT IN (select ujis_b.idsantri from ujiansantri ujis_b where ujis_b.idujian = ?)
 			%3$s
 			group by keli.idsantri

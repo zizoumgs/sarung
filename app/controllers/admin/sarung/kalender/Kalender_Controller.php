@@ -1,7 +1,7 @@
 <?php
 class Kalender_Controller extends Admin{
     public function __construct(){
-		parent::__construct(1);
+		parent::__construct(10);
 		admin::init_helper( new Kalender_Helper );
 		
 	}

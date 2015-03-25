@@ -27,8 +27,8 @@
                 <div class="collapse navbar-collapse">
 	                <ul class="nav navbar-nav navbar-right">
                         <li class="active"><a href="#">Home</a></li>
-                        <li><a href="%4$s" rel="nofollow">Visit Site</a></li>
-                        <li><a href="%5$s" rel="nofollow">Back up Database</a></li>
+                        <li><a href="{{root::get_url_base() }}" rel="nofollow">Visit Site</a></li>
+                        <li><a href="#" rel="nofollow">Back up Database</a></li>
                         <li><a href="#" rel="nofollow">{{ admin::get_user_power() }} | {{ admin::get_user_name_group() }} </a></li>
 		                <li><a href="{{ root::get_url_logout() }}" rel="nofollow"><span class="glyphicon glyphicon-log-in"> </span> Log out</a></li>
                     </ul>

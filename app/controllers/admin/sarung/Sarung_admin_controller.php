@@ -1,6 +1,9 @@
 <?php
-class Sarung_admin_controller extends Admin_sarung_session{
+class Sarung_Admin_Controller extends admin{
     public function __construct(){
-        parent::__construct( );
+        parent::__construct(1);
+    }
+    public function getIndex(){
+        return View::make("sarung.admin.index");
     }
 }

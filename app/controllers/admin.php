@@ -9,9 +9,32 @@ abstract class admin extends Controller {
 	public function get_helper(){
 		return $this->helper;
 	}
+	private function set_min_power($val){
+		$this->value->min_power = $val;		
+	}
+	public function get_min_power(){
+		return $this->value->min_power;
+	}
     public function __construct($min_power){
+		//$this->beforeFilter('auth');
+		$this->beforeFilter('@filterRequests');
 		$this->value = new stdClass();
+		$this->set_min_power( $min_power);
 		$this->set_error_message("Unknow Error");
+    }
+	public function isnt_power_enough(){
+		return self::get_user_power() < $this->get_min_power();
+	}
+    /**
+     * Filter the incoming requests.
+     */
+    public function filterRequests($route, $request){
+		if (! Auth::check()){
+			return Redirect::to('login');
+		}
+		elseif( $this ->isnt_power_enough() ){
+			return Redirect::to( root::get_url_logout() );
+		}
     }
 	protected function set_error_message( $message ){
 		$this->value->error_db = $message ; 

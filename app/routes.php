@@ -48,10 +48,6 @@ Route::controller('sarung_admin/tindakan_meta'          , 'Admin_sarung_larangan
 Route::controller('sarung_admin/tindakan_kasus'          , 'Admin_sarung_larangan_kasus');
 */
 
-//! i will remove this
-Route::any('/delete_img',
-				array('uses'=>'Admin_sarung_user_cud@getDelete_img','as' => 'delete_img')
-			);
 
 //! for updating
 Route::controller('update'                 , 'first_update');
@@ -59,7 +55,7 @@ Route::controller('update'                 , 'first_update');
 Route::controller('/home'     , 'Home_controller');
 
 //Route::controller('/'                 , 'sarung_controller');
-Route::controller('sarung_admin'      , 'Sarung_admin_controller');
+Route::controller('sarung_admin'      , 'Sarung_Admin_Controller');
 Route::controller('klasement'      , 'Klasement_controller');
 
 Route::controller('/login'     , 'Login_controller');

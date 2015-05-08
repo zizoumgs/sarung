@@ -3,7 +3,7 @@
 *	All class will be sub class to this class
 * this is just definition , you can`t instant this class 
 **/
-abstract class root extends Controller {
+abstract class root_depreated extends Controller{
 	private $js , $css  , $header , $content , $footer , $side;
 	private $title = "" , $value = array( 'jump' => 15  );
 	protected $category = "";
@@ -221,7 +221,9 @@ abstract class root extends Controller {
 			});
 			$job->delete();
 		});
-	}
+	}	
+}
+abstract class root extends root_depreated {
 	protected function get_rupiah_root( $angka){
 		return number_format($angka,0,',','.');
 	}
@@ -306,7 +308,8 @@ abstract class root extends Controller {
 	public static  function get_url_admin_user		($add=""){		return url("sarung_admin/user/".$add);	}
 	public static  function get_url_admin_santri	($add=""){		return url("sarung_admin/santri/".$add);	}
 	public static  function get_url_admin_ujis		($add=""){		return url("sarung_admin/ujian_santri/".$add);	}
-		
+	public static  function get_url_admin_nama_pelanggaran		($add=""){		return url("sarung_admin/nama_pelanggaran/".$add);	}
+	
 	public static function get_url_base(){ return URL::to('/') ;}
 	public static function get_path_base(){ return public_path()  ;}
 	
@@ -338,13 +341,7 @@ abstract class root extends Controller {
 			return floor($total/365) ." Years ".$future_or_no ; 
 		}
 	}
-	/**
-	 *	To logout
-	*/
-	public static function anyLogout(){
-	    Auth::logout();
-	    return Redirect::to( root::get_url_home());		
-	}
+
 	/**
 	 *	To back up 
 	*/

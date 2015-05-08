@@ -25,5 +25,9 @@
 		</li>
         <li>
 			<a href="{{ root::get_url_admin_ujis() }}" rel="nofollow"><span class="glyphicon glyphicon-user"></span> Ujian Siswa </a>
-		</li>		
+		</li>
+        <li>
+			<a href="{{ root::get_url_admin_nama_pelanggaran() }}" rel="nofollow"><span class="glyphicon glyphicon-user"></span> Nama Pelanggaran </a>
+		</li>
+
     </ul>

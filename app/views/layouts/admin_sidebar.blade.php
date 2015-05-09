@@ -30,4 +30,10 @@
 			<a href="{{ root::get_url_admin_nama_pelanggaran() }}" rel="nofollow"><span class="glyphicon glyphicon-user"></span> Nama Pelanggaran </a>
 		</li>
 
+
+
+        <li>
+			<a href="{{ root::get_url_admin_larangan_meta() }}" rel="nofollow"><span class="glyphicon glyphicon-user"></span> Aturan </a>
+		</li>
+        
     </ul>

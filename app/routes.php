@@ -30,6 +30,7 @@ Route::controller('sarung_admin/santri'                 , 'Santri_Controller');
 Route::controller('sarung_admin/ujian_santri'           , 'Ujian_Santri_Controller');
 
 Route::controller('sarung_admin/nama_pelanggaran'           , 'Nama_Pelanggaran_Controller');
+Route::controller('sarung_admin/larangan_meta'           , 'Larangan_Meta_Controller');
 /*
 Route::controller('sarung_admin/jurusan'                , 'Admin_sarung_jurusan');
 Route::controller('sarung_admin/kelas_root'             , 'Admin_sarung_kelas_root');

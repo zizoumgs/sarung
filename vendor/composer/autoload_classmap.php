@@ -120,6 +120,8 @@ return array(
     'Klasement_controller' => $baseDir . '/app/controllers/klasement_controller.php',
     'Klasement_helper' => $baseDir . '/app/controllers/klasement_controller.php',
     'Larangan_Kasus_Model' => $baseDir . '/app/models/Sarung/Larangan_Model.php',
+    'Larangan_Meta_Controller' => $baseDir . '/app/controllers/admin/sarung/larangan/Larangan_Meta_Controller.php',
+    'Larangan_Meta_Helper' => $baseDir . '/app/controllers/admin/sarung/larangan/Larangan_Meta_Helper.php',
     'Larangan_Meta_Model' => $baseDir . '/app/models/Sarung/Larangan_Model.php',
     'Larangan_Nama_Model' => $baseDir . '/app/models/Sarung/Larangan_Model.php',
     'Login_controller' => $baseDir . '/app/controllers/login_controller.php',

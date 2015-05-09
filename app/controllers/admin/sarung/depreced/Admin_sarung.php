@@ -34,8 +34,8 @@ abstract class  Admin_sarung_urls extends Admin_root {
 	protected function get_url_admin_sarung		()   { 		return helper_get_url_admin_sarung();}
 	//@ larangan
 	protected function get_url_admin_larangan_nama	($add="")	{		return URL::to("sarung_admin/tindakan$add");}
-	protected function get_url_admin_larangan_meta	($add="")	{		return URL::to("sarung_admin/tindakan_meta$add");}
-	protected function get_url_admin_larangan_kasus	($add="")	{		return URL::to("sarung_admin/tindakan_kasus$add");}
+	//protected function get_url_admin_larangan_meta	($add="")	{		return URL::to("sarung_admin/tindakan_meta$add");}
+	//protected function get_url_admin_larangan_kasus	($add="")	{		return URL::to("sarung_admin/tindakan_kasus$add");}
 	
 }
 /**

@@ -119,6 +119,8 @@ return array(
     'Klasement_Model' => $baseDir . '/app/models/Sarung/Klasement_Model.php',
     'Klasement_controller' => $baseDir . '/app/controllers/klasement_controller.php',
     'Klasement_helper' => $baseDir . '/app/controllers/klasement_controller.php',
+    'Larangan_Kasus_Controller' => $baseDir . '/app/controllers/admin/sarung/larangan/Larangan_Kasus_Controller.php',
+    'Larangan_Kasus_Helper' => $baseDir . '/app/controllers/admin/sarung/larangan/Larangan_Kasus_Helper.php',
     'Larangan_Kasus_Model' => $baseDir . '/app/models/Sarung/Larangan_Model.php',
     'Larangan_Meta_Controller' => $baseDir . '/app/controllers/admin/sarung/larangan/Larangan_Meta_Controller.php',
     'Larangan_Meta_Helper' => $baseDir . '/app/controllers/admin/sarung/larangan/Larangan_Meta_Helper.php',

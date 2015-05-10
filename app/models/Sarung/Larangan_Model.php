@@ -53,7 +53,7 @@ class Larangan_Kasus_Model extends Sarung_Model_Root{
     }
     public function Userobj(){
 		return $this->belongsTo('User_Model', 'idadmind' , 'id');
-    }	
+    }
 	public function scopeWheresantri($query , $nama){
 		return $query->whereHas('userObj', function($q) use($nama) {
 			//$q->whereRaw(sprintf('first_name LIKE "%1$s" or second_name LIKE "%1$s" ' , "$nama"));

@@ -35,5 +35,10 @@
         <li>
 			<a href="{{ root::get_url_admin_larangan_meta() }}" rel="nofollow"><span class="glyphicon glyphicon-user"></span> Aturan </a>
 		</li>
+    
+        <li>
+			<a href="{{ root::get_url_admin_larangan_kasus() }}" rel="nofollow"><span class="glyphicon glyphicon-user"></span> Kasus </a>
+		</li>
+
         
     </ul>

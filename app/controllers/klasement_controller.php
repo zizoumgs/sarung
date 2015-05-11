@@ -34,6 +34,9 @@ class Klasement_helper extends Controller {
 	protected function get_pelajaran(){		return Input::get('pelajaran');	}
 	public function get_header(){ return $this->values->header; }
 	public function get_total_poor(){		return $this->values->stay_santri;	}
+	private function is_not_empty( $string ){
+		return $string != "" && $string  != "All";
+	}
     /**
      *  this will limit output of santri
     */
@@ -41,19 +44,19 @@ class Klasement_helper extends Controller {
         $this->where_values = array();
 		$this->where_text = "";
         //! class
-		if( $this->get_kelas() != "" && $this->get_kelas() != "All" ){
+		if( $this->is_not_empty($this->get_kelas()) ){
 			$this->where_text = " and kel.nama = ? ";
 			$this->where_values [] = $this->get_kelas() ;
 			$this->where_url ['kelas'] = $this->get_kelas();
 		}
         //! session
-		if( $this->get_session() != "" && $this->get_session() != "ALL" ){
-			$this->where_text .= " and ses.nama = ? ";
+		if( $this->is_not_empty($this->get_session()) ){
 			$this->where_values [] = $this->get_session() ;
+			$this->where_text .= " and ses.nama = ? ";
 			$this->where_url ['session'] = $this->get_session();
 		}
 		//! pelajaran
-        if( $this->get_pelajaran() != "" && $this->get_pelajaran() != "All"){
+        if( $this->is_not_empty( $this->get_pelajaran() ) ){
 			$this->where_values [] = $this->get_pelajaran();
             $this->where_text .= " and pel.nama = ? ";
 			$this->where_url ['pelajaran'] = $this->get_pelajaran();
@@ -66,13 +69,13 @@ class Klasement_helper extends Controller {
     protected function get_santri(){
 		$headers = $this->get_header();
         $date = $this->get_date_from_string($headers [1]."-01" ,"Y-m-d");
-		$santri_obj 	= new Klasement_Model();
-		$santries 	= $santri_obj->get_klasement_all( $this->where_text  , $this->where_values );
+		$santries 	= Klasement_Model_query::get_klasement_all( $this->where_text  , $this->where_values );
         
 		//echo count ($santries);
         $where_query_one    =   $this->where_text." and kal.awal < ? ";
         $where_query_two    =   $this->where_text." and MONTH(kal.awal) = ? ";
         //@ get database and then save it in array
+		$santri_obj 	= new Klasement_Model( $this->where_url );
 		$santri_obj->init_array($santries);
         $santri_obj->set_score($santries, $this->get_month_per_view() , $where_query_one , $where_query_two ,$this->where_values , $date);
 
@@ -108,8 +111,8 @@ class Klasement_helper extends Controller {
         //$this->where_values = array( Input::get('session_name') , Input::get('class_name') );
 		$this->set_filters();
         //$this->set_pelajaran_filter();
-		$uji = new Klasement_Model();
-		$ujis = $uji->get_date_examination( $this->where_text , $this->where_values , "");
+		$uji = new Klasement_Model( $this->where_url );
+		$ujis = Klasement_Model_query::get_date_examination( $this->where_text , $this->where_values , "");
         //@ there are result
 		if($ujis){
 			foreach($ujis as $uji){

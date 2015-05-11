@@ -57,11 +57,11 @@ class Larangan_Kasus_Controller extends admin{
 	}
     public function postAdd(){
 	    if($this->insert_to_db()){
-	        return Redirect::to( root::get_url_admin_larangan_meta() )
+	        return Redirect::to( root::get_url_admin_larangan_kasus() )
 				->with('message',  "Berhasil memasukkan ke database");
 		}
         else{
-			return Redirect::to( root::get_url_admin_larangan_meta('add/') )
+			return Redirect::to( root::get_url_admin_larangan_kasus('add/') )
 				->with('message',  admin::get_error_message() );
 		}
     }
@@ -85,10 +85,10 @@ class Larangan_Kasus_Controller extends admin{
 			$datas ['id']		=	$id;
 			$datas ["types"]	=	$this->getTypes();
 			$datas = array_merge( $datas , admin::get_helper()->get_all_values( $obj ) );
-            return View::make('sarung.admin.pelanggaran.larangan_meta.edit' , $datas  );
+            return View::make('sarung.admin.pelanggaran.larangan_kasus.edit' , $datas  );
         }
         else{
-            return Redirect::to( root::get_url_admin_larangan_meta () );
+            return Redirect::to( root::get_url_admin_larangan_kasus () );
         }
     }
 
@@ -97,11 +97,11 @@ class Larangan_Kasus_Controller extends admin{
     public function postEdit(){
 		$id = Input::get('id');
 	    if($this->edit_to_db( $id  )){
-	        return Redirect::to( root::get_url_admin_larangan_meta() )
+	        return Redirect::to( root::get_url_admin_larangan_kasus() )
 				->with('message',  "Berhasil merubah ke database");
 		}
         else{
-			return Redirect::to( root::get_url_admin_larangan_meta('edit/'.$id) )
+			return Redirect::to( root::get_url_admin_larangan_kasus('edit/'.$id) )
 				->with('message',  admin::get_error_message() );
 		}
     }
@@ -121,10 +121,10 @@ class Larangan_Kasus_Controller extends admin{
 			$datas ['id']		=	$id;
 			$datas ["types"]	=	$this->getTypes();
 			$datas = array_merge( $datas , admin::get_helper()->get_all_values( $obj ) );
-            return View::make('sarung.admin.pelanggaran.larangan_meta.delete' , $datas  );
+            return View::make('sarung.admin.pelanggaran.larangan_kasus.delete' , $datas  );
         }
         else{
-            return Redirect::to( root::get_url_admin_larangan_meta () );
+            return Redirect::to( root::get_url_admin_larangan_kasus () );
         }
     }
 	/**
@@ -132,11 +132,11 @@ class Larangan_Kasus_Controller extends admin{
     public function postDelete(){
 		$id = Input::get('id');
 	    if($this->delete_to_db( $id  )){
-	        return Redirect::to( root::get_url_admin_larangan_meta() )
+	        return Redirect::to( root::get_url_admin_larangan_kasus() )
 				->with('message',  "Berhasil menghapus ke database");
 		}
         else{
-			return Redirect::to( root::get_url_admin_larangan_meta('delete/'.$id) )
+			return Redirect::to( root::get_url_admin_larangan_kasus('delete/'.$id) )
 				->with('message',  admin::get_error_message() );
 		}
     }

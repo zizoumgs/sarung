@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 
 @section('title')
-	Nama Peraturan | Add 
+	Kasus | Add 
 @stop
 @include( 'sarung.admin.pelanggaran.larangan_kasus.common')
 
 @section('content')
-    <h1 class="title">Add Peraturan
+    <h1 class="title">Add Kasus
         <a href="{{ root::get_url_admin_larangan_kasus()}}" class="btn btn-primary btn-xs" >View</a>
     </h1>
     @if( Session::has('message')  )

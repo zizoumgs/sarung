@@ -14,7 +14,7 @@ class Larangan_Kasus_Helper extends Root_Helper{
 		if( Root_Helper::should_be_keep( Input::get('find_pelanggaran_name') ) ) {
 			$where ['find_pelanggaran_name'] = Input::get('find_pelanggaran_name');
 		}
-		if( Root_Helper::should_be_keep( Input::get('find_type_name') )  )
+		if( Root_Helper::should_be_keep( Input::get('find_type_name') )  )	
 			$where ['find_type_name'] = Input::get('find_type_name');
 		return $where;
 	}
@@ -39,33 +39,36 @@ class Larangan_Kasus_Helper extends Root_Helper{
 		return $main;
 	}
 	public static function get_the_obj($obj , $id){
-		$pelanggaran_name	= 	Input::get('pelanggaran_name');
-		$session_name		= 	Input::get('session_name');
-		
-		$objTmp = new Larangan_Nama_Model();
-		$idlarangan = $objTmp->get_id_by_name( $pelanggaran_name);
-		
-		//@ session`s id
-		$objTmp = new Session_Model();
-		$idsession = $objTmp->get_id_by_name(  $session_name );
-		
+		$id_admind = self::get_id_admind( Input::get("id_santri_name") ); 		
+		$id_larangan = Input::get( "id_pelanggaran_name" );
+		$tanggal = Input::get( "date_name" );
 
         $obj->id            =   $id	    			;
-        $obj->point	        =   Input::get("point_name")    ;
-		$obj->idsession		=	$idsession			;
-		$obj->idlarangan	=	$idlarangan			;
-		$obj->jenis			=	Input::get("type_name");
-		$obj->hukuman		=	Input::get("hukuman_name");
-		
+		$obj->idlarangan	=	$id_larangan			;
+		$obj->idadmind   	= 	$id_admind ;
+		$obj->tanggal		=	$tanggal ; 	
 		return $obj;
 	}
+	public static function get_id_admind( $id_santri){
+		$santri = Santri_Model::find($id_santri);
+		return $santri->user->id;
+	}
+	public static function get_santri_model( $id_admind ){
+		return Santri_Model::where("idadmind" ,"=" , $id_admind)->first();
+	}
 	public static function get_all_values($obj){
-		$array = array();
-        $array	['point_name'] 			=   $obj->point ;
-		$array	['session_name']		=	$obj->sessionObj->nama;
-		$array	['pelanggaran_name']	=	$obj->namaObj->nama			;
-		$array	["type_name"]			=	$obj->jenis;
-		$array	["hukuman_name"]		=	$obj->hukuman;
+		$santriModel   = self::get_santri_model ( $obj->idadmind );
+		$laranganModel = Larangan_Meta_Model::find( $obj->idlarangan );
+		
+		$array 		= array();
+		$array	['id_santri_name']		=	$santriModel->id;
+		$array	['santri_name']			=	$santriModel->user->first_name . "" . $santriModel->user->second_name;
+		$array	['alamat_name']			=	$santriModel->user->desa->kecamatan->nama ."-" . $santriModel->user->desa->nama;;
+		$array	['date_name']			=	$obj->tanggal;
+		$array	['id_pelanggaran_name']	=	$obj->idlarangan;
+		$array  ['pelanggaran_name']	=	$laranganModel->namaObj->nama;
+		$array  ['session_name']		=	$laranganModel->sessionObj->nama;
+		
 		return $array;
 	}
 }

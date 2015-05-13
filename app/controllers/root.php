@@ -311,6 +311,8 @@ abstract class root extends root_depreated {
 	public static  function get_url_admin_nama_pelanggaran		($add=""){		return url("sarung_admin/nama_pelanggaran/".$add);	}
 	public static  function get_url_admin_larangan_meta		($add=""){		return url("sarung_admin/larangan_meta/".$add);	}
 	public static  function get_url_admin_larangan_kasus		($add=""){		return url("sarung_admin/larangan_kasus/".$add);	}
+
+	public static  function get_url_profile		($add=""){		return url("profile/".$add);	}
 	
 	public static function get_url_base(){ return URL::to('/') ;}
 	public static function get_path_base(){ return public_path()  ;}

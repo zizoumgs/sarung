@@ -34,7 +34,7 @@ class Klasement_helper extends Controller {
 	protected function get_pelajaran(){		return Input::get('pelajaran');	}
 	public function get_header(){ return $this->values->header; }
 	public function get_total_poor(){		return $this->values->stay_santri;	}
-	private function is_not_empty( $string ){
+	public function is_not_empty( $string ){
 		return $string != "" && $string  != "All";
 	}
     /**
@@ -62,6 +62,48 @@ class Klasement_helper extends Controller {
 			$this->where_url ['pelajaran'] = $this->get_pelajaran();
         }		
     }
+
+	private function build_santri_list(){
+		$santries 	= Klasement_Model_query::get_klasement_all( $this->where_text  , $this->where_values , $this->where_url ['session'] );
+		$pelangggarans = Klasement_Model_query::get_pelanggaran_all( $this->where_url ['session'] );
+		$pelanggaran_array = array();
+		
+		foreach( $pelangggarans as $pel ){
+			$pelanggaran_array [ $pel->id] = $pel->point;
+		}
+		$santries_array = array();
+		$object = new stdClass();
+		
+		foreach( $santries as $santri ){
+			$point = 0 ;
+			$array = array();
+			$array ['id_santri'] 	= 	$santri->id_santri;
+			$array ['first_name'] 	= 	$santri->first_name;
+			$array ["second_name"]  = 	$santri->second_name;
+			if( array_key_exists ( $santri->id_santri  , $pelanggaran_array) ){
+				$point = $pelanggaran_array [$santri->id_santri];
+				//$point = 10 ;
+			}
+			$array ["nilai"] 		=	$santri->nilai - $point;
+			
+			$santries_array [] = (object)$array; 
+		}
+		
+		usort( $santries_array , array("Klasement_helper", "cmp_obj"));
+		//array_multisort();
+		//echo count( $santries_array );
+		foreach( $santries_array as $key => $value){
+			//echo $key." ".$value->first_name." ".$value->second_name." ".$value->nilai."<br>";
+		}
+		//return $santries_array;
+		return $santries;
+	}
+	public static function cmp_obj(  $b , $a ){
+		if ( $a->nilai == $b->nilai) {
+		    return 10;
+		}
+		return ($a->nilai < $b->nilai) ? -1 : 1;		
+	}
     /*
      ** init clasement and its array
      ** return string
@@ -69,15 +111,19 @@ class Klasement_helper extends Controller {
     protected function get_santri(){
 		$headers = $this->get_header();
         $date = $this->get_date_from_string($headers [1]."-01" ,"Y-m-d");
-		$santries 	= Klasement_Model_query::get_klasement_all( $this->where_text  , $this->where_values );
-        
-		//echo count ($santries);
+		$santries 	= $this->build_santri_list();
+        /*
+		foreach ( $santries as $santri ){
+			echo $santri->nilai ."<br>";
+		}
+		*/
         $where_query_one    =   $this->where_text." and kal.awal < ? ";
         $where_query_two    =   $this->where_text." and MONTH(kal.awal) = ? ";
         //@ get database and then save it in array
-		$santri_obj 	= new Klasement_Model( $this->where_url );
+		$santri_obj 	= new Klasement_Model();
 		$santri_obj->init_array($santries);
-        $santri_obj->set_score($santries, $this->get_month_per_view() , $where_query_one , $where_query_two ,$this->where_values , $date);
+        $santri_obj->set_score($santries, $this->get_month_per_view() , $where_query_one , $where_query_two ,$this->where_values
+							   , $this->where_url ['session'], $date);
 
 		$this->values->stay_santri = $this->get_poor_student($santries);
         
@@ -165,11 +211,15 @@ class Klasement_controller extends Klasement_helper{
         $posts = array ();
 		$pg = Paginator::make( array() , 1, 1); 
 		$santries = $html_santries = array();
-		if( $this->get_session() != "ALL" && $this->get_session() != "" ){
+		$message = "";
+		if( $this->is_not_empty($this->get_session())  ){
 			$this->set_table_header();
 			$santries = $this->get_santri();
 			$html_santries = $this->values->html_santries;
 	        $pg = Paginator::make( array("a" , "b" , "c","d") , 12, 4 );
+		}
+		else{
+			$message = "Please choose specific Session ";
 		}
 		return View::make('klasement', array('posts'    =>  $posts ,
                                              'wheres'   =>  $this->get_where_values()  ,
@@ -177,6 +227,7 @@ class Klasement_controller extends Klasement_helper{
                                              'santries' =>  $santries ,
                                              'html_santri'  => $html_santries ,
 											 'total_stay'	=> $this->get_total_poor(),
+											 'message'		=>	$message,
                                              'pg' => $pg )
                           );
     }

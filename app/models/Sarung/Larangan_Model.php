@@ -79,4 +79,15 @@ class Larangan_Kasus_Model extends Sarung_Model_Root{
 			$q->wherenama($nama);
 		});
 	}
+	
+	public static function get_kasus_santri( $idsantri ){
+		$sql = sprintf('
+			select san.id as idsantri_name , met.point as point_name  , CONCAT( adm.first_name , " "  ,  adm.second_name) as santri_name  ,
+			nam.nama as pelanggaran_name  , ses.nama as session_name , kas.tanggal as time_name 
+			from larangan_kasus_ kas , larangan_meta met , larangan_nama nam , session ses , admind adm , santri  san 
+			where kas.idlarangan = met.id	and san.idadmind = adm.id and nam.id = met.idlarangan 
+			and ses.id = met.idsession and san.id = ?
+			and adm.id = kas.idadmind  order by ses.nama DESC ');
+		return DB::connection( self::get_db())->select( DB::raw( $sql ) , array(  $idsantri) 	);
+	}
 }

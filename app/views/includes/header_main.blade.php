@@ -15,7 +15,13 @@
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="{{ root::get_url_home() }}">Home</a></li>
-						<li><a href="{{ root::get_url_klasement() }}">Klasement</a></li>
+						<li>
+                            <a href="{{ root::get_url_klasement() }}">Table</a>
+                            <ul class="child-menu">
+                                <li><a href="{{ root::get_url_score() }}">Score</a></li>
+                                <li><a href="{{ root::get_url_klasement() }}">Klasement</a></li>
+                            </ul>
+                        </li>
 						<li>
 			                <a href="{{ root::get_url_uang() }}">Uang</a>
 								<ul class="child-menu">

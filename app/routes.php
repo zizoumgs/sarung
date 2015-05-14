@@ -62,7 +62,8 @@ Route::controller('/home'     , 'Home_controller');
 
 //Route::controller('/'                 , 'sarung_controller');
 Route::controller('sarung_admin'      , 'Sarung_Admin_Controller');
-Route::controller('klasement'      , 'Klasement_controller');
+Route::controller('klasement'      , 'Klasement_Controller');
+Route::controller('score'      , 'Score_Controller');
 
 Route::controller('/login'     , 'Login_controller');
 

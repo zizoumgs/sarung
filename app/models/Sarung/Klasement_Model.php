@@ -35,7 +35,7 @@ class Klasement_Model_query extends Sarung_Model_Root {
 		$sql = sprintf('
 				select 
 			adm.first_name, adm.second_name , san.id  as id_santri,	ses.awal , ses.akhir , 
-			ROUND(sum(ujis.nilai*uji.kalinilai),1) - %2$s  as nilai,
+			ROUND(sum(ujis.nilai*uji.kalinilai),1)  as nilai,
 			 @row_number:=@row_number+1 AS  rank
 						
 			from (SELECT @row_number:=0) AS foo , admind adm , santri san , ujiansantri ujis,
@@ -47,9 +47,9 @@ class Klasement_Model_query extends Sarung_Model_Root {
 			and ( san.keluar ="0000-00-00" OR YEAR(ses.akhir) < YEAR(san.keluar)   )
             %1$s
 			group by ujis.idsantri order by nilai DESC			
-		',$where_query,
-		self::get_unspecific_date_pelanggaran( " and  sesn.nama = ?  and YEAR (kasn.tanggal) = ? and MONTH(kasn.tanggal) = ? "  ) );
-		$kelas = DB::connection( self::get_db())->select( DB::raw( $sql ) , array_merge( $where_pelanggaran , $where_values)	);
+		',$where_query);
+		//self::get_unspecific_date_pelanggaran( " and  sesn.nama = ?  and YEAR (kasn.tanggal) = ? and MONTH(kasn.tanggal) = ? "  ) );
+		$kelas = DB::connection( self::get_db())->select( DB::raw( $sql ) ,  $where_values	);
 		return $kelas;
 	}
 	/**
@@ -60,7 +60,7 @@ class Klasement_Model_query extends Sarung_Model_Root {
 		$sql = sprintf('
 				select 
 			adm.first_name, adm.second_name , san.id  as id_santri,	ses.awal , ses.akhir , 
-			ROUND(sum(ujis.nilai*uji.kalinilai),1) - %2$s  as nilai,
+			ROUND(sum(ujis.nilai*uji.kalinilai),1)  as nilai,
 			 @row_number:=@row_number+1 AS  rank
 						
 			from (SELECT @row_number:=0) AS foo , admind adm , santri san , ujiansantri ujis,
@@ -72,14 +72,8 @@ class Klasement_Model_query extends Sarung_Model_Root {
 			and ( san.keluar ="0000-00-00" OR YEAR(ses.akhir) < YEAR(san.keluar)   )
             %1$s
 			group by ujis.idsantri order by nilai DESC			
-		',$where_query , self::get_unspecific_date_pelanggaran( " and  sesn.nama = ?   and kasn.tanggal < ?  " 		 ) );
-		/*
-		echo ($sql )."<Br>";
-		foreach( $where_values as $a ){
-			echo $a . "<br>";
-		}
-		*/
-		$kelas = DB::connection( self::get_db())->select( DB::raw( $sql ) , array_merge( $where_pelanggaran , $where_values)	);
+		',$where_query );
+		$kelas = DB::connection( self::get_db())->select( DB::raw( $sql ) , $where_values	);
 		return $kelas;
 	}	
 

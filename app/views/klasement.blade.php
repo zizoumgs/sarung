@@ -1,7 +1,7 @@
 @extends('layouts.klasement_layout')
 
 @section('title')
-	Score
+	Klasement
 @stop
 
 @section('content')

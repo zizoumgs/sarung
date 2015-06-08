@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Admin' => $baseDir . '/app/controllers/Admin.php',
     'Admin_divisi_crud' => $baseDir . '/app/controllers/admin/uang/Admin_divisi_crud.php',
     'Admin_income' => $baseDir . '/app/controllers/admin/uang/Admin_income.php',
     'Admin_income_cud' => $baseDir . '/app/controllers/admin/uang/Admin_income_cud.php',
@@ -171,7 +172,6 @@ return array(
     'Whoops\\Module' => $vendorDir . '/filp/whoops/src/deprecated/Zend/Module.php',
     'Whoops\\Provider\\Zend\\ExceptionStrategy' => $vendorDir . '/filp/whoops/src/deprecated/Zend/ExceptionStrategy.php',
     'Whoops\\Provider\\Zend\\RouteNotFoundStrategy' => $vendorDir . '/filp/whoops/src/deprecated/Zend/RouteNotFoundStrategy.php',
-    'admin' => $baseDir . '/app/controllers/admin.php',
     'first_update' => $baseDir . '/app/controllers/updates/first_update.php',
     'root' => $baseDir . '/app/controllers/root.php',
     'root_depreated' => $baseDir . '/app/controllers/root.php',

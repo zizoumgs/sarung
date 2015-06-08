@@ -15,6 +15,8 @@
     </div>
     <hr>
 	<div class="table-responsive">
+		@if ( root::get_user_power() > 0 ) 
+
 		<table class="table table-condensed table-bordered table-striped">
             <tr>
                 <td>Id</td>
@@ -35,6 +37,9 @@
                 </tr>
             @endforeach
         </table>
+		@else
+			<p>Nothing here</p>
+		@endif
     </div>    
     
 @stop

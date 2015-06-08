@@ -381,3 +381,12 @@ class Klasement_Model extends Sarung_Model_Root{
         return sprintf('%1$s <span class="glyphicon glyphicon-minus pull-right"></span> '               ,   $current_post);
     }
 }
+
+/**
+			select san.id as id ,sum( met.point) as point , adm.first_name , adm.second_name
+			from larangan_kasus_ kas , larangan_meta met , larangan_nama nam , session ses , admind adm , santri  san 
+			where kas.idlarangan = met.id	and san.idadmind = adm.id and nam.id = met.idlarangan and ses.id = met.idsession
+			and adm.id = kas.idadmind  and ses.nama = "14-15"  # and MONTH(kas.tanggal) = 12
+			group by kas.idadmind order by point DESC 
+			;
+ */

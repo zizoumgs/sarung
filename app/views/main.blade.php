@@ -1,7 +1,7 @@
 @extends('layouts.onepage')
 
 @section('title')
-	home
+	Fatihul Ulum
 @stop
 
 @section('content')
@@ -25,6 +25,30 @@
 		<div class="col-md-3">
 			<a class="twitter-timeline"  href="https://twitter.com/zizoumgs/lists/our-friends"  data-widget-id="461428361286270976">Tweets from https://twitter.com/zizoumgs/lists/our-friends</a>
 			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>				
+			@if(Auth::user())
+            <ul class="list-group">
+				<?php
+					$outcome = Outcome_Model::sum('jumlah');
+					$income  = Income_Model::sum('jumlah');
+				?>
+                <li href="#" class="list-group-item list-group-item-info disable"><b>Budget Information</b></a></li>
+                <li href="#" class="list-group-item">Total Pengeluaran :
+					<span class="pull-right">
+						{{ root::get_rupiah_root($outcome ) }}
+					</span>
+				</li>
+                <li href="#" class="list-group-item">Total Pemasukan :
+					<span class="pull-right">
+						{{ root::get_rupiah_root($income) }}
+					</span>
+				</li>
+                <li href="#" class="list-group-item">Uang Sekarang :
+					<span class="pull-right">
+						{{ root::get_rupiah_root($income-$outcome) }}
+					</span>
+				</li>
+            </ul>
+			@endif
 		</div>
 	</div>		
 @stop

@@ -1,5 +1,5 @@
 <?php 
-abstract class admin extends Controller {
+abstract class Admin extends Controller {
 	private $value ;
 	//! i will private this
 	protected $helper ;

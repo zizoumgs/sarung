@@ -224,7 +224,7 @@ abstract class root_depreated extends Controller{
 	}	
 }
 abstract class root extends root_depreated {
-	protected function get_rupiah_root( $angka){
+	public static  function get_rupiah_root( $angka){
 		return number_format($angka,0,',','.');
 	}
 	/*the name who will be sent email */

@@ -56,7 +56,7 @@ return array(
 		'uang' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'test_1',
+			'database'  => 'mgscom_nuga',
 			'username'  => 'root',
 			'password'  => '1',
 			'charset'   => 'utf8',

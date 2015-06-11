@@ -40,5 +40,13 @@
 			<a href="{{ root::get_url_admin_larangan_kasus() }}" rel="nofollow"><span class="glyphicon glyphicon-user"></span> Kasus </a>
 		</li>
 
+        <li>
+            <hr style="background:white;">
+
+			<a href="{{ root::get_url_admin_blog_category() }}" rel="nofollow"><span class="glyphicon glyphicon-user"></span> Category </a>
+		</li>
+        <li>
+			<a href="{{ root::get_url_admin_blog_content() }}" rel="nofollow"><span class="glyphicon glyphicon-user"></span> Content </a>
+		</li>
         
     </ul>

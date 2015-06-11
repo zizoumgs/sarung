@@ -33,6 +33,9 @@ Route::controller('sarung_admin/nama_pelanggaran'           , 'Nama_Pelanggaran_
 Route::controller('sarung_admin/larangan_meta'           , 'Larangan_Meta_Controller');
 Route::controller('sarung_admin/larangan_kasus'           , 'Larangan_Kasus_Controller');
 
+Route::controller('sarung_admin/blog_category'     , 'Category_Controller');
+
+
 Route::controller('profile'           , 'Profile_Controller');
 /*
 Route::controller('sarung_admin/jurusan'                , 'Admin_sarung_jurusan');
@@ -56,7 +59,8 @@ Route::controller('sarung_admin/tindakan_kasus'          , 'Admin_sarung_laranga
 
 
 //! for updating
-Route::controller('update'                 , 'first_update');
+//Route::controller('update'               , 'first_update');
+Route::controller('update'                 , 'Second_Update_Controller');
 
 Route::controller('/home'     , 'Home_controller');
 
@@ -66,6 +70,7 @@ Route::controller('klasement'      , 'Klasement_Controller');
 Route::controller('score'      , 'Score_Controller');
 
 Route::controller('/login'     , 'Login_controller');
+
 
 
 Route::controller('/'     , 'Home_controller');

@@ -313,6 +313,10 @@ abstract class root extends root_depreated {
 	public static  function get_url_admin_larangan_meta		($add=""){		return url("sarung_admin/larangan_meta/".$add);	}
 	public static  function get_url_admin_larangan_kasus		($add=""){		return url("sarung_admin/larangan_kasus/".$add);	}
 
+	public static function get_url_admin_blog_category ( $add = "" ){ return url("sarung_admin/blog_category/".$add); }
+	public static function get_url_admin_blog_content ( $add = "" ){}
+	
+	
 	public static  function get_url_profile		($add=""){		return url("profile/".$add);	}
 	
 	public static function get_url_base(){ return URL::to('/') ;}

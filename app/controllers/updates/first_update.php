@@ -113,6 +113,22 @@ class update_support extends Controller{
     function get_max_id( $table ){
         return DB::connection( $this->get_db())->table($table)->max('id');
     }
+	
+	protected function get_sarung_db(){
+		return Config::get("database.connections.fusarung.database");
+	}
+	protected function get_user_name_main(){
+		return Config::get("database.main_username");
+	}
+	protected function get_password_main(){
+		return Config::get("database.main_password");
+	}
+	
+	protected function get_db_sarung_object(){
+		$sarung = $this->get_sarung_db();
+		$db_sarung = new PDO("mysql:host=localhost;dbname=$sarung;charset=utf8", $this->get_user_name_main() , $this->get_password_main() );
+		return $db_sarung;
+	}
 }
 /**
  *	third update will add several column in session
@@ -166,9 +182,9 @@ class update_tindakan extends update_third{
 	**/
 	public function init_update_tindakan(){
 		//@ get object
-		$sarung = Config::get("database.connections.fusarung.database");
-		$db_sarung = new PDO("mysql:host=localhost;dbname=$sarung;charset=utf8", Config::get("database.main_username") , Config::get("database.main_password"));
-		$db = new PDO('mysql:host=localhost;dbname=mgscom_iman;charset=utf8', Config::get("database.main_username") , Config::get("database.main_password"));
+		$sarung = $this->get_sarung_db();
+		$db_sarung = new PDO("mysql:host=localhost;dbname=$sarung;charset=utf8", $this->get_user_name_main() , $this->get_password_main() );
+		$db = new PDO('mysql:host=localhost;dbname=mgscom_iman;charset=utf8', $this->get_user_name_main() , $this->get_password_main() );
 		//@ get names of tindakan
 		//
 		$sql = "select namaLarangan as nama_larangan from larangan group by nama_larangan";

@@ -67,17 +67,24 @@ class Ujian_Santri_Controller extends admin{
 		echo json_encode( $to_ajax); 
 	}	
 	public function getIndexadd(){
+		$id_ujian		  	=	Input::get('find_id_ujian_name');
+		if( Session::has('id_kelas') ){
+			$id_ujian = Session::get('id_kelas');
+		}
 		$limit = 10;
         $datas = array();
         $datas ['wheres']  		=	array();//admin::get_helper()->get_values_for_pagenation();
 		$null = array();
-		$datas ['ujian_ket'] 	= Ujian_Model::find($limit);
-        $datas ["items"] 		= 	admin::get_helper()->get_the_obj_find_add(  $null , '' );
+        $datas ["items"] 		= 	admin::get_helper()->get_the_obj_find_add(  $null , ''  , $id_ujian);
 		$datas ["pagination"] 	= 	admin::get_helper()->get_pagination( $datas ["items"]   , $limit );
 		
 		$datas ["items"] 	= 	admin::get_helper()->get_the_obj_find_add(
 																  $datas ['wheres'] ,
-																  Ujian_Santri_Helper::get_limit_text($limit)  );
+																  Ujian_Santri_Helper::get_limit_text($limit)  ,
+																  $id_ujian);
+		$datas ["id_ujian"] = $id_ujian;
+		$datas ['ujian_ket'] 	= Ujian_Model::find( $id_ujian);
+		
 		$datas ["info"]     = 	admin::get_helper()->get_info( $datas ["pagination"]  );
 		$datas ['helper'] 	= 	admin::get_helper();
         return View::make( "sarung.admin.ujian_santri.index_add" , $datas);		
@@ -99,8 +106,8 @@ class Ujian_Santri_Controller extends admin{
 				->with('message',  $message );			
 		}
 	    elseif($this->insert_to_db()){
-	        return Redirect::to( root::get_url_admin_ujis() )
-				->with('message',  "Berhasil memasukkan ke database");
+	        return Redirect::to( root::get_url_admin_ujis('indexadd') )
+				->with('id_kelas',  Input::get("dialog_add_id_ujian_name") );
 		}
         else{
 			return Redirect::to( root::get_url_admin_ujis() )

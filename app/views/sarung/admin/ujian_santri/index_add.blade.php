@@ -34,7 +34,7 @@
 			<div class="form-group">
                 <div class="input-group ">
                     <input name="find_id_ujian_name" id="find_id_ujian_name" type="text" class="form-control input-sm" title="Type Id Ujian Here Here.."
-                        placeholder="Type Id Ujian Here" Value="{{ Input::get('find_id_ujian_name') }}" >
+                        placeholder="Type Id Ujian Here" Value="{{ $id_ujian }}" >
                     <span class="input-group-btn"  >
                         <button type="submit" class="btn btn-success btn-sm" >
                         	<span class="glyphicon glyphicon-search"></span> &nbsp;

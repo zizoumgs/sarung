@@ -5,6 +5,8 @@ class Kalender_Controller extends Admin{
 		admin::init_helper( new Kalender_Helper );
 		
 	}
+		private static function get_db_name(){	return Config::get('database.default'); }
+
     public function getIndex(){
         $data = array();
         $data ['wheres']  =  admin::get_helper()->get_table_filter();

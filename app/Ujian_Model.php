@@ -106,11 +106,12 @@ class Ujis_Model extends Sarung_Model_Root{
 	 *	query for view
 	**/
 	public function get_raw_query($wheres , $wherequery  , $limit = ""){
-		$sql = $this->getRawText( $wherequery , $limit );
+		$sql = $this->getRawQueryText( $wherequery , $limit);
 		$kelas = DB::connection($this->get_db())->select( DB::raw( $sql ) , $wheres  );
 		return $kelas;
 	}
-	public function getRawText( $wherequery  , $limit = "" ){
+	public function getRawQueryText( $wherequery , $limit = ""){
+		
 		$sql = sprintf('select pel.nama as course_name, ses.nama as session_name  , kel.nama as kelas_name	,
 		ses.perkiraansantri perkiraansantri, ses.awal as awal	,	ujis.created_at as created_at	,
 		ujis.updated_at as updated_at	,	uji.id as id_ujian	,
@@ -134,7 +135,7 @@ class Ujis_Model extends Sarung_Model_Root{
 		order by ujis.created_at DESC
 		%2$s
 		',$wherequery,$limit);
-		return $sql;
+		return  $sql;
 	}
 	/**
 	 *	query for add
@@ -142,14 +143,12 @@ class Ujis_Model extends Sarung_Model_Root{
 	 *	return obj
 	*/
 	public function get_raw_query_add($model_ujian , $nama_santri = ""  , $limit = ""  ){
-		if( !$model_ujian){
+		if( !$model_ujian)
 			return array();
-		}
 		$array = array() ;
 		$array [] = $model_ujian->idkelas  ;
 		$array [] = $model_ujian->kalender->idsession;
 		$array [] = $model_ujian->id;
-		
 		//@ new feaature is filter by name
 		$sql_nama_santri = "";
 		if($nama_santri != ""){
@@ -174,7 +173,7 @@ class Ujis_Model extends Sarung_Model_Root{
 			and kel.id = keli.idkelas
 			and keli.idkelas = ?
 			and ses.id = ?
-			and ( san.keluar = "0000-00-00")
+			and ( san.keluar != "0000-00-00")
 			and san.id NOT IN (select ujis_b.idsantri from ujiansantri ujis_b where ujis_b.idujian = ?)
 			%3$s
 			group by keli.idsantri
@@ -185,8 +184,7 @@ class Ujis_Model extends Sarung_Model_Root{
 		$kelas = DB::connection($this->get_db())->select( DB::raw( $sql ) , $array  );
 		return $kelas;
 	}	
-	public function getRawTextAdd( $wherequery  , $limit = "" ){
-	}
+	
 }
 
 /**

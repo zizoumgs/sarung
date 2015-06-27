@@ -79,15 +79,15 @@ class Ujian_Santri_Helper extends Root_Helper{
 							$limit_query ) ;
 		return $model;
 	}
-	public static function get_the_obj_find_add( & $wheres_content , $limit_query){
-		$id_ujian		  	=	Input::get('find_id_ujian_name');
-		$santri		  	=	Input::get('find_santri_name');
+	public static function get_the_obj_find_add( & $wheres_content , $limit_query , $id_ujian){
+		$santri		  	    =	Input::get('find_santri_name');
 		$ujian_obj = "";
 		$wheres = "";
 		if( Root_Helper::should_be_keep( $id_ujian ) ){
 	        $ujian_obj = Ujian_Model::find($id_ujian) ;
 		}
 		
+		//echo( self::get_create_model()->getRawText( $santri , $limit_query) )."<br>";
 		$model   	= 	self::get_create_model()->get_raw_query_add(
 							$ujian_obj	,
 							$santri		,
